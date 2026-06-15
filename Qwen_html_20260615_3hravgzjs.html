@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlooMarket - Marketplace Roblox</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#07080f;--bg2:#0d0f1a;--surface:rgba(255,255,255,0.04);--surface2:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.07);--border2:rgba(30,111,255,0.3);--blue:#1E6FFF;--blue2:#3D8BFF;--blue3:#0050CC;--green:#22C55E;--red:#EF4444;--text:#F1F5F9;--muted:#64748B;--muted2:#94A3B8}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;min-height:100vh}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--blue3);border-radius:10px}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:68px;background:rgba(7,8,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
+.logo-icon-img{height:48px;width:auto;object-fit:contain}
+.logo-name{font-size:17px;font-weight:900;letter-spacing:-.5px}
+.logo-name .b{color:#3D8BFF}.logo-name .w{color:#fff}
+.search-main{flex:1;max-width:600px;margin:0 16px;position:relative}
+.search-main input{width:100%;background:rgba(255,255,255,0.06);border:1px solid var(--border2);border-radius:10px;padding:10px 16px 10px 42px;font-size:14px;color:#fff;font-family:'Inter',sans-serif;outline:none;transition:all .2s}
+.search-main input:focus{background:rgba(30,111,255,0.08);border-color:var(--blue2)}
+.search-main input::placeholder{color:var(--muted)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px}
+.search-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--blue3);border:none;color:#fff;padding:5px 12px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer}
+.nav-r{display:flex;align-items:center;gap:10px;margin-left:auto}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--muted2);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
+.btn-ghost:hover{color:#fff;border-color:rgba(255,255,255,0.2)}
+.btn-blue{background:var(--blue3);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;white-space:nowrap}
+.btn-blue:hover{background:var(--blue)}
+.notif-btn{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 10px;cursor:pointer;font-size:16px;line-height:1}
+.notif-badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:9px;font-weight:800;width:16px;height:16px;border-radius:50%;display:none;align-items:center;justify-content:center}
+.account-icon{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:8px}
+.account-icon:hover{border-color:rgba(30,111,255,0.3);background:var(--surface2)}
+.account-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--blue3),var(--blue));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.account-name{font-size:12px;font-weight:600;color:var(--muted2);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.account-arrow{color:var(--muted);font-size:10px}
+.account-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:6px;min-width:220px;display:none;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.account-dropdown.show{display:block}
+.ud-item{padding:10px 12px;border-radius:8px;font-size:13px;color:var(--muted2);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px;font-weight:500}
+.ud-item:hover{background:var(--surface);color:#fff}
+.ud-sep{height:1px;background:var(--border);margin:4px 0}
+.ud-balance{padding:10px 12px;font-size:13px;color:var(--blue2);font-weight:700;border-bottom:1px solid var(--border);margin-bottom:4px}
+.ud-verify-status{padding:8px 12px;font-size:11px;border-bottom:1px solid var(--border);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.ud-verify-status.verified{color:var(--green)}
+.ud-verify-status.unverified{color:var(--red)}
+.main{margin-top:68px;padding:24px;min-height:calc(100vh - 68px)}
+.hero-banner{background:linear-gradient(135deg,rgba(30,111,255,0.12),rgba(0,80,204,0.05));border:1px solid rgba(30,111,255,0.15);border-radius:14px;padding:28px 32px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;position:relative}
+.hero-banner::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(30,111,255,0.15),transparent 70%);border-radius:50%}
+.hb-title{font-size:22px;font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.hb-sub{font-size:13px;color:var(--muted2);margin-bottom:16px}
+.hb-stats{display:flex;gap:24px}
+.hb-stat-n{font-size:18px;font-weight:800;color:var(--blue2)}
+.hb-stat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.cat-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.cat-tab{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--muted2);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.cat-tab:hover{color:#fff;border-color:rgba(30,111,255,0.3)}
+.cat-tab.active{background:rgba(30,111,255,0.15);border-color:rgba(30,111,255,0.4);color:var(--blue2)}
+.filters-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.filter-select{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--muted2);font-family:'Inter',sans-serif;cursor:pointer;outline:none}
+.results-count{font-size:12px;color:var(--muted);margin-left:auto}
+.listings{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.listing-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s}
+.listing-card:hover{border-color:rgba(30,111,255,0.4);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.lc-img{height:110px;display:flex;align-items:center;justify-content:center;font-size:48px;background:rgba(255,255,255,0.02);position:relative}
+.lc-game-badge{position:absolute;top:8px;left:8px;background:rgba(7,8,15,0.85);border:1px solid var(--border);font-size:9px;font-weight:700;color:var(--muted2);padding:2px 8px;border-radius:5px;text-transform:uppercase}
+.lc-online{position:absolute;top:8px;right:8px;width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 6px rgba(34,197,94,0.6)}
+.lc-body{padding:12px}
+.lc-title{font-size:13px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc-seller{font-size:11px;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.lc-seller-dot{width:5px;height:5px;background:var(--green);border-radius:50%}
+.lc-footer{display:flex;align-items:center;justify-content:space-between}
+.lc-price{font-size:16px;font-weight:900;color:var(--blue2)}
+.lc-buy{background:var(--blue3);color:#fff;border:none;padding:6px 14px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.lc-buy:hover{background:var(--blue)}
+.lc-rating{font-size:10px;color:var(--muted);margin-top:6px}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state .ico{font-size:48px;margin-bottom:12px}
+.empty-state h3{font-size:16px;font-weight:700;color:var(--muted2);margin-bottom:6px}
+.loader{display:flex;justify-content:center;align-items:center;padding:60px;gap:8px}
+.loader-dot{width:8px;height:8px;background:var(--blue);border-radius:50%;animation:bounce .6s infinite alternate}
+.loader-dot:nth-child(2){animation-delay:.2s}.loader-dot:nth-child(3){animation-delay:.4s}
+@keyframes bounce{to{transform:translateY(-10px);opacity:.4}}
+.overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center}
+.overlay.show{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:32px;width:100%;max-width:420px;position:relative;max-height:90vh;overflow-y:auto}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--surface);border:none;color:var(--muted2);width:28px;height:28px;border-radius:6px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{color:#fff}
+.modal-logo{display:flex;align-items:center;justify-content:center;margin-bottom:24px}
+.modal-logo img{height:52px;width:auto}
+.modal-h{font-size:20px;font-weight:800;text-align:center;margin-bottom:6px;letter-spacing:-.5px}
+.modal-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:24px}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.fg input,.fg select,.fg textarea{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:9px;padding:11px 14px;font-size:14px;color:#fff;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(30,111,255,0.5)}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(100,116,139,.5)}
+.fg textarea{resize:vertical;min-height:80px}
+.btn-submit{width:100%;background:var(--blue3);border:none;color:#fff;padding:13px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-top:4px;transition:background .2s}
+.btn-submit:hover{background:var(--blue)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed}
+.sw{text-align:center;margin-top:16px;font-size:12px;color:var(--muted)}
+.sw a{color:var(--blue2);cursor:pointer}
+.alert{padding:10px 14px;border-radius:8px;font-size:12px;font-weight:500;margin-bottom:14px}
+.alert-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#FCA5A5}
+.alert-success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#86EFAC}
+.sell-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:14px 18px;font-size:13px;font-weight:600;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-color:rgba(34,197,94,0.4);color:#86EFAC}
+.toast.error{border-color:rgba(239,68,68,0.4);color:#FCA5A5}
+.dash-page{display:none}.dash-page.show{display:block}
+.page{display:none}.page.show{display:block}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.dash-title{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.dash-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.dc{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px}
+.dc-l{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-weight:600}
+.dc-v{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.dc-c{font-size:11px;color:var(--green);margin-top:4px}
+.section-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.dtable{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px}
+.dth{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:11px 18px;border-bottom:1px solid var(--border);font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.dtr{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:13px 18px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:12px;align-items:center}
+.dtr:last-child{border:none}
+.badge-ok{background:rgba(34,197,94,0.1);color:#22C55E;font-size:10px;font-weight:700;padding:3px 9px;border-radius:5px}
+.badge-wait{background:rgba(251,191,36,0.1);color:#FBBF24;font-size:10px;font-weight:700;padding:3px 9px;border-radius:5px}
+.wallet-box{background:linear-gradient(135deg,rgba(30,111,255,0.15),rgba(0,80,204,0.08));border:1px solid rgba(30,111,255,0.2);border-radius:12px;padding:20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between}
+.wallet-label{font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.wallet-amount{font-size:28px;font-weight:900;color:var(--blue2)}
+.wallet-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.listing-detail{max-width:580px}
+.ld-img{height:140px;display:flex;align-items:center;justify-content:center;font-size:64px;background:rgba(255,255,255,0.02);border-radius:10px;margin-bottom:20px}
+.ld-title{font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px}
+.ld-meta{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.ld-badge{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--muted2)}
+.ld-desc{font-size:13px;color:var(--muted2);line-height:1.7;margin-bottom:20px;background:var(--surface);border-radius:8px;padding:12px}
+.ld-seller-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.ld-seller-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue3),var(--blue));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0}
+.ld-seller-info h4{font-size:13px;font-weight:700;margin-bottom:2px}
+.ld-seller-info p{font-size:11px;color:var(--muted)}
+.ld-price-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ld-price{font-size:28px;font-weight:900;color:var(--blue2)}
+.btn-buy-now{background:linear-gradient(135deg,var(--blue3),var(--blue));color:#fff;border:none;padding:13px 28px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.btn-buy-now:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(30,111,255,0.3)}
+.btn-msg{background:var(--surface);color:var(--muted2);border:1px solid var(--border);padding:13px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-msg:hover{color:#fff}
+.chat-modal{max-width:480px;padding:0!important;overflow:hidden}
+.chat-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.chat-title{font-size:14px;font-weight:700}
+.chat-sub{font-size:11px;color:var(--muted)}
+.chat-messages{height:320px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg{display:flex;flex-direction:column;max-width:75%}
+.msg.me{align-self:flex-end;align-items:flex-end}
+.msg.them{align-self:flex-start;align-items:flex-start}
+.msg-bubble{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;word-break:break-word}
+.msg.me .msg-bubble{background:var(--blue3);color:#fff;border-radius:12px 12px 2px 12px}
+.msg.them .msg-bubble{background:var(--surface2);color:var(--text);border-radius:12px 12px 12px 2px}
+.msg-time{font-size:10px;color:var(--muted);margin-top:3px;padding:0 4px}
+.chat-input-row{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px}
+.chat-input{flex:1;background:rgba(255,255,255,0.06);border:1px solid var(--border2);border-radius:9px;padding:10px 14px;font-size:13px;color:#fff;font-family:'Inter',sans-serif;outline:none}
+.chat-input:focus{border-color:var(--blue2)}
+.chat-send{background:var(--blue3);border:none;color:#fff;padding:10px 16px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.chat-empty{text-align:center;color:var(--muted);font-size:12px;padding:40px 0}
+.conv-list{display:flex;flex-direction:column;gap:4px}
+.conv-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:9px;cursor:pointer;transition:all .15s;border:1px solid transparent}
+.conv-item:hover{background:var(--surface);border-color:var(--border)}
+.conv-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue3),var(--blue));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.conv-info{flex:1;min-width:0}
+.conv-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.conv-last{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-time{font-size:10px;color:var(--muted)}
+.order-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px}
+.order-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.order-title{font-size:13px;font-weight:700}
+.order-meta{font-size:11px;color:var(--muted);margin-bottom:10px}
+.order-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-sm{padding:6px 12px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;border:none;transition:all .15s}
+.btn-sm-blue{background:var(--blue3);color:#fff}
+.btn-sm-ghost{background:var(--surface);color:var(--muted2);border:1px solid var(--border)!important}
+.btn-sm-green{background:rgba(34,197,94,0.15);color:#22C55E;border:1px solid rgba(34,197,94,0.3)!important}
+.review-stars{display:flex;gap:8px;justify-content:center;margin:16px 0}
+.review-star{font-size:32px;cursor:pointer;transition:transform .1s;filter:grayscale(1);opacity:.4}
+.review-star.active{filter:grayscale(0);opacity:1;transform:scale(1.1)}
+@media(max-width:768px){.dash-cards{grid-template-columns:repeat(2,1fr)}.sell-form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+<div class="logo" onclick="showPage('home')">
+<img src="https://i.imgur.com/ton-logo.png" class="logo-icon-img" alt="BlooMarket" onerror="this.style.display='none'">
+<span class="logo-name"><span class="b">BLOO</span><span class="w">MARKET</span></span>
+</div>
+<div class="search-main">
+<span class="search-icon"></span>
+<input type="text" id="searchInput" placeholder="Rechercher un item Roblox..." oninput="handleSearch()">
+<button class="search-btn" onclick="handleSearch()">Chercher</button>
+</div>
+<div class="nav-r">
+<div id="guestNav" style="display:flex;gap:8px">
+<button class="btn-ghost" onclick="showModal('loginModal')">Connexion</button>
+<button class="btn-blue" onclick="showModal('registerModal')">Inscription</button>
+</div>
+<div id="userNav" style="display:none">
+<div class="account-icon" onclick="toggleAccountDropdown()">
+<div class="account-avatar" id="userAvatar">?</div>
+<span class="account-name" id="userName">...</span>
+<span class="account-arrow">▼</span>
+</div>
+<div class="account-dropdown" id="accountDropdown">
+<div class="ud-balance">💰 Solde : <span id="dropBalance">0.00</span>€</div>
+<div class="ud-verify-status unverified" id="udVerifyStatus">⚠ Non vérifié</div>
+<div class="ud-item" onclick="showPage('dashboard')">📊 Dashboard</div>
+<div class="ud-item" onclick="showPage('orders')">📦 Mes commandes</div>
+<div class="ud-item" onclick="showPage('messages')">💬 Messages</div>
+<div class="ud-sep"></div>
+<div class="ud-item" onclick="showModal('sellModal')">➕ Vendre un item</div>
+<div class="ud-item" onclick="showModal('addFundsModal')">💳 Recharger solde</div>
+<div class="ud-sep"></div>
+<div class="ud-item" onclick="logout()" style="color:#FCA5A5"> Déconnexion</div>
+</div>
+</div>
+</div>
+</nav>
+
+<main class="main">
+<div id="homePage" class="page show">
+<div class="hero-banner">
+<div>
+<div class="hb-title">La marketplace Roblox de référence 🎮</div>
+<div class="hb-sub">Achète et vends tes items en toute sécurité</div>
+<div class="hb-stats">
+<div><div class="hb-stat-n" id="statListings">0</div><div class="hb-stat-l">Annonces actives</div></div>
+<div><div class="hb-stat-n" id="statSellers">0</div><div class="hb-stat-l">Vendeurs</div></div>
+<div><div class="hb-stat-n">24/7</div><div class="hb-stat-l">Support</div></div>
+</div>
+</div>
+<div style="font-size:72px;opacity:.8"></div>
+</div>
+<div class="cat-tabs">
+<div class="cat-tab active" onclick="filterGame('all')">🎮 Tous</div>
+<div class="cat-tab" onclick="filterGame('Steal A Brainrot')">🧠 Steal A Brainrot</div>
+<div class="cat-tab" onclick="filterGame('Blox Fruits')">🍎 Blox Fruits</div>
+<div class="cat-tab" onclick="filterGame('Murder Mystery 2')">🔪 Murder Mystery 2</div>
+<div class="cat-tab" onclick="filterGame('Grow A Garden')">🌱 Grow A Garden</div>
+<div class="cat-tab" onclick="filterGame('Adopt Me')">🐾 Adopt Me</div>
+</div>
+<div class="filters-bar">
+<select class="filter-select" onchange="applySort(this.value)">
+<option value="created_at">Plus récents</option>
+<option value="price_asc">Prix croissant</option>
+<option value="price_desc">Prix décroissant</option>
+</select>
+<span class="results-count" id="resultsCount">Chargement...</span>
+</div>
+<div id="listingsLoader" class="loader"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div>
+<div class="listings" id="listingsGrid"></div>
+<div id="emptyState" class="empty-state" style="display:none"><div class="ico">🔍</div><h3>Aucune annonce trouvée</h3><p>Sois le premier à vendre !</p></div>
+</div>
+
+<div id="dashPage" class="page">
+<div class="dash-header">
+<div><div class="dash-title">Mon tableau de bord</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Bienvenue, <span id="dashUsername">-</span></div></div>
+<button class="btn-blue" onclick="showModal('sellModal')">➕ Nouvelle annonce</button>
+</div>
+<div class="wallet-box">
+<div><div class="wallet-label">Mon solde</div><div class="wallet-amount" id="dashBalance">0.00€</div><div class="wallet-sub">Solde disponible pour acheter</div></div>
+<button class="btn-blue" onclick="showModal('addFundsModal')">💳 Recharger</button>
+</div>
+<div class="dash-cards">
+<div class="dc"><div class="dc-l">Mes annonces</div><div class="dc-v" id="dMyListings">0</div><div class="dc-c">actives</div></div>
+<div class="dc"><div class="dc-l">Ventes</div><div class="dc-v" id="dSales">0</div><div class="dc-c">complétées</div></div>
+<div class="dc"><div class="dc-l">Revenus</div><div class="dc-v" id="dRevenue">0€</div><div class="dc-c">total gagné</div></div>
+<div class="dc"><div class="dc-l">Note moy.</div><div class="dc-v" id="dRating">—</div><div class="dc-c">sur 5 ⭐</div></div>
+</div>
+<div class="section-title">Mes annonces actives</div>
+<div class="dtable">
+<div class="dth"><span>Item</span><span>Prix</span><span>Jeu</span><span>Action</span></div>
+<div id="myListingsBody"><div style="padding:32px;text-align:center;color:var(--muted);font-size:13px">Aucune annonce</div></div>
+</div>
+</div>
+
+<div id="ordersPage" class="page">
+<div class="dash-header"><div class="dash-title">Mes commandes 📦</div></div>
+<div style="margin-bottom:16px;display:flex;gap:8px">
+<button class="cat-tab active" id="tabBuying" onclick="switchOrderTab('buying')">🛒 Mes achats</button>
+<button class="cat-tab" id="tabSelling" onclick="switchOrderTab('selling')">📤 Mes ventes</button>
+</div>
+<div id="ordersContent"><div class="loader"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div></div>
+</div>
+
+<div id="messagesPage" class="page">
+<div class="dash-header"><div class="dash-title">Messages 💬</div></div>
+<div id="convList"><div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Aucune conversation</div></div>
+</div>
+</main>
+
+<!-- MODALS -->
+<div class="overlay" id="loginModal" onclick="closeOnBg(event,'loginModal')">
+<div class="modal">
+<button class="modal-close" onclick="hideModal('loginModal')"></button>
+<div class="modal-h">Content de te revoir 👋</div>
+<div class="modal-sub">Connecte-toi à ton compte</div>
+<div id="loginAlert"></div>
+<div class="fg"><label>Email</label><input type="email" id="loginEmail" placeholder="ton@email.com"></div>
+<div class="fg"><label>Mot de passe</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
+<button class="btn-submit" id="loginBtn" onclick="doLogin()">Se connecter</button>
+<p class="sw">Pas de compte ? <a onclick="switchModal('loginModal','registerModal')">S'inscrire</a></p>
+</div>
+</div>
+
+<div class="overlay" id="registerModal" onclick="closeOnBg(event,'registerModal')">
+<div class="modal">
+<button class="modal-close" onclick="hideModal('registerModal')">✕</button>
+<div class="modal-h">Rejoins BlooMarket 🚀</div>
+<div class="modal-sub">Crée ton compte gratuitement</div>
+<div id="registerAlert"></div>
+<div class="fg"><label>Pseudo</label><input type="text" id="registerUsername" placeholder="TonPseudo"></div>
+<div class="fg"><label>Email</label><input type="email" id="registerEmail" placeholder="ton@email.com"></div>
+<div class="fg"><label>Mot de passe</label><input type="password" id="registerPassword" placeholder="Minimum 6 caractères"></div>
+<button class="btn-submit" id="registerBtn" onclick="doRegister()">Créer mon compte</button>
+<p class="sw">Déjà un compte ? <a onclick="switchModal('registerModal','loginModal')">Se connecter</a></p>
+</div>
+</div>
+
+<div class="overlay" id="sellModal" onclick="closeOnBg(event,'sellModal')">
+<div class="modal" style="max-width:500px">
+<button class="modal-close" onclick="hideModal('sellModal')">✕</button>
+<div class="modal-h" style="text-align:left;margin-bottom:4px">Mettre en vente ➕</div>
+<div class="modal-sub" style="text-align:left;margin-bottom:20px">Remplis les infos de ton annonce</div>
+<div id="sellAlert"></div>
+<div class="fg"><label>Titre</label><input type="text" id="sellTitle" placeholder="Ex: Blox Fruit Legendary x5"></div>
+<div class="sell-form-grid">
+<div class="fg"><label>Jeu</label>
+<select id="sellGame">
+<option value="Steal A Brainrot">Steal A Brainrot</option>
+<option value="Blox Fruits">Blox Fruits</option>
+<option value="Murder Mystery 2">Murder Mystery 2</option>
+<option value="Grow A Garden">Grow A Garden</option>
+<option value="Adopt Me">Adopt Me</option>
+</select>
+</div>
+<div class="fg"><label>Prix (€)</label><input type="number" id="sellPrice" placeholder="0.00" min="0.01" step="0.01"></div>
+</div>
+<div class="fg"><label>Description</label><textarea id="sellDesc" placeholder="Décris ton item..."></textarea></div>
+<button class="btn-submit" id="sellBtn" onclick="doSell()">Publier l'annonce</button>
+</div>
+</div>
+
+<div class="overlay" id="detailModal" onclick="closeOnBg(event,'detailModal')">
+<div class="modal listing-detail"><button class="modal-close" onclick="hideModal('detailModal')"></button><div id="detailContent"></div></div>
+</div>
+
+<div class="overlay" id="chatModal" onclick="closeOnBg(event,'chatModal')">
+<div class="modal chat-modal">
+<div class="chat-header">
+<div class="account-avatar" id="chatAvatar">?</div>
+<div><div class="chat-title" id="chatTitle">Chat</div><div class="chat-sub">En ligne</div></div>
+<button class="modal-close" style="position:static;margin-left:auto" onclick="hideModal('chatModal')">✕</button>
+</div>
+<div class="chat-messages" id="chatMessages"><div class="chat-empty">Début de la conversation 👋</div></div>
+<div class="chat-input-row">
+<input class="chat-input" id="chatInput" placeholder="Ton message...">
+<button class="chat-send" onclick="sendMessage()">Envoyer</button>
+</div>
+</div>
+</div>
+
+<div class="overlay" id="addFundsModal" onclick="closeOnBg(event,'addFundsModal')">
+<div class="modal" style="max-width:380px">
+<button class="modal-close" onclick="hideModal('addFundsModal')">✕</button>
+<div class="modal-h">Recharger mon solde 💳</div>
+<div class="modal-sub">Ajoute des fonds</div>
+<div id="fundsAlert"></div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+<button class="btn-ghost" onclick="setFundsAmount(5)" style="padding:12px;font-size:14px;font-weight:700">5€</button>
+<button class="btn-ghost" onclick="setFundsAmount(10)" style="padding:12px;font-size:14px;font-weight:700">10€</button>
+<button class="btn-ghost" onclick="setFundsAmount(20)" style="padding:12px;font-size:14px;font-weight:700">20€</button>
+<button class="btn-ghost" onclick="setFundsAmount(50)" style="padding:12px;font-size:14px;font-weight:700">50€</button>
+<button class="btn-ghost" onclick="setFundsAmount(100)" style="padding:12px;font-size:14px;font-weight:700">100€</button>
+<button class="btn-ghost" onclick="setFundsAmount(200)" style="padding:12px;font-size:14px;font-weight:700">200€</button>
+</div>
+<div class="fg"><label>Montant personnalisé (€)</label><input type="number" id="fundsAmount" placeholder="Ex: 25" min="1"></div>
+<button class="btn-submit" onclick="addFunds()">Ajouter les fonds</button>
+</div>
+</div>
+
+<div class="overlay" id="reviewModal" onclick="closeOnBg(event,'reviewModal')">
+<div class="modal" style="max-width:380px">
+<button class="modal-close" onclick="hideModal('reviewModal')">✕</button>
+<div class="modal-h">Laisser un avis ⭐</div>
+<div class="modal-sub">Comment s'est passée la transaction ?</div>
+<div id="reviewAlert"></div>
+<div class="review-stars" id="reviewStars">
+<span class="review-star" onclick="setReviewRating(1)">⭐</span>
+<span class="review-star" onclick="setReviewRating(2)">⭐</span>
+<span class="review-star" onclick="setReviewRating(3)">⭐</span>
+<span class="review-star" onclick="setReviewRating(4)">⭐</span>
+<span class="review-star" onclick="setReviewRating(5)">⭐</span>
+</div>
+<div style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:16px" id="reviewRatingLabel">Sélectionne une note</div>
+<div class="fg"><label>Commentaire</label><textarea id="reviewComment" placeholder="Dis-nous comment ça s'est passé..."></textarea></div>
+<button class="btn-submit" id="reviewBtn" onclick="submitReview()">Publier l'avis</button>
+<input type="hidden" id="reviewOrderId">
+<input type="hidden" id="reviewSellerId">
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ️ REMPLACE CES VALEURS PAR LES TIENNES DEPUIS SUPABASE
+var SUPA_URL = 'https://xmsvlznounoyalrcckjz.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // <-- TA VRAIE CLÉ ANON ICI
+
+var db = supabase.createClient(SUPA_URL, SUPA_KEY);
+var currentUser = null;
+var userProfile = null;
+var currentFilter = 'all';
+var currentSort = 'created_at';
+var searchQuery = '';
+var currentChatConvId = null;
+var chatChannel = null;
+var currentOrderTab = 'buying';
+var reviewRating = 0;
+var GAME_ICONS = {'Steal A Brainrot':'🧠','Blox Fruits':'🍎','Murder Mystery 2':'🔪','Grow A Garden':'','Adopt Me':'🐾'};
+var RATING_LABELS = ['','Très mauvais 😤','Mauvais 😕','Correct 😐','Bien 😊','Excellent ! 🎉'];
+
+async function init() {
+console.log(' BlooMarket initialisation...');
+try {
+var s = await db.auth.getSession();
+console.log('Session:', s.data.session ? 'connecté' : 'non connecté');
+if (s.data.session) await setUser(s.data.session.user);
+db.auth.onAuthStateChange(async function(event, session) {
+console.log('Auth event:', event);
+if (session) await setUser(session.user);
+else clearUser();
+});
+await loadListings();
+db.channel('listings_rt').on('postgres_changes',{event:'*',schema:'public',table:'listings'},function(){loadListings();}).subscribe();
+} catch(e) {
+console.error('❌ Erreur init:', e);
+showToast('Erreur de connexion à la base de données', 'error');
+}
+}
+
+async function setUser(user) {
+currentUser = user;
+document.getElementById('guestNav').style.display = 'none';
+document.getElementById('userNav').style.display = 'block';
+var name = (user.user_metadata && user.user_metadata.username) ? user.user_metadata.username : user.email.split('@')[0];
+document.getElementById('userName').textContent = name;
+document.getElementById('userAvatar').textContent = name[0].toUpperCase();
+document.getElementById('dashUsername').textContent = name;
+await loadProfile();
+}
+
+function clearUser() {
+currentUser = null; userProfile = null;
+document.getElementById('guestNav').style.display = 'flex';
+document.getElementById('userNav').style.display = 'none';
+}
+
+async function loadProfile() {
+if (!currentUser) return;
+try {
+var res = await db.from('profiles').select('*').eq('id', currentUser.id).single();
+if (res.data) {
+userProfile = res.data;
+var bal = parseFloat(res.data.balance || 0).toFixed(2);
+document.getElementById('dropBalance').textContent = bal;
+document.getElementById('dashBalance').textContent = bal + '€';
+var vs = document.getElementById('udVerifyStatus');
+if (res.data.id_verified) { vs.className = 'ud-verify-status verified'; vs.innerHTML = '✓ Vérifié'; }
+else { vs.className = 'ud-verify-status unverified'; vs.innerHTML = ' Non vérifié'; }
+}
+} catch(e) { console.error('loadProfile error:', e); }
+}
+
+function toggleAccountDropdown() {
+document.getElementById('accountDropdown').classList.toggle('show');
+}
+
+document.addEventListener('click', function(e) {
+if (!e.target.closest('#userNav')) {
+document.getElementById('accountDropdown').classList.remove('show');
+}
+});
+
+async function doLogin() {
+var email = document.getElementById('loginEmail').value.trim();
+var pwd = document.getElementById('loginPassword').value;
+if (!email || !pwd) return showAlert('loginAlert','error','Remplis tous les champs !');
+document.getElementById('loginBtn').disabled = true;
+document.getElementById('loginBtn').textContent = 'Chargement...';
+var res = await db.auth.signInWithPassword({email: email, password: pwd});
+document.getElementById('loginBtn').disabled = false;
+document.getElementById('loginBtn').textContent = 'Se connecter';
+if (res.error) return showAlert('loginAlert','error','Email ou mot de passe incorrect.');
+hideModal('loginModal');
+showToast('Connexion réussie ! ','success');
+}
+
+async function doRegister() {
+var username = document.getElementById('registerUsername').value.trim();
+var email = document.getElementById('registerEmail').value.trim();
+var pwd = document.getElementById('registerPassword').value;
+if (!username || !email || !pwd) return showAlert('registerAlert','error','Remplis tous les champs !');
+if (pwd.length < 6) return showAlert('registerAlert','error','Mot de passe trop court (min. 6).');
+document.getElementById('registerBtn').disabled = true;
+document.getElementById('registerBtn').textContent = 'Création...';
+var res = await db.auth.signUp({email: email, password: pwd, options:{data:{username: username}}});
+document.getElementById('registerBtn').disabled = false;
+document.getElementById('registerBtn').textContent = 'Créer mon compte';
+if (res.error) return showAlert('registerAlert','error', res.error.message);
+hideModal('registerModal');
+showToast('Compte créé ! Vérifie ton email 🎉','success');
+}
+
+async function logout() {
+await db.auth.signOut(); clearUser(); showPage('home');
+showToast('Déconnecté','success');
+}
+
+function setFundsAmount(n) { document.getElementById('fundsAmount').value = n; }
+
+async function addFunds() {
+if (!currentUser) return;
+var amount = parseFloat(document.getElementById('fundsAmount').value);
+if (!amount || amount <= 0) return showAlert('fundsAlert','error','Montant invalide.');
+var newBalance = (parseFloat(userProfile ? userProfile.balance : 0) + amount);
+var res = await db.from('profiles').update({balance: newBalance}).eq('id', currentUser.id);
+if (res.error) return showAlert('fundsAlert','error','Erreur: ' + res.error.message);
+if (!userProfile) userProfile = {};
+userProfile.balance = newBalance;
+var bal = newBalance.toFixed(2);
+document.getElementById('dropBalance').textContent = bal;
+document.getElementById('dashBalance').textContent = bal + '€';
+document.getElementById('fundsAmount').value = '';
+hideModal('addFundsModal');
+showToast('+' + amount.toFixed(2) + '€ ajoutés ! 💰','success');
+}
+
+async function loadListings() {
+document.getElementById('listingsLoader').style.display = 'flex';
+document.getElementById('listingsGrid').innerHTML = '';
+document.getElementById('emptyState').style.display = 'none';
+try {
+var query = db.from('listings').select('*, profiles(username)').eq('active', true);
+if (currentFilter !== 'all') query = query.eq('game', currentFilter);
+if (searchQuery) query = query.ilike('title', '%' + searchQuery + '%');
+if (currentSort === 'price_asc') query = query.order('price', {ascending: true});
+else if (currentSort === 'price_desc') query = query.order('price', {ascending: false});
+else query = query.order('created_at', {ascending: false});
+var res = await query;
+document.getElementById('listingsLoader').style.display = 'none';
+if (res.error) { console.error('loadListings error:', res.error); return; }
+if (!res.data) return;
+renderListings(res.data);
+document.getElementById('statListings').textContent = res.data.length;
+document.getElementById('statSellers').textContent = new Set(res.data.map(function(l){return l.user_id;})).size;
+} catch(e) { console.error('loadListings error:', e); }
+}
+
+function renderListings(listings) {
+var grid = document.getElementById('listingsGrid');
+var count = document.getElementById('resultsCount');
+count.textContent = listings.length + ' annonce' + (listings.length !== 1 ? 's' : '') + ' trouvée' + (listings.length !== 1 ? 's' : '');
+if (!listings.length) { grid.innerHTML = ''; document.getElementById('emptyState').style.display = 'block'; return; }
+document.getElementById('emptyState').style.display = 'none';
+var html = '';
+for (var i = 0; i < listings.length; i++) {
+var l = listings[i];
+var icon = GAME_ICONS[l.game] || '🎮';
+var seller = (l.profiles && l.profiles.username) ? l.profiles.username : 'Vendeur';
+var isOwn = currentUser && l.user_id === currentUser.id;
+html += '<div class="listing-card" onclick="openDetailById(' + l.id + ')">';
+html += '<div class="lc-img">' + icon + '<div class="lc-game-badge">' + l.game + '</div><div class="lc-online"></div></div>';
+html += '<div class="lc-body">';
+html += '<div class="lc-title">' + escHtml(l.title) + '</div>';
+html += '<div class="lc-seller"><div class="lc-seller-dot"></div>' + escHtml(seller) + (isOwn ? ' (toi)' : '') + '</div>';
+html += '<div class="lc-footer"><div class="lc-price">' + parseFloat(l.price).toFixed(2) + '€</div>';
+html += '<button class="lc-buy" onclick="event.stopPropagation();openDetailById(' + l.id + ')">Voir</button></div>';
+html += '<div class="lc-rating">⭐ Vendeur actif</div></div></div>';
+}
+grid.innerHTML = html;
+}
+
+async function openDetailById(id) {
+var res = await db.from('listings').select('*, profiles(username)').eq('id', id).single();
+if (res.data) openDetail(res.data);
+}
+
+function openDetail(l) {
+var icon = GAME_ICONS[l.game] || '🎮';
+var seller = (l.profiles && l.profiles.username) ? l.profiles.username : 'Vendeur';
+var isOwn = currentUser && l.user_id === currentUser.id;
+var html = '';
+html += '<div class="ld-img">' + icon + '</div>';
+html += '<div class="ld-title">' + escHtml(l.title) + '</div>';
+html += '<div class="ld-meta"><span class="ld-badge">' + l.game + '</span></div>';
+html += '<div class="ld-desc">' + escHtml(l.description || 'Aucune description.') + '</div>';
+html += '<div class="ld-seller-box">';
+html += '<div class="ld-seller-avatar">' + seller[0].toUpperCase() + '</div>';
+html += '<div class="ld-seller-info"><h4>' + escHtml(seller) + '</h4><p>Vendeur actif</p></div>';
+if (!isOwn) {
+html += '<button class="btn-msg" style="margin-left:auto" onclick="openChat(\'' + l.user_id + '\',\'' + escHtml(seller) + '\',' + l.id + ')">💬 Contacter</button>';
+}
+html += '</div>';
+html += '<div class="ld-price-row"><div class="ld-price">' + parseFloat(l.price).toFixed(2) + '€</div>';
+if (isOwn) {
+html += '<span style="font-size:12px;color:var(--muted)">Ton annonce</span>';
+} else {
+html += '<button class="btn-buy-now" onclick="handleBuy(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + l.user_id + '\',' + l.price + ')">Acheter maintenant</button>';
+}
+html += '</div>';
+document.getElementById('detailContent').innerHTML = html;
+showModal('detailModal');
+}
+
+async function handleBuy(listingId, title, sellerId, price) {
+if (!currentUser) { hideModal('detailModal'); showModal('loginModal'); return; }
+if (currentUser.id === sellerId) { showToast("Tu ne peux pas acheter ta propre annonce !", 'error'); return; }
+await loadProfile();
+var balance = parseFloat(userProfile ? userProfile.balance : 0);
+price = parseFloat(price);
+if (balance < price) {
+hideModal('detailModal');
+showToast('Solde insuffisant ! Tu as ' + balance.toFixed(2) + '€, il faut ' + price.toFixed(2) + '€', 'error');
+setTimeout(function(){showModal('addFundsModal');}, 600);
+return;
+}
+if (!confirm('Confirmer l\'achat de "' + title + '" pour ' + price.toFixed(2) + '€ ?')) return;
+var newBuyerBal = balance - price;
+await db.from('profiles').update({balance: newBuyerBal}).eq('id', currentUser.id);
+var sellerRes = await db.from('profiles').select('balance').eq('id', sellerId).single();
+var newSellerBal = parseFloat((sellerRes.data ? sellerRes.data.balance : 0)) + price;
+await db.from('profiles').update({balance: newSellerBal}).eq('id', sellerId);
+await db.from('orders').insert({buyer_id: currentUser.id, seller_id: sellerId, listing_id: listingId, title: title, price: price, status: 'pending'});
+await db.from('listings').update({active: false}).eq('id', listingId);
+if (!userProfile) userProfile = {};
+userProfile.balance = newBuyerBal;
+document.getElementById('dropBalance').textContent = newBuyerBal.toFixed(2);
+document.getElementById('dashBalance').textContent = newBuyerBal.toFixed(2) + '€';
+hideModal('detailModal');
+showToast('Achat réussi ! 🎉 ' + price.toFixed(2) + '€ débités', 'success');
+loadListings();
+setTimeout(function(){openChat(sellerId, 'Vendeur', listingId);}, 800);
+}
+
+async function doSell() {
+if (!currentUser) return showModal('loginModal');
+var title = document.getElementById('sellTitle').value.trim();
+var game = document.getElementById('sellGame').value;
+var price = parseFloat(document.getElementById('sellPrice').value);
+var desc = document.getElementById('sellDesc').value.trim();
+if (!title || !price || !desc) return showAlert('sellAlert','error','Remplis tous les champs !');
+if (price <= 0) return showAlert('sellAlert','error','Prix invalide.');
+document.getElementById('sellBtn').disabled = true;
+document.getElementById('sellBtn').textContent = 'Publication...';
+var res = await db.from('listings').insert({user_id: currentUser.id, title: title, game: game, price: price, description: desc, active: true});
+document.getElementById('sellBtn').disabled = false;
+document.getElementById('sellBtn').textContent = "Publier l'annonce";
+if (res.error) return showAlert('sellAlert','error','Erreur: ' + res.error.message);
+hideModal('sellModal');
+document.getElementById('sellTitle').value = '';
+document.getElementById('sellPrice').value = '';
+document.getElementById('sellDesc').value = '';
+showToast('Annonce publiée ! 🎉','success');
+loadListings();
+}
+
+async function loadMyListings() {
+if (!currentUser) return;
+var res = await db.from('listings').select('*').eq('user_id', currentUser.id).eq('active', true).order('created_at',{ascending:false});
+if (!res.data) return;
+document.getElementById('dMyListings').textContent = res.data.length;
+var body = document.getElementById('myListingsBody');
+if (!res.data.length) { body.innerHTML = '<div style="padding:32px;text-align:center;color:var(--muted);font-size:13px">Aucune annonce</div>'; return; }
+var html = '';
+for (var i = 0; i < res.data.length; i++) {
+var l = res.data[i];
+html += '<div class="dtr"><span>' + (GAME_ICONS[l.game]||'🎮') + ' ' + escHtml(l.title) + '</span>';
+html += '<span style="color:var(--blue2);font-weight:700">' + parseFloat(l.price).toFixed(2) + '€</span>';
+html += '<span style="color:var(--muted)">' + l.game + '</span>';
+html += '<span><button onclick="deleteListing(' + l.id + ')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer">Supprimer</button></span></div>';
+}
+body.innerHTML = html;
+var salesRes = await db.from('orders').select('price').eq('seller_id', currentUser.id).eq('status','completed');
+if (salesRes.data) {
+document.getElementById('dSales').textContent = salesRes.data.length;
+var total = salesRes.data.reduce(function(s,o){return s+parseFloat(o.price);},0);
+document.getElementById('dRevenue').textContent = total.toFixed(2) + '€';
+}
+}
+
+async function deleteListing(id) {
+if (!confirm('Supprimer cette annonce ?')) return;
+await db.from('listings').update({active: false}).eq('id', id).eq('user_id', currentUser.id);
+showToast('Annonce supprimée','success'); loadMyListings(); loadListings();
+}
+
+function switchOrderTab(tab) {
+currentOrderTab = tab;
+document.getElementById('tabBuying').classList.toggle('active', tab === 'buying');
+document.getElementById('tabSelling').classList.toggle('active', tab === 'selling');
+loadOrders();
+}
+
+async function loadOrders() {
+if (!currentUser) return;
+var el = document.getElementById('ordersContent');
+el.innerHTML = '<div class="loader"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div>';
+var res;
+if (currentOrderTab === 'buying') {
+res = await db.from('orders').select('*, seller:profiles!orders_seller_id_fkey(username)').eq('buyer_id', currentUser.id).order('created_at',{ascending:false});
+} else {
+res = await db.from('orders').select('*, buyer:profiles!orders_buyer_id_fkey(username)').eq('seller_id', currentUser.id).order('created_at',{ascending:false});
+}
+if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Aucune commande</div>'; return; }
+var html = '';
+for (var i = 0; i < res.data.length; i++) {
+var o = res.data[i];
+var other = currentOrderTab === 'buying' ? ((o.seller && o.seller.username) || 'Vendeur') : ((o.buyer && o.buyer.username) || 'Acheteur');
+var statusHtml = '';
+if (o.status === 'pending') statusHtml = '<span class="badge-wait">⏳ En attente</span>';
+else if (o.status === 'completed') statusHtml = '<span class="badge-ok">✅ Complété</span>';
+else statusHtml = '<span style="color:#EF4444;font-size:10px">❌ Annulé</span>';
+var actions = '';
+if (currentOrderTab === 'buying' && o.status === 'pending') {
+actions += '<button class="btn-sm btn-sm-ghost" onclick="openChat(\'' + (o.seller_id||'') + '\',\'' + escHtml(other) + '\',' + (o.listing_id||'') + ')">💬 Chat</button>';
+actions += '<button class="btn-sm btn-sm-green" onclick="confirmOrder(' + o.id + ',\'' + o.seller_id + '\')">✅ Confirmer réception</button>';
+} else if (currentOrderTab === 'selling' && o.status === 'pending') {
+actions += '<button class="btn-sm btn-sm-ghost" onclick="openChat(\'' + (o.buyer_id||'') + '\',\'' + escHtml(other) + '\',' + (o.listing_id||'') + ')">💬 Chat</button>';
+} else if (o.status === 'completed' && currentOrderTab === 'buying' && !o.reviewed) {
+actions += '<button class="btn-sm btn-sm-blue" onclick="openReviewModal(' + o.id + ',\'' + o.seller_id + '\')">⭐ Laisser un avis</button>';
+}
+html += '<div class="order-item"><div class="order-header"><div class="order-title">' + escHtml(o.title||'Commande') + '</div>' + statusHtml + '</div>';
+html += '<div class="order-meta">' + (currentOrderTab==='buying'?'Vendeur':'Acheteur') + ' : <strong>' + escHtml(other) + '</strong> • ' + parseFloat(o.price||0).toFixed(2) + '€ • ' + new Date(o.created_at).toLocaleDateString('fr-FR') + '</div>';
+html += '<div class="order-actions">' + actions + '</div></div>';
+}
+el.innerHTML = html;
+}
+
+async function confirmOrder(orderId, sellerId) {
+if (!confirm("Confirmer que tu as bien reçu l'item ?")) return;
+await db.from('orders').update({status: 'completed'}).eq('id', orderId);
+showToast('Commande confirmée ! ✅','success');
+loadOrders();
+setTimeout(function(){openReviewModal(orderId, sellerId);}, 500);
+}
+
+async function openChat(otherUserId, otherUsername, listingId) {
+if (!currentUser) { showModal('loginModal'); return; }
+hideModal('detailModal');
+var ids = [currentUser.id, otherUserId].sort();
+var convRes = await db.from('conversations').select('*').eq('user1_id', ids[0]).eq('user2_id', ids[1]).maybeSingle();
+var conv = convRes.data;
+if (!conv) {
+var newConv = await db.from('conversations').insert({user1_id: ids[0], user2_id: ids[1], listing_id: listingId}).select().single();
+conv = newConv.data;
+}
+if (!conv) { showToast('Erreur chat','error'); return; }
+currentChatConvId = conv.id;
+document.getElementById('chatTitle').textContent = otherUsername;
+document.getElementById('chatAvatar').textContent = otherUsername[0].toUpperCase();
+showModal('chatModal');
+await loadMessages();
+if (chatChannel) chatChannel.unsubscribe();
+chatChannel = db.channel('conv-' + conv.id).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'conversation_id=eq.' + conv.id},function(payload){
+appendMessage(payload.new);
+}).subscribe();
+await db.from('messages').update({read: true}).eq('conversation_id', conv.id).neq('sender_id', currentUser.id);
+checkUnreadMessages();
+}
+
+async function loadMessages() {
+var res = await db.from('messages').select('*').eq('conversation_id', currentChatConvId).order('created_at',{ascending:true});
+var container = document.getElementById('chatMessages');
+if (!res.data || !res.data.length) { container.innerHTML = '<div class="chat-empty">Début de la conversation 👋</div>'; return; }
+var html = '';
+for (var i = 0; i < res.data.length; i++) { html += msgHTML(res.data[i]); }
+container.innerHTML = html;
+container.scrollTop = container.scrollHeight;
+}
+
+function appendMessage(msg) {
+var container = document.getElementById('chatMessages');
+if (container.querySelector('.chat-empty')) container.innerHTML = '';
+container.insertAdjacentHTML('beforeend', msgHTML(msg));
+container.scrollTop = container.scrollHeight;
+}
+
+function msgHTML(msg) {
+var isMe = currentUser && msg.sender_id === currentUser.id;
+var d = new Date(msg.created_at);
+var time = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+return '<div class="msg ' + (isMe?'me':'them') + '"><div class="msg-bubble">' + escHtml(msg.content) + '</div><div class="msg-time">' + time + '</div></div>';
+}
+
+async function sendMessage() {
+if (!currentChatConvId || !currentUser) return;
+var input = document.getElementById('chatInput');
+var content = input.value.trim();
+if (!content) return;
+input.value = '';
+await db.from('messages').insert({conversation_id: currentChatConvId, sender_id: currentUser.id, content: content, read: false});
+await db.from('conversations').update({last_message: content, updated_at: new Date().toISOString()}).eq('id', currentChatConvId);
+}
+
+document.getElementById('chatInput').addEventListener('keydown', function(e){ if(e.key==='Enter') sendMessage(); });
+
+async function loadConversations() {
+if (!currentUser) return;
+var res = await db.from('conversations')
+.select('*, user1:profiles!conversations_user1_id_fkey(username), user2:profiles!conversations_user2_id_fkey(username)')
+.or('user1_id.eq.' + currentUser.id + ',user2_id.eq.' + currentUser.id)
+.order('updated_at',{ascending:false});
+var el = document.getElementById('convList');
+if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Aucune conversation</div>'; return; }
+var html = '<div class="conv-list">';
+for (var i = 0; i < res.data.length; i++) {
+var c = res.data[i];
+var isUser1 = c.user1_id === currentUser.id;
+var other = isUser1 ? c.user2 : c.user1;
+var otherId = isUser1 ? c.user2_id : c.user1_id;
+var name = (other && other.username) ? other.username : 'Utilisateur';
+var lastMsg = c.last_message || 'Nouvelle conversation';
+var d = c.updated_at ? new Date(c.updated_at) : new Date();
+var time = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+html += '<div class="conv-item" onclick="openChatById(' + c.id + ',\'' + otherId + '\',\'' + escHtml(name) + '\')">';
+html += '<div class="conv-avatar">' + name[0].toUpperCase() + '</div>';
+html += '<div class="conv-info"><div class="conv-name">' + escHtml(name) + '</div><div class="conv-last">' + escHtml(lastMsg) + '</div></div>';
+html += '<div class="conv-time">' + time + '</div></div>';
+}
+html += '</div>';
+el.innerHTML = html;
+}
+
+async function openChatById(convId, otherUserId, otherUsername) {
+currentChatConvId = convId;
+document.getElementById('chatTitle').textContent = otherUsername;
+document.getElementById('chatAvatar').textContent = otherUsername[0].toUpperCase();
+showModal('chatModal');
+await loadMessages();
+if (chatChannel) chatChannel.unsubscribe();
+chatChannel = db.channel('conv-' + convId).on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'conversation_id=eq.' + convId},function(payload){
+appendMessage(payload.new);
+}).subscribe();
+await db.from('messages').update({read: true}).eq('conversation_id', convId).neq('sender_id', currentUser.id);
+checkUnreadMessages();
+}
+
+async function checkUnreadMessages() {
+if (!currentUser) return;
+var res = await db.from('messages').select('id', {count:'exact',head:true}).eq('read', false).neq('sender_id', currentUser.id);
+var count = res.count || 0;
+var badge = document.getElementById('msgBadge');
+if (count > 0) { badge.textContent = count > 9 ? '9+' : count; badge.style.display = 'flex'; }
+else { badge.style.display = 'none'; }
+}
+
+function openReviewModal(orderId, sellerId) {
+document.getElementById('reviewOrderId').value = orderId;
+document.getElementById('reviewSellerId').value = sellerId;
+reviewRating = 0;
+document.querySelectorAll('.review-star').forEach(function(s){s.classList.remove('active');});
+document.getElementById('reviewRatingLabel').textContent = 'Sélectionne une note';
+document.getElementById('reviewComment').value = '';
+document.getElementById('reviewAlert').innerHTML = '';
+showModal('reviewModal');
+}
+
+function setReviewRating(r) {
+reviewRating = r;
+var stars = document.querySelectorAll('.review-star');
+for (var i = 0; i < stars.length; i++) { stars[i].classList.toggle('active', i < r); }
+document.getElementById('reviewRatingLabel').textContent = RATING_LABELS[r];
+}
+
+async function submitReview() {
+if (!reviewRating) return showAlert('reviewAlert','error','Sélectionne une note !');
+var orderId = document.getElementById('reviewOrderId').value;
+var sellerId = document.getElementById('reviewSellerId').value;
+var comment = document.getElementById('reviewComment').value.trim();
+document.getElementById('reviewBtn').disabled = true;
+document.getElementById('reviewBtn').textContent = 'Chargement...';
+var res = await db.from('reviews').insert({order_id: orderId, seller_id: sellerId, buyer_id: currentUser.id, rating: reviewRating, comment: comment});
+if (!res.error) await db.from('orders').update({reviewed: true}).eq('id', orderId);
+document.getElementById('reviewBtn').disabled = false;
+document.getElementById('reviewBtn').textContent = "Publier l'avis";
+if (res.error) return showAlert('reviewAlert','error','Erreur: ' + res.error.message);
+hideModal('reviewModal');
+showToast('Avis publié ! Merci ⭐','success');
+loadOrders();
+}
+
+function filterGame(game) {
+currentFilter = game;
+document.querySelectorAll('.cat-tab').forEach(function(t){t.classList.remove('active');});
+event.target.closest('.cat-tab').classList.add('active');
+loadListings();
+}
+
+function applySort(val) { currentSort = val; loadListings(); }
+
+var searchTimeout;
+function handleSearch() {
+clearTimeout(searchTimeout);
+searchQuery = document.getElementById('searchInput').value.trim();
+searchTimeout = setTimeout(function(){loadListings();}, 400);
+}
+
+function showPage(page) {
+document.querySelectorAll('.page').forEach(function(p){p.classList.remove('show');});
+var pageMap = {home:'homePage', dashboard:'dashPage', orders:'ordersPage', messages:'messagesPage'};
+var el = document.getElementById(pageMap[page]);
+if (el) el.classList.add('show');
+if (page !== 'home' && !currentUser) { showModal('loginModal'); return; }
+if (page === 'dashboard') { loadMyListings(); loadProfile(); }
+if (page === 'orders') { loadOrders(); }
+if (page === 'messages') { loadConversations(); }
+document.getElementById('accountDropdown').classList.remove('show');
+}
+
+function requireAuth(fn) { if (!currentUser) { showModal('loginModal'); return; } fn(); }
+function showModal(id) { document.getElementById(id).classList.add('show'); }
+function hideModal(id) { document.getElementById(id).classList.remove('show'); }
+function closeOnBg(e, id) { if (e.target.id === id) hideModal(id); }
+function switchModal(from, to) { hideModal(from); showModal(to); }
+function showAlert(id, type, msg) { document.getElementById(id).innerHTML = '<div class="alert alert-' + type + '">' + msg + '</div>'; }
+function showToast(msg, type) {
+type = type || 'success';
+var t = document.getElementById('toast');
+t.textContent = msg; t.className = 'toast ' + type + ' show';
+setTimeout(function(){t.classList.remove('show');}, 3500);
+}
+function escHtml(str) { if (!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+init();
+</script>
+</body>
+</html>
