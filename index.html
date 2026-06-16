@@ -429,6 +429,31 @@ body.auth-loading #guestNav{display:none!important}
 body.auth-loading #userNav{display:none!important}
 .auth-spin{width:16px;height:16px;border:2px solid rgba(255,255,255,0.14);border-top-color:var(--blue2);border-radius:50%;animation:authspin .6s linear infinite}
 @keyframes authspin{to{transform:rotate(360deg)}}
+
+/* ── PHASE 1 : verif vendeur / avis / galerie / zoom / trust ── */
+.sv-steps{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.sv-step{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted2);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:9px 12px}
+.sv-step .sv-ic{font-size:16px}
+.review-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.review-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.review-card-name{font-size:13px;font-weight:700}
+.review-card-body{font-size:13px;color:var(--muted2);line-height:1.6;margin-bottom:5px}
+.review-card-date{font-size:10px;color:var(--muted)}
+.ld-thumbs{display:flex;gap:8px;margin:-8px 0 16px;flex-wrap:wrap}
+.ld-thumb{width:54px;height:54px;border-radius:9px;object-fit:cover;cursor:pointer;border:2px solid transparent;opacity:.6;transition:all .15s}
+.ld-thumb:hover{opacity:1}
+.ld-thumb.active{border-color:var(--blue2);opacity:1}
+.zoom-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.92);align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.zoom-overlay.show{display:flex}
+.zoom-overlay img{max-width:96vw;max-height:92vh;border-radius:12px;box-shadow:0 12px 50px rgba(0,0,0,0.6)}
+.trust-badge{display:inline-flex;align-items:center;gap:5px;background:#fff;color:#0a0a0a;border-radius:6px;padding:5px 10px;font-size:12px;font-weight:800;letter-spacing:.3px}
+.trust-badge.trust-visa{color:#1A1F71;font-style:italic}
+.trust-badge.trust-pp{color:#003087}
+.trust-badge.trust-stripe{color:#635BFF}
+.mc-c{width:13px;height:13px;border-radius:50%;display:inline-block;margin-right:-6px}
+.mc-c.mc-r{background:#EB001B}
+.mc-c.mc-y{background:#F79E1B;opacity:.85}
+@media(max-width:640px){ .footer-badges{flex-wrap:wrap;gap:6px} .ld-thumb{width:46px;height:46px} }
 </style>
 </head>
 <body class="auth-loading">
@@ -479,6 +504,7 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-item" onclick="showPage('orders')">📦 Mes commandes</div>
         <div class="ud-item" onclick="showPage('messages')">💬 Messages</div>
         <div class="ud-sep"></div>
+        <div class="ud-item" id="becomeSellerItem" onclick="showModal('sellerVerifyModal')">🛡️ Devenir vendeur vérifié</div>
         <div class="ud-item" onclick="showModal('sellModal')">➕ Vendre un item</div>
         <div class="ud-item" onclick="showModal('addFundsModal')">💳 Recharger solde</div>
         <div class="ud-item" onclick="showPage('withdrawPage')">💸 Retirer des fonds</div>
@@ -555,6 +581,8 @@ body.auth-loading #userNav{display:none!important}
     </div>
     <button class="btn-blue" onclick="showModal('editProfileModal')">✏️ Modifier profil</button>
   </div>
+  <div class="section-title">Avis reçus (<span id="profileReviewCount">0</span>)</div>
+  <div id="profileReviews" style="margin-bottom:22px"></div>
   <div class="section-title">Mes annonces actives</div>
   <div id="profileListings" class="listings"></div>
 </div>
@@ -633,8 +661,10 @@ body.auth-loading #userNav{display:none!important}
   <div class="admin-stat-grid" id="adminStats"></div>
   <div class="admin-nav">
     <button class="admin-tab active" onclick="adminTab('users',this)">👥 Utilisateurs</button>
+    <button class="admin-tab" onclick="adminTab('sellers',this)">🛡️ Vendeurs</button>
     <button class="admin-tab" onclick="adminTab('listings',this)">📋 Annonces</button>
     <button class="admin-tab" onclick="adminTab('orders',this)">📦 Commandes</button>
+    <button class="admin-tab" onclick="adminTab('disputes',this)">⚖️ Litiges</button>
     <button class="admin-tab" onclick="adminTab('withdraws',this)">💸 Retraits</button>
   </div>
   <div id="adminContent"></div>
@@ -685,9 +715,11 @@ body.auth-loading #userNav{display:none!important}
   <div class="footer-bottom">
     <div class="footer-copy">© 2025 BlooMarket. Tous droits réservés. BlooMarket n'est pas affilié à Roblox Corporation.</div>
     <div class="footer-badges">
-      <div class="footer-badge">🔒 SSL</div>
-      <div class="footer-badge">💳 Stripe</div>
-      <div class="footer-badge">✓ Sécurisé</div>
+      <div class="trust-badge">🔒 SSL</div>
+      <div class="trust-badge trust-visa">VISA</div>
+      <div class="trust-badge trust-mc"><span class="mc-c mc-r"></span><span class="mc-c mc-y"></span>Mastercard</div>
+      <div class="trust-badge trust-pp">PayPal</div>
+      <div class="trust-badge trust-stripe">Stripe</div>
     </div>
   </div>
 </footer>
@@ -861,6 +893,37 @@ body.auth-loading #userNav{display:none!important}
   </div>
 </div>
 
+<!-- Seller verification -->
+<div class="overlay" id="sellerVerifyModal" onclick="closeOnBg(event,'sellerVerifyModal')">
+  <div class="modal" style="max-width:460px">
+    <button class="modal-close" onclick="hideModal('sellerVerifyModal')">✕</button>
+    <div class="modal-h">Devenir vendeur vérifié 🛡️</div>
+    <div class="modal-sub">Vérification manuelle par notre équipe (KYC)</div>
+    <div id="sellerVerifyAlert"></div>
+    <div class="sv-steps">
+      <div class="sv-step"><span class="sv-ic">📧</span> Email vérifié (via ton inscription)</div>
+      <div class="sv-step"><span class="sv-ic">🪪</span> Pièce d'identité lisible (recto)</div>
+      <div class="sv-step"><span class="sv-ic">🔞</span> 18 ans minimum</div>
+    </div>
+    <div class="fg"><label>Téléphone (recommandé)</label><input type="tel" id="svPhone" placeholder="+33 6 12 34 56 78"></div>
+    <div class="fg">
+      <label>Pièce d'identité</label>
+      <div class="img-upload-zone" onclick="document.getElementById('svIdFile').click()">
+        <div class="ico">🪪</div>
+        <p>Clique pour ajouter ta pièce d'identité</p>
+        <p style="font-size:11px;margin-top:4px;color:var(--muted)">Stockée de façon privée — visible uniquement par l'admin</p>
+      </div>
+      <input type="file" id="svIdFile" accept="image/*" style="display:none" onchange="previewSvId(this)">
+      <div class="img-preview-row" id="svIdPreview"></div>
+    </div>
+    <label class="filter-check" style="margin:6px 0 14px"><input type="checkbox" id="svAge"> Je certifie avoir 18 ans ou plus</label>
+    <button class="btn-submit" id="svBtn" onclick="submitSellerVerify()">Envoyer ma demande</button>
+  </div>
+</div>
+
+<!-- Zoom image -->
+<div class="zoom-overlay" id="zoomOverlay" onclick="closeZoom()"><img id="zoomImg" src="" alt="zoom"></div>
+
 <div class="toast" id="toast"></div>
 
 <!-- ══ SCRIPT ══ -->
@@ -879,7 +942,7 @@ function gameBadgeIc(game){ return GAME_IMG[game] ? '<img class="lc-badge-ic" sr
 function gameDetailFallback(game, emoji){ return GAME_IMG[game] ? '<img class="ld-game-img" src="'+GAME_IMG[game]+'" alt="'+escHtml(game)+'">' : '<div class="fallback-icon">'+emoji+'</div>'; }
 function gameCartIc(game, emoji){ return GAME_IMG[game] ? '<img src="'+GAME_IMG[game]+'" alt="'+escHtml(game)+'">' : emoji; }
 var RATING_LABELS = ['','Très mauvais 😤','Mauvais 😕','Correct 😐','Bien 😊','Excellent ! 🎉'];
-var ADMIN_EMAILS = ['admin@bloomarket.com']; // à personnaliser
+var ADMIN_EMAILS = ['aronbibale@gmail.com']; // compte admin du site
 
 /* ── STATE ── */
 var currentUser = null, userProfile = null;
@@ -952,6 +1015,7 @@ async function setUser(user) {
   document.getElementById('userAvatarText').textContent = name[0].toUpperCase();
   document.getElementById('dashUsername').textContent = name;
   if (ADMIN_EMAILS.includes(user.email)) document.getElementById('adminMenuItem').style.display = 'block';
+  db.from('profiles').update({last_seen:new Date().toISOString()}).eq('id', user.id).then(function(){});
   revealAuthUI();
   await loadProfile();
   await checkUnreadMessages();
@@ -977,6 +1041,7 @@ async function loadProfile() {
     var vs = document.getElementById('udVerifyStatus');
     if (res.data.id_verified) { vs.className = 'ud-verify-status verified'; vs.innerHTML = '✓ Vérifié'; }
     else { vs.className = 'ud-verify-status unverified'; vs.innerHTML = '⚠ Non vérifié'; }
+    var bsItem = document.getElementById('becomeSellerItem'); if (bsItem) bsItem.style.display = res.data.id_verified ? 'none' : 'flex';
     // Avatar
     if (res.data.avatar_url) {
       var img = '<img src="' + res.data.avatar_url + '" onerror="this.style.display=\'none\'">';
@@ -1049,14 +1114,41 @@ async function loadProfilePage() {
   document.getElementById('profileStatBuys').textContent = buysRes.count || 0;
   if (reviewsRes.data && reviewsRes.data.length) {
     var avg = reviewsRes.data.reduce(function(s,r){return s+r.rating;},0) / reviewsRes.data.length;
-    document.getElementById('profileStatRating').textContent = avg.toFixed(1) + ' ⭐';
+    document.getElementById('profileStatRating').innerHTML = starRow(avg) + ' ' + avg.toFixed(1);
+  } else {
+    document.getElementById('profileStatRating').textContent = '—';
   }
   var d = new Date(currentUser.created_at);
   document.getElementById('profileStatDate').textContent = d.toLocaleDateString('fr-FR', {month:'short', year:'numeric'});
+  if (userProfile.last_seen) {
+    var ls = new Date(userProfile.last_seen);
+    document.getElementById('profileEmail').textContent = currentUser.email + ' · vu le ' + ls.toLocaleDateString('fr-FR');
+  }
   document.getElementById('editUsername').value = name;
+  loadProfileReviews(currentUser.id);
   // Listings
   var listRes = await db.from('listings').select('*').eq('user_id', currentUser.id).eq('active', true);
   if (listRes.data) renderListings(listRes.data, 'profileListings');
+}
+
+function starRow(avg) {
+  var full = Math.round(avg), s = '';
+  for (var i = 1; i <= 5; i++) s += (i <= full ? '★' : '☆');
+  return '<span style="color:#FBBF24">' + s + '</span>';
+}
+
+async function loadProfileReviews(sellerId) {
+  var el = document.getElementById('profileReviews');
+  if (!el) return;
+  var res = await db.from('reviews').select('*, buyer:profiles!reviews_buyer_id_fkey(username)').eq('seller_id', sellerId).order('created_at',{ascending:false}).limit(20);
+  var cnt = document.getElementById('profileReviewCount');
+  if (cnt) cnt.textContent = (res.data || []).length;
+  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:12px;color:var(--muted);font-size:13px">Aucun avis pour le moment.</div>'; return; }
+  el.innerHTML = res.data.map(function(rv) {
+    var bn = (rv.buyer && rv.buyer.username) || 'Acheteur';
+    var dd = new Date(rv.created_at).toLocaleDateString('fr-FR');
+    return '<div class="review-card"><div class="review-card-top"><span class="review-card-name">' + escHtml(bn) + '</span>' + starRow(rv.rating) + '</div>' + (rv.comment ? '<div class="review-card-body">' + escHtml(rv.comment) + '</div>' : '') + '<div class="review-card-date">' + dd + '</div></div>';
+  }).join('');
 }
 
 async function saveProfile() {
@@ -1162,16 +1254,22 @@ function openDetail(l) {
   var verified = l.profiles && l.profiles.id_verified;
   var isOwn = currentUser && l.user_id === currentUser.id;
   var imgs = l.image_urls && l.image_urls.length ? l.image_urls : [];
+  window._ldImgs = imgs;
   var html = '<div class="ld-imgs" id="ldImgContainer">';
   if (imgs.length) {
-    html += '<img id="ldMainImg" src="' + escHtml(imgs[0]) + '" alt="' + escHtml(l.title) + '">';
+    html += '<img id="ldMainImg" src="' + escHtml(imgs[0]) + '" alt="' + escHtml(l.title) + '" style="cursor:zoom-in" onclick="openZoom(0)">';
     if (imgs.length > 1) {
       html += '<div class="ld-img-nav">';
-      for (var x=0;x<imgs.length;x++) html += '<div class="ld-img-dot' + (x===0?' active':'') + '" onclick="switchDetailImg(' + x + ',' + JSON.stringify(imgs).replace(/"/g,"'") + ')"></div>';
+      for (var x=0;x<imgs.length;x++) html += '<div class="ld-img-dot' + (x===0?' active':'') + '" onclick="event.stopPropagation();switchDetailImg(' + x + ',' + JSON.stringify(imgs).replace(/"/g,"'") + ')"></div>';
       html += '</div>';
     }
   } else html += gameDetailFallback(l.game, icon);
   html += '</div>';
+  if (imgs.length > 1) {
+    html += '<div class="ld-thumbs">';
+    for (var t=0;t<imgs.length;t++) html += '<img class="ld-thumb' + (t===0?' active':'') + '" src="' + escHtml(imgs[t]) + '" onclick="switchDetailImg(' + t + ',' + JSON.stringify(imgs).replace(/"/g,"'") + ')">';
+    html += '</div>';
+  }
   html += '<div class="ld-title">' + escHtml(l.title) + '</div>';
   html += '<div class="ld-meta"><span class="ld-badge">' + escHtml(l.game) + '</span>';
   if (verified) html += '<span class="ld-badge" style="color:var(--blue2);border-color:rgba(30,111,255,0.3)">✓ Vendeur vérifié</span>';
@@ -1195,9 +1293,18 @@ function openDetail(l) {
 
 function switchDetailImg(idx, imgs) {
   var el = document.getElementById('ldMainImg');
-  if (el) el.src = imgs[idx];
+  if (el) { el.src = imgs[idx]; el.setAttribute('onclick', 'openZoom(' + idx + ')'); }
   document.querySelectorAll('.ld-img-dot').forEach(function(d,i){d.classList.toggle('active', i===idx);});
+  document.querySelectorAll('.ld-thumb').forEach(function(d,i){d.classList.toggle('active', i===idx);});
 }
+
+function openZoom(idx) {
+  var imgs = window._ldImgs || [];
+  if (!imgs.length) return;
+  document.getElementById('zoomImg').src = imgs[idx];
+  document.getElementById('zoomOverlay').classList.add('show');
+}
+function closeZoom() { document.getElementById('zoomOverlay').classList.remove('show'); }
 
 /* ══ SELL ══ */
 var sellImageDataURLs = [];
@@ -1228,6 +1335,13 @@ function removeSellImage(idx) {
 
 async function doSell() {
   if (!currentUser) return showModal('loginModal');
+  await loadProfile();
+  if (!userProfile || !userProfile.id_verified) {
+    hideModal('sellModal');
+    showToast('Tu dois être vendeur vérifié pour publier','error');
+    setTimeout(function(){ showModal('sellerVerifyModal'); }, 500);
+    return;
+  }
   var title = document.getElementById('sellTitle').value.trim();
   var game = document.getElementById('sellGame').value;
   var price = parseFloat(document.getElementById('sellPrice').value);
@@ -1270,29 +1384,17 @@ async function handleBuy(listingId, title, sellerId, price) {
     setTimeout(function(){showModal('addFundsModal');}, 700);
     return;
   }
-  if (!confirm('Confirmer l\'achat de "' + title + '" pour ' + price.toFixed(2) + '€ ?')) return;
-  var commission = Math.round(price * COMMISSION * 100) / 100;
-  var sellerGets = Math.round((price - commission) * 100) / 100;
-  // Debit buyer
-  var newBuyerBal = Math.round((balance - price) * 100) / 100;
-  await db.from('profiles').update({balance: newBuyerBal}).eq('id', currentUser.id);
-  // Credit seller (minus commission)
-  var sellerRes = await db.from('profiles').select('balance').eq('id', sellerId).single();
-  var sellerBal = parseFloat((sellerRes.data ? sellerRes.data.balance : 0));
-  await db.from('profiles').update({balance: Math.round((sellerBal + sellerGets) * 100) / 100}).eq('id', sellerId);
-  // Create order
-  var orderRes = await db.from('orders').insert({buyer_id:currentUser.id, seller_id:sellerId, listing_id:listingId, title, price, commission, status:'pending'}).select().single();
-  // Deactivate listing
-  await db.from('listings').update({active:false}).eq('id', listingId);
-  userProfile.balance = newBuyerBal;
-  document.getElementById('dropBalance').textContent = newBuyerBal.toFixed(2);
-  document.getElementById('dashBalance').textContent = newBuyerBal.toFixed(2) + '€';
-  document.getElementById('withdrawBalance').textContent = newBuyerBal.toFixed(2) + '€';
+  if (!confirm('Confirmer l\'achat de "' + title + '" pour ' + price.toFixed(2) + '€ ?\n\nL\'argent sera bloqué en séquestre et versé au vendeur uniquement après ta confirmation de réception.')) return;
+  // Sequestre securise cote serveur (RPC) : debit acheteur + commande "pending"
+  var r = await db.rpc('buy_listing', { p_listing_id: listingId });
+  if (r.error) { showToast('Achat impossible : ' + rpcMsg(r.error), 'error'); return; }
+  await loadProfile();
+  var nb = parseFloat(userProfile ? userProfile.balance : 0);
+  document.getElementById('dropBalance').textContent = nb.toFixed(2);
+  document.getElementById('dashBalance').textContent = nb.toFixed(2) + '€';
+  document.getElementById('withdrawBalance').textContent = nb.toFixed(2) + '€';
   hideModal('detailModal');
-  showToast('Achat réussi ! 🎉 ' + price.toFixed(2) + '€ débités','success');
-  // Notifications
-  await addNotification(currentUser.id, '🛒', 'Achat effectué', 'Tu as acheté "' + title + '" pour ' + price.toFixed(2) + '€.');
-  await addNotification(sellerId, '💰', 'Vente réalisée', '"' + title + '" a été vendu ! Tu as reçu ' + sellerGets.toFixed(2) + '€ (après commission).');
+  showToast('Achat réussi ! 🔒 ' + price.toFixed(2) + '€ bloqués en séquestre','success');
   loadListings();
   setTimeout(function(){openChat(sellerId, 'Vendeur', listingId);}, 800);
 }
@@ -1374,23 +1476,13 @@ async function checkoutCart() {
 
 async function handleBuyDirect(listingId, title, sellerId, price) {
   if (currentUser.id === sellerId) return;
+  // Sequestre securise (RPC) — le serveur verifie le solde a chaque item
+  var r = await db.rpc('buy_listing', { p_listing_id: listingId });
+  if (r.error) return;
   await loadProfile();
-  var balance = parseFloat(userProfile ? userProfile.balance : 0);
-  price = parseFloat(price);
-  if (balance < price) return;
-  var commission = Math.round(price * COMMISSION * 100) / 100;
-  var sellerGets = Math.round((price - commission) * 100) / 100;
-  var newBuyerBal = Math.round((balance - price) * 100) / 100;
-  await db.from('profiles').update({balance: newBuyerBal}).eq('id', currentUser.id);
-  var sellerRes = await db.from('profiles').select('balance').eq('id', sellerId).single();
-  var sellerBal = parseFloat((sellerRes.data ? sellerRes.data.balance : 0));
-  await db.from('profiles').update({balance: Math.round((sellerBal + sellerGets)*100)/100}).eq('id', sellerId);
-  await db.from('orders').insert({buyer_id:currentUser.id, seller_id:sellerId, listing_id:listingId, title, price, commission, status:'pending'});
-  await db.from('listings').update({active:false}).eq('id', listingId);
-  if (!userProfile) userProfile = {};
-  userProfile.balance = newBuyerBal;
-  document.getElementById('dropBalance').textContent = newBuyerBal.toFixed(2);
-  document.getElementById('dashBalance').textContent = newBuyerBal.toFixed(2) + '€';
+  var nb = parseFloat(userProfile ? userProfile.balance : 0);
+  document.getElementById('dropBalance').textContent = nb.toFixed(2);
+  document.getElementById('dashBalance').textContent = nb.toFixed(2) + '€';
 }
 
 /* ══ STRIPE ══ */
@@ -1516,13 +1608,16 @@ async function loadOrders() {
   var html = '';
   res.data.forEach(function(o) {
     var other = currentOrderTab === 'buying' ? ((o.seller && o.seller.username) || 'Vendeur') : ((o.buyer && o.buyer.username) || 'Acheteur');
-    var statusHtml = o.status === 'pending' ? '<span class="badge-wait">⏳ En attente</span>' :
+    var statusHtml = o.status === 'pending' ? '<span class="badge-wait">🔒 Séquestre</span>' :
                      o.status === 'completed' ? '<span class="badge-ok">✅ Complété</span>' :
+                     o.status === 'disputed' ? '<span class="badge-cancel">⚖️ Litige</span>' :
+                     o.status === 'refunded' ? '<span class="badge-cancel">↩️ Remboursé</span>' :
                      '<span class="badge-cancel">❌ Annulé</span>';
     var actions = '';
     if (currentOrderTab === 'buying' && o.status === 'pending') {
       actions += '<button class="btn-sm btn-sm-ghost" onclick="openChat(\'' + (o.seller_id||'') + '\',\'' + escHtml(other) + '\',' + (o.listing_id||0) + ')">💬 Chat</button>';
       actions += '<button class="btn-sm btn-sm-green" onclick="confirmOrder(' + o.id + ',\'' + o.seller_id + '\')">✅ Confirmer réception</button>';
+      actions += '<button class="btn-sm btn-sm-red" onclick="openDispute(' + o.id + ')">⚖️ Signaler un problème</button>';
     } else if (currentOrderTab === 'selling' && o.status === 'pending') {
       actions += '<button class="btn-sm btn-sm-ghost" onclick="openChat(\'' + (o.buyer_id||'') + '\',\'' + escHtml(other) + '\',' + (o.listing_id||0) + ')">💬 Chat</button>';
     } else if (o.status === 'completed' && currentOrderTab === 'buying' && !o.reviewed) {
@@ -1537,12 +1632,23 @@ async function loadOrders() {
 }
 
 async function confirmOrder(orderId, sellerId) {
-  if (!confirm("Confirmer que tu as bien reçu l'item ?")) return;
-  await db.from('orders').update({status:'completed'}).eq('id', orderId);
-  await addNotification(sellerId, '✅', 'Commande confirmée', 'L\'acheteur a confirmé la réception de ta vente.');
-  showToast('Commande confirmée ! ✅','success');
+  if (!confirm("Confirmer que tu as bien reçu l'item ?\n\nL'argent en séquestre sera alors versé au vendeur. Action définitive.")) return;
+  var r = await db.rpc('confirm_order', { p_order_id: orderId });
+  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
+  showToast('Réception confirmée ✅ Fonds versés au vendeur','success');
   loadOrders();
   setTimeout(function(){openReviewModal(orderId, sellerId);}, 500);
+}
+
+async function openDispute(orderId) {
+  var reason = prompt("Décris le problème (item non reçu, incorrect, tentative d'arnaque...) :");
+  if (reason === null) return;
+  reason = (reason || '').trim();
+  if (!reason) { showToast('Motif requis pour ouvrir un litige','error'); return; }
+  var r = await db.rpc('open_dispute', { p_order_id: orderId, p_reason: reason });
+  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
+  showToast('Litige ouvert ⚖️ Un administrateur va vérifier','info');
+  loadOrders();
 }
 
 /* ══ CHAT ══ */
@@ -1807,6 +1913,36 @@ async function adminTab(tab, el) {
     });
     html += '</div>';
     content.innerHTML = html;
+  } else if (tab === 'sellers') {
+    var res = await db.from('seller_requests').select('*, profiles(username, id_verified)').order('created_at',{ascending:false});
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucune demande de vendeur</div>'; return; }
+    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.5fr 1fr 0.6fr 1fr 1.2fr"><span>Utilisateur</span><span>Téléphone</span><span>18+</span><span>Statut</span><span>Actions</span></div>';
+    for (var i = 0; i < res.data.length; i++) {
+      var s = res.data[i];
+      var uname = (s.profiles && s.profiles.username) || '—';
+      var idlink = '—';
+      if (s.id_card_url) {
+        var signed = await db.storage.from('kyc').createSignedUrl(s.id_card_url, 3600);
+        if (signed.data) idlink = '<a href="' + signed.data.signedUrl + '" target="_blank" style="color:var(--blue2)">Voir pièce 🪪</a>';
+      }
+      var sbadge = s.status === 'approved' ? '<span class="badge-ok">Approuvé</span>' : s.status === 'rejected' ? '<span class="badge-cancel">Refusé</span>' : '<span class="badge-wait">En attente</span>';
+      var acts = s.status === 'pending' ? '<button onclick="adminApproveSeller(\'' + s.user_id + '\',true)" class="btn-sm btn-sm-green" style="font-size:10px">✅ Valider</button> <button onclick="adminApproveSeller(\'' + s.user_id + '\',false)" class="btn-sm btn-sm-red" style="font-size:10px">❌ Refuser</button>' : '—';
+      html += '<div class="admin-table-row" style="grid-template-columns:1.5fr 1fr 0.6fr 1fr 1.2fr"><span style="font-weight:600">' + escHtml(uname) + '<br><span style="font-size:10px;color:var(--muted)">' + idlink + '</span></span><span style="color:var(--muted)">' + escHtml(s.phone || '—') + '</span><span>' + (s.age_confirmed ? '✅' : '—') + '</span>' + sbadge + '<span>' + acts + '</span></div>';
+    }
+    html += '</div>';
+    content.innerHTML = html;
+  } else if (tab === 'disputes') {
+    var res = await db.from('disputes').select('*, orders(title, price)').order('created_at',{ascending:false});
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucun litige</div>'; return; }
+    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.5fr 2fr 1fr 1.4fr"><span>Commande</span><span>Motif</span><span>Statut</span><span>Décision</span></div>';
+    res.data.forEach(function(dp) {
+      var o = dp.orders || {};
+      var sbadge = dp.status === 'open' ? '<span class="badge-wait">Ouvert</span>' : dp.status === 'resolved_refund' ? '<span class="badge-cancel">Remboursé</span>' : '<span class="badge-ok">Versé vendeur</span>';
+      var acts = dp.status === 'open' ? '<button onclick="adminResolveDispute(' + dp.order_id + ',\'refund\')" class="btn-sm btn-sm-red" style="font-size:10px">↩️ Rembourser</button> <button onclick="adminResolveDispute(' + dp.order_id + ',\'release\')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Payer vendeur</button>' : '—';
+      html += '<div class="admin-table-row" style="grid-template-columns:1.5fr 2fr 1fr 1.4fr"><span style="font-weight:600">' + escHtml(o.title || ('#' + dp.order_id)) + '<br><span style="font-size:10px;color:var(--blue2)">' + parseFloat(o.price || 0).toFixed(2) + '€</span></span><span style="color:var(--muted2);font-size:11px">' + escHtml(dp.reason || '') + '</span>' + sbadge + '<span>' + acts + '</span></div>';
+    });
+    html += '</div>';
+    content.innerHTML = html;
   } else if (tab === 'listings') {
     var res = await db.from('listings').select('*, profiles(username)').order('created_at',{ascending:false}).limit(50);
     if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucune annonce</div>'; return; }
@@ -1840,10 +1976,25 @@ async function adminTab(tab, el) {
 }
 
 async function adminVerifyUser(userId, verified) {
-  await db.from('profiles').update({id_verified: verified}).eq('id', userId);
+  var r = await db.rpc('admin_set_verified', { p_user_id: userId, p_verified: verified });
+  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
   showToast(verified ? 'Utilisateur vérifié ✓' : 'Vérification retirée','success');
-  if (verified) await addNotification(userId, '✓', 'Compte vérifié', 'Ton compte a été vérifié par l\'administration !');
   adminTab(currentAdminTab);
+}
+
+async function adminApproveSeller(userId, approve) {
+  var r = await db.rpc('admin_set_verified', { p_user_id: userId, p_verified: approve });
+  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
+  showToast(approve ? 'Vendeur validé ✅' : 'Demande refusée','success');
+  adminTab('sellers');
+}
+
+async function adminResolveDispute(orderId, action) {
+  if (!confirm(action === 'refund' ? "Rembourser l'acheteur ?" : 'Verser les fonds au vendeur ?')) return;
+  var r = await db.rpc('admin_resolve_dispute', { p_order_id: orderId, p_action: action });
+  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
+  showToast('Litige résolu ✅','success');
+  adminTab('disputes');
 }
 
 async function adminDeleteListing(id) {
@@ -1951,9 +2102,45 @@ function showToast(msg, type) {
   toastTimeout = setTimeout(function(){t.classList.remove('show');}, 3500);
 }
 
+function rpcMsg(err) {
+  var m = (err && err.message) ? String(err.message) : 'erreur';
+  var map = {INSUFFICIENT_FUNDS:'solde insuffisant', LISTING_UNAVAILABLE:'annonce indisponible', OWN_LISTING:"c'est ta propre annonce", NOT_AUTH:'connecte-toi', BAD_STATUS:'action déjà effectuée', NOT_BUYER:"réservé à l'acheteur", NOT_ADMIN:'accès admin requis', NOT_PARTY:'tu n\'es pas concerné', ORDER_NOT_FOUND:'commande introuvable', BAD_ACTION:'action invalide'};
+  for (var k in map) if (m.indexOf(k) !== -1) return map[k];
+  return m;
+}
+
 function escHtml(str) {
   if (!str) return '';
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+var svIdFile = null;
+function previewSvId(input) {
+  if (!input.files || !input.files[0]) return;
+  svIdFile = input.files[0];
+  var rd = new FileReader();
+  rd.onload = function(e){ document.getElementById('svIdPreview').innerHTML = '<div class="img-preview"><img src="' + e.target.result + '"></div>'; };
+  rd.readAsDataURL(svIdFile);
+}
+async function submitSellerVerify() {
+  if (!currentUser) return showModal('loginModal');
+  if (!document.getElementById('svAge').checked) return showAlert('sellerVerifyAlert','error','Tu dois certifier avoir 18 ans ou plus.');
+  if (!svIdFile) return showAlert('sellerVerifyAlert','error','Ajoute une photo de ta pièce d\'identité.');
+  setBtn('svBtn', true, 'Envoi…');
+  var phone = document.getElementById('svPhone').value.trim();
+  var path = null;
+  try {
+    var ext = svIdFile.name.split('.').pop();
+    path = currentUser.id + '/id_' + Date.now() + '.' + ext;
+    var up = await db.storage.from('kyc').upload(path, svIdFile, {upsert:true});
+    if (up.error) path = null;
+  } catch(e) { path = null; }
+  var ins = await db.from('seller_requests').insert({user_id:currentUser.id, id_card_url:path, phone:phone, age_confirmed:true, status:'pending'});
+  if (phone) db.from('profiles').update({phone:phone, age_confirmed:true}).eq('id', currentUser.id).then(function(){});
+  setBtn('svBtn', false, 'Envoyer ma demande');
+  if (ins.error) return showAlert('sellerVerifyAlert','error','Erreur : ' + ins.error.message);
+  hideModal('sellerVerifyModal');
+  showToast('Demande envoyée ✅ Réponse après vérification par l\'admin','success');
 }
 
 init();
