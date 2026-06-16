@@ -473,6 +473,16 @@ body.auth-loading #userNav{display:none!important}
 .cat-search-ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none}
 
 @media(max-width:640px){ .gm-item span{font-size:11px} .gm-item img{width:26px;height:26px} }
+
+/* ── PARRAINAGE + BOUTIQUE BLOOBUX ── */
+.referral-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px}
+.referral-row{display:flex;gap:8px}
+.referral-row input{flex:1;min-width:0;background:var(--surface);border:1px solid var(--border2);border-radius:9px;padding:9px 12px;font-size:12px;color:#fff;font-family:'Inter',sans-serif;outline:none}
+.shop-item{display:flex;align-items:center;gap:12px;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.shop-info{min-width:0}
+.shop-title{font-size:13px;font-weight:700}
+.shop-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.shop-item .btn-blue:disabled{opacity:.45;cursor:not-allowed}
 </style>
 </head>
 <body class="auth-loading">
@@ -525,6 +535,7 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-item" onclick="showPage('messages')">💬 Messages</div>
         <div class="ud-sep"></div>
         <div class="ud-item" id="becomeSellerItem" onclick="showModal('sellerVerifyModal')">🛡️ Devenir vendeur vérifié</div>
+        <div class="ud-item" onclick="openShop()">🔷 Boutique Bloobux</div>
         <div class="ud-item" onclick="showModal('sellModal')">➕ Vendre un item</div>
         <div class="ud-item" onclick="showModal('addFundsModal')">💳 Recharger solde</div>
         <div class="ud-item" onclick="showPage('withdrawPage')">💸 Retirer des fonds</div>
@@ -603,6 +614,12 @@ body.auth-loading #userNav{display:none!important}
       </div>
     </div>
     <button class="btn-blue" onclick="showModal('editProfileModal')">✏️ Modifier profil</button>
+  </div>
+  <div class="section-title">Parrainage 🎁</div>
+  <div class="referral-box" id="referralBox" style="margin-bottom:22px">
+    <p style="font-size:13px;color:var(--muted2);margin-bottom:10px">Partage ton lien : <strong>+5 Bloobux</strong> par filleul, <strong>+3</strong> pour lui.</p>
+    <div class="referral-row"><input id="referralLink" readonly value=""><button class="btn-blue" onclick="copyReferral()">Copier</button></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px">Filleuls : <strong id="referralCount">0</strong></p>
   </div>
   <div class="section-title">Avis reçus (<span id="profileReviewCount">0</span>)</div>
   <div id="profileReviews" style="margin-bottom:22px"></div>
@@ -945,6 +962,17 @@ body.auth-loading #userNav{display:none!important}
   </div>
 </div>
 
+<!-- Boutique Bloobux -->
+<div class="overlay" id="shopModal" onclick="closeOnBg(event,'shopModal')">
+  <div class="modal" style="max-width:460px">
+    <button class="modal-close" onclick="hideModal('shopModal')">✕</button>
+    <div class="modal-h">Boutique Bloobux 🔷</div>
+    <div class="modal-sub">Tu as <strong id="shopBalance">0</strong> Bloobux · non convertibles en argent</div>
+    <div id="shopAlert"></div>
+    <div id="shopList"></div>
+  </div>
+</div>
+
 <!-- Zoom image -->
 <div class="zoom-overlay" id="zoomOverlay" onclick="closeZoom()"><img id="zoomImg" src="" alt="zoom"></div>
 
@@ -996,6 +1024,7 @@ new MutationObserver(function(){
 
 /* ══ INIT ══ */
 async function init() {
+  try { var _ref = new URLSearchParams(location.search).get('ref'); if (_ref) localStorage.setItem('bm_ref', _ref.toUpperCase()); } catch(e){}
   updateCartBadge();
   // UN SEUL listener d'auth. IMPORTANT : ne JAMAIS faire d'await d'un appel Supabase
   // a l'interieur de ce callback -> sinon deadlock du verrou d'auth (session perdue/lente).
@@ -1099,7 +1128,8 @@ async function doRegister() {
   var check = await db.from('profiles').select('id').eq('username', username).maybeSingle();
   if (check.data) return showAlert('registerAlert','error','Nom d\'utilisateur indisponible.');
   setBtn('registerBtn', true, 'Création…');
-  var res = await db.auth.signUp({email, password: pwd, options:{data:{username}}});
+  var refCode = localStorage.getItem('bm_ref') || '';
+  var res = await db.auth.signUp({email, password: pwd, options:{data:{username, ref_code: refCode}}});
   setBtn('registerBtn', false, 'Créer mon compte');
   if (res.error) return showAlert('registerAlert','error', res.error.message);
   hideModal('registerModal');
@@ -1125,7 +1155,9 @@ async function logout() {
 async function loadProfilePage() {
   if (!currentUser || !userProfile) return;
   var name = userProfile.username || currentUser.email.split('@')[0];
-  document.getElementById('profileDisplayName').textContent = name;
+  var _dn = document.getElementById('profileDisplayName');
+  _dn.innerHTML = escHtml(name) + (userProfile.premium_badge ? ' <span title="Premium">👑</span>' : '');
+  _dn.style.color = userProfile.profile_color || '';
   document.getElementById('profileEmail').textContent = currentUser.email;
   document.getElementById('profileAvatarText').textContent = name[0].toUpperCase();
   if (userProfile.avatar_url) {
@@ -1153,6 +1185,7 @@ async function loadProfilePage() {
   }
   document.getElementById('editUsername').value = name;
   loadProfileReviews(currentUser.id);
+  loadReferral();
   // Listings
   var listRes = await db.from('listings').select('*').eq('user_id', currentUser.id).eq('active', true);
   if (listRes.data) renderListings(listRes.data, 'profileListings');
@@ -1213,7 +1246,7 @@ async function loadListings() {
   document.getElementById('listingsGrid').innerHTML = '';
   document.getElementById('emptyState').style.display = 'none';
   try {
-    var query = db.from('listings').select('*, profiles(username, id_verified, avatar_url)').eq('active', true);
+    var query = db.from('listings').select('*, profiles(username, id_verified, avatar_url, premium_badge)').eq('active', true);
     if (currentFilter !== 'all') query = query.eq('game', currentFilter);
     if (searchQuery) query = query.ilike('title', '%' + searchQuery + '%');
     var minP = parseFloat(document.getElementById('filterMinPrice').value);
@@ -1262,7 +1295,7 @@ function renderListings(listings, targetId) {
     html += '</div>';
     html += '<div class="lc-body">';
     html += '<div class="lc-title">' + escHtml(l.title) + '</div>';
-    html += '<div class="lc-seller"><div class="lc-seller-dot"></div>' + escHtml(seller) + (verified ? ' <span class="verified-badge">✓</span>' : '') + (isOwn ? ' <em style="font-size:10px;color:var(--muted)">(toi)</em>' : '') + '</div>';
+    html += '<div class="lc-seller"><div class="lc-seller-dot"></div>' + escHtml(seller) + (verified ? ' <span class="verified-badge">✓</span>' : '') + ((l.profiles && l.profiles.premium_badge) ? ' <span title="Vendeur premium">👑</span>' : '') + (isOwn ? ' <em style="font-size:10px;color:var(--muted)">(toi)</em>' : '') + '</div>';
     html += '<div class="lc-footer"><div class="lc-price">' + parseFloat(l.price).toFixed(2) + '€</div>';
     html += '<button class="lc-buy" onclick="event.stopPropagation();openDetailById(' + l.id + ')">Voir</button></div>';
     html += '<div class="lc-rating">⭐ ' + escHtml(seller) + '</div></div></div>';
@@ -1271,7 +1304,7 @@ function renderListings(listings, targetId) {
 }
 
 async function openDetailById(id) {
-  var res = await db.from('listings').select('*, profiles(username, id_verified, avatar_url)').eq('id', id).single();
+  var res = await db.from('listings').select('*, profiles(username, id_verified, avatar_url, premium_badge)').eq('id', id).single();
   if (res.data) openDetail(res.data);
 }
 
@@ -2189,7 +2222,7 @@ function showToast(msg, type) {
 
 function rpcMsg(err) {
   var m = (err && err.message) ? String(err.message) : 'erreur';
-  var map = {INSUFFICIENT_FUNDS:'solde insuffisant', LISTING_UNAVAILABLE:'annonce indisponible', OWN_LISTING:"c'est ta propre annonce", NOT_AUTH:'connecte-toi', BAD_STATUS:'action déjà effectuée', NOT_BUYER:"réservé à l'acheteur", NOT_ADMIN:'accès admin requis', NOT_PARTY:'tu n\'es pas concerné', ORDER_NOT_FOUND:'commande introuvable', BAD_ACTION:'action invalide'};
+  var map = {INSUFFICIENT_FUNDS:'solde insuffisant', LISTING_UNAVAILABLE:'annonce indisponible', OWN_LISTING:"c'est ta propre annonce", NOT_AUTH:'connecte-toi', BAD_STATUS:'action déjà effectuée', NOT_BUYER:"réservé à l'acheteur", NOT_ADMIN:'accès admin requis', NOT_PARTY:'tu n\'es pas concerné', ORDER_NOT_FOUND:'commande introuvable', BAD_ACTION:'action invalide', NOT_ENOUGH_BLOOBUX:'pas assez de Bloobux', BAD_PERK:'avantage inconnu'};
   for (var k in map) if (m.indexOf(k) !== -1) return map[k];
   return m;
 }
@@ -2226,6 +2259,53 @@ async function submitSellerVerify() {
   if (ins.error) return showAlert('sellerVerifyAlert','error','Erreur : ' + ins.error.message);
   hideModal('sellerVerifyModal');
   showToast('Demande envoyée ✅ Réponse après vérification par l\'admin','success');
+}
+
+async function loadReferral() {
+  var code = (userProfile && userProfile.referral_code) || '';
+  var link = location.origin + (code ? ('?ref=' + code) : '');
+  var li = document.getElementById('referralLink'); if (li) li.value = link;
+  var cnt = await db.from('profiles').select('id',{count:'exact',head:true}).eq('referred_by', currentUser.id);
+  var ce = document.getElementById('referralCount'); if (ce) ce.textContent = cnt.count || 0;
+}
+function copyReferral() {
+  var li = document.getElementById('referralLink'); if (!li) return;
+  li.select();
+  try { navigator.clipboard.writeText(li.value); } catch(e) { try { document.execCommand('copy'); } catch(e2){} }
+  showToast('Lien copié ! 🎁','success');
+}
+
+async function openShop() {
+  if (!currentUser) return showModal('loginModal');
+  await loadProfile();
+  document.getElementById('shopBalance').textContent = (userProfile && userProfile.bloobux) || 0;
+  renderShop();
+  showModal('shopModal');
+}
+function renderShop() {
+  var bx = (userProfile && userProfile.bloobux) || 0;
+  var hasP = userProfile && userProfile.premium_badge;
+  var h = '';
+  h += shopItem('premium_badge', '', '👑 Badge Premium', 'Une couronne sur ton profil et tes annonces', 50, bx, hasP);
+  h += shopItem('color', '#3D8BFF', '🔵 Pseudo bleu', 'Affiche ton pseudo en bleu', 30, bx, false);
+  h += shopItem('color', '#22C55E', '🟢 Pseudo vert', 'Affiche ton pseudo en vert', 30, bx, false);
+  h += shopItem('color', '#FBBF24', '🟡 Pseudo doré', 'Affiche ton pseudo en doré', 30, bx, false);
+  document.getElementById('shopList').innerHTML = h;
+}
+function shopItem(perk, value, title, desc, cost, bx, owned) {
+  var dis = (owned || bx < cost) ? 'disabled' : '';
+  var label = owned ? 'Débloqué' : (bx < cost ? 'Pas assez' : (cost + ' 🔷'));
+  return '<div class="shop-item"><div class="shop-info"><div class="shop-title">' + title + '</div><div class="shop-desc">' + desc + '</div></div>'
+    + '<button class="btn-blue" ' + dis + ' onclick="redeemPerk(\'' + perk + '\',\'' + value + '\')">' + label + '</button></div>';
+}
+async function redeemPerk(perk, value) {
+  var r = await db.rpc('redeem_perk', { p_perk: perk, p_value: value || null });
+  if (r.error) { showAlert('shopAlert','error', rpcMsg(r.error)); return; }
+  await loadProfile();
+  document.getElementById('shopBalance').textContent = (userProfile && userProfile.bloobux) || 0;
+  renderShop();
+  showToast('Avantage débloqué ✅','success');
+  if (document.getElementById('profilePage').classList.contains('show')) loadProfilePage();
 }
 
 init();
