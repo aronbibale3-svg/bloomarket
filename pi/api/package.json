@@ -1,8 +1,0 @@
-{
-  "name": "bloomarket",
-  "version": "1.0.0",
-  "dependencies": {
-    "@supabase/supabase-js": "^2.0.0",
-    "stripe": "^14.0.0"
-  }
-}
