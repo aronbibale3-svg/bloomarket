@@ -2073,6 +2073,7 @@ async function adminResolveDispute(orderId, action) {
 async function adminDeleteListing(id) {
   if (!confirm('Supprimer cette annonce ?')) return;
   var r = await db.rpc('admin_delete_listing', { p_id: id });
+  if (r.error) { r = await db.from('listings').update({active:false}).eq('id', id); } // fallback RLS admin
   if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
   showToast('Annonce supprimée','success');
   adminTab(currentAdminTab); loadListings();
@@ -2080,6 +2081,7 @@ async function adminDeleteListing(id) {
 
 async function adminToggleListing(id, active) {
   var r = await db.rpc('admin_set_listing_active', { p_id: id, p_active: active });
+  if (r.error) { r = await db.from('listings').update({active:active}).eq('id', id); } // fallback RLS admin
   if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
   showToast(active ? 'Annonce réactivée ✅' : 'Annonce désactivée','success');
   adminTab('listings'); loadListings();
