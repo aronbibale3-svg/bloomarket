@@ -483,6 +483,8 @@ body.auth-loading #userNav{display:none!important}
 .shop-title{font-size:13px;font-weight:700}
 .shop-desc{font-size:11px;color:var(--muted);margin-top:2px}
 .shop-item .btn-blue:disabled{opacity:.45;cursor:not-allowed}
+.pay-summary{display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;font-weight:600}
+.pay-summary strong{color:var(--blue2);font-size:18px}
 </style>
 </head>
 <body class="auth-loading">
@@ -537,7 +539,6 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-item" id="becomeSellerItem" onclick="showModal('sellerVerifyModal')">🛡️ Devenir vendeur vérifié</div>
         <div class="ud-item" onclick="openShop()">🔷 Boutique Bloobux</div>
         <div class="ud-item" onclick="showModal('sellModal')">➕ Vendre un item</div>
-        <div class="ud-item" onclick="showModal('addFundsModal')">💳 Recharger solde</div>
         <div class="ud-item" onclick="showPage('withdrawPage')">💸 Retirer des fonds</div>
         <div id="adminMenuItem" style="display:none"><div class="ud-sep"></div><div class="ud-item" onclick="showPage('adminPage')" style="color:#FBBF24">⚙️ Administration</div></div>
         <div class="ud-sep"></div>
@@ -908,8 +909,22 @@ body.auth-loading #userNav{display:none!important}
     <div id="cartEmpty" class="empty-state" style="display:none;padding:30px 0"><div class="ico">🛒</div><h3>Panier vide</h3><p>Explore la marketplace !</p></div>
     <div id="cartFooter" style="display:none">
       <div class="cart-total-row"><div class="cart-total-label">Total</div><div class="cart-total-price" id="cartTotal">0.00€</div></div>
-      <button class="btn-submit" onclick="checkoutCart()">Acheter tout (solde)</button>
+      <button class="btn-submit" onclick="checkoutCart()">Payer le panier</button>
     </div>
+  </div>
+</div>
+
+<!-- Paiement direct -->
+<div class="overlay" id="payModal" onclick="closeOnBg(event,'payModal')">
+  <div class="modal" style="max-width:440px">
+    <button class="modal-close" onclick="hideModal('payModal')">✕</button>
+    <div class="modal-h">Paiement sécurisé 🔒</div>
+    <div class="modal-sub">Carte · Apple Pay · Google Pay</div>
+    <div class="pay-summary"><span id="payItemTitle">Article</span><strong id="payItemPrice">0.00€</strong></div>
+    <div id="pay-element" style="margin:14px 0"></div>
+    <div id="pay-errors" style="color:#FCA5A5;font-size:12px;margin-bottom:10px"></div>
+    <button class="btn-submit" id="payNowBtn" onclick="submitPayElement()">Payer</button>
+    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:10px">🔒 100% sécurisé · Stripe · aucun solde à recharger</p>
   </div>
 </div>
 
@@ -1436,28 +1451,68 @@ async function doSell() {
 async function handleBuy(listingId, title, sellerId, price) {
   if (!currentUser) { hideModal('detailModal'); showModal('loginModal'); return; }
   if (currentUser.id === sellerId) { showToast("Tu ne peux pas acheter ta propre annonce !", 'error'); return; }
-  await loadProfile();
-  var balance = parseFloat(userProfile ? userProfile.balance : 0);
-  price = parseFloat(price);
-  if (balance < price) {
-    hideModal('detailModal');
-    showToast('Solde insuffisant ! Tu as ' + balance.toFixed(2) + '€, il faut ' + price.toFixed(2) + '€','error');
-    setTimeout(function(){showModal('addFundsModal');}, 700);
+  hideModal('detailModal');
+  openPayment({ amount: parseFloat(price), title: title, listingIds: [listingId], kind: 'order' });
+}
+
+/* ══ PAIEMENT DIRECT (Stripe Payment Element : Carte + Apple Pay + Google Pay) ══ */
+var payElements = null, payClientSecret = null, payContext = null;
+
+async function openPayment(ctx) {
+  if (!currentUser) { showModal('loginModal'); return; }
+  payContext = ctx;
+  document.getElementById('payItemTitle').textContent = ctx.title;
+  document.getElementById('payItemPrice').textContent = ctx.amount.toFixed(2) + '€';
+  document.getElementById('pay-errors').textContent = '';
+  document.getElementById('pay-element').innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted);font-size:13px">Chargement du paiement…</div>';
+  setBtn('payNowBtn', true, 'Chargement…');
+  showModal('payModal');
+  try {
+    var res = await fetch('/api/create-payment', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ amount: ctx.amount, userId: currentUser.id, buyerId: currentUser.id, kind: ctx.kind, listingIds: (ctx.listingIds||[]).join(',') })
+    });
+    var data = await res.json();
+    if (data.error) throw new Error(data.error);
+    payClientSecret = data.clientSecret;
+    payElements = stripe.elements({ clientSecret: payClientSecret, appearance: { theme: 'night', variables: { colorPrimary: '#1E6FFF', colorBackground: '#0d0f1a' } } });
+    var pe = payElements.create('payment', { layout: 'tabs' });
+    document.getElementById('pay-element').innerHTML = '';
+    pe.mount('#pay-element');
+    setBtn('payNowBtn', false, 'Payer ' + ctx.amount.toFixed(2) + '€');
+  } catch(e) {
+    document.getElementById('pay-errors').textContent = e.message || 'Erreur de paiement';
+    setBtn('payNowBtn', false, 'Réessayer');
+  }
+}
+
+async function submitPayElement() {
+  if (!payElements || !payClientSecret) return;
+  setBtn('payNowBtn', true, 'Paiement…');
+  document.getElementById('pay-errors').textContent = '';
+  var result = await stripe.confirmPayment({ elements: payElements, redirect: 'if_required' });
+  if (result.error) {
+    document.getElementById('pay-errors').textContent = result.error.message;
+    setBtn('payNowBtn', false, 'Réessayer');
     return;
   }
-  if (!confirm('Confirmer l\'achat de "' + title + '" pour ' + price.toFixed(2) + '€ ?\n\nL\'argent sera bloqué en séquestre et versé au vendeur uniquement après ta confirmation de réception.')) return;
-  // Sequestre securise cote serveur (RPC) : debit acheteur + commande "pending"
-  var r = await db.rpc('buy_listing', { p_listing_id: listingId });
-  if (r.error) { showToast('Achat impossible : ' + rpcMsg(r.error), 'error'); return; }
-  await loadProfile();
-  var nb = parseFloat(userProfile ? userProfile.balance : 0);
-  document.getElementById('dropBalance').textContent = nb.toFixed(2);
-  document.getElementById('dashBalance').textContent = nb.toFixed(2) + '€';
-  document.getElementById('withdrawBalance').textContent = nb.toFixed(2) + '€';
-  hideModal('detailModal');
-  showToast('Achat réussi ! 🔒 ' + price.toFixed(2) + '€ bloqués en séquestre','success');
-  loadListings();
-  setTimeout(function(){openChat(sellerId, 'Vendeur', listingId);}, 800);
+  var st = result.paymentIntent ? result.paymentIntent.status : '';
+  if (st === 'succeeded' || st === 'processing') {
+    // Paiement OK -> on crée la/les commande(s) en séquestre
+    var ids = (payContext && payContext.listingIds) || [];
+    var firstSeller = null, created = 0;
+    for (var i = 0; i < ids.length; i++) {
+      var r = await db.rpc('create_paid_order', { p_listing_id: ids[i] });
+      if (!r.error) created++;
+    }
+    if (payContext && payContext.kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); }
+    hideModal('payModal');
+    showToast('Paiement réussi ! 🔒 ' + created + ' commande(s) en séquestre','success');
+    loadListings();
+    if (currentUser) { loadNotifications(); }
+  } else {
+    setBtn('payNowBtn', false, 'Payer');
+  }
 }
 
 /* ══ CART ══ */
@@ -1514,25 +1569,12 @@ function renderCartModal() {
 
 async function checkoutCart() {
   if (!currentUser) { showModal('loginModal'); return; }
-  await loadProfile();
+  if (!cart.length) return;
   var total = cart.reduce(function(s,c){ return s + parseFloat(c.price); }, 0);
-  var balance = parseFloat(userProfile ? userProfile.balance : 0);
-  if (balance < total) {
-    showToast('Solde insuffisant (' + balance.toFixed(2) + '€ / ' + total.toFixed(2) + '€)','error');
-    hideModal('cartModal');
-    setTimeout(function(){showModal('addFundsModal');}, 600);
-    return;
-  }
-  if (!confirm('Acheter tous les items du panier pour ' + total.toFixed(2) + '€ ?')) return;
-  for (var i = 0; i < cart.length; i++) {
-    var item = cart[i];
-    var res = await db.from('listings').select('*, profiles(username)').eq('id', item.id).eq('active', true).single();
-    if (!res.data) continue;
-    await handleBuyDirect(res.data.id, res.data.title, res.data.user_id, res.data.price);
-  }
-  cart = []; localStorage.setItem('bm_cart', JSON.stringify(cart));
-  updateCartBadge(); hideModal('cartModal');
-  showToast('Panier acheté avec succès ! 🎉','success');
+  var ids = cart.map(function(c){ return c.id; });
+  var title = cart.length === 1 ? cart[0].title : (cart.length + ' articles');
+  hideModal('cartModal');
+  openPayment({ amount: total, title: title, listingIds: ids, kind: 'cart' });
 }
 
 async function handleBuyDirect(listingId, title, sellerId, price) {
