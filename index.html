@@ -554,6 +554,7 @@ body.auth-loading #userNav{display:none!important}
 .ai-input-row{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border)}
 .ai-input-row input{flex:1;background:#141826;border:1px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif}
 .ai-input-row button{background:linear-gradient(135deg,var(--blue),var(--blue2));border:none;color:#fff;width:42px;border-radius:10px;cursor:pointer;font-size:15px}
+.lc-promoted{position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#F59E0B,#FBBF24);color:#1a1205;font-size:10px;font-weight:800;padding:3px 8px;border-radius:7px;z-index:3;box-shadow:0 3px 10px rgba(245,158,11,0.4)}
 </style>
 </head>
 <body class="auth-loading">
@@ -782,7 +783,7 @@ body.auth-loading #userNav{display:none!important}
     <button class="admin-tab" onclick="adminTab('disputes',this)">⚖️ Litiges</button>
     <button class="admin-tab" onclick="adminTab('withdraws',this)">💸 Retraits</button>
     <button class="admin-tab" onclick="adminTab('aconv',this)">💬 Conversations</button>
-    <button class="admin-tab" onclick="adminSupport(this)">🤖 Signalements IA</button>
+    <button class="admin-tab" onclick="adminSupport(this)">🚩 Signalements</button>
   </div>
   <div id="adminContent"></div>
 </div>
@@ -1033,6 +1034,18 @@ body.auth-loading #userNav{display:none!important}
   </div>
 </div>
 
+<!-- Promouvoir une annonce -->
+<div class="overlay" id="promoteModal" onclick="closeOnBg(event,'promoteModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('promoteModal')">✕</button>
+    <div class="modal-h">Promouvoir l annonce 🚀</div>
+    <div class="modal-sub">Ton annonce passe en tête des résultats avec un badge ⭐ Sponsorisé.</div>
+    <div id="promoteAlert"></div>
+    <p class="settings-desc">Payé depuis ton solde : <strong id="promoteBalance" style="color:var(--blue2)">0€</strong></p>
+    <div id="promoteTiers"></div>
+  </div>
+</div>
+
 <!-- Detail -->
 <div class="overlay" id="detailModal" onclick="closeOnBg(event,'detailModal')">
   <div class="modal listing-detail"><button class="modal-close" onclick="hideModal('detailModal')">✕</button><div id="detailContent"></div></div>
@@ -1044,7 +1057,8 @@ body.auth-loading #userNav{display:none!important}
     <div class="chat-header">
       <div class="conv-avatar" id="chatAvatar">?</div>
       <div><div class="chat-title" id="chatTitle">Chat</div><div class="chat-sub">En ligne</div></div>
-      <button class="modal-close" style="position:static;margin-left:auto" onclick="hideModal('chatModal')">✕</button>
+      <button onclick="reportUser()" title="Signaler cet utilisateur" style="background:none;border:none;color:#FCA5A5;font-size:15px;cursor:pointer;margin-left:auto">🚩</button>
+      <button class="modal-close" style="position:static;margin-left:8px" onclick="hideModal('chatModal')">✕</button>
     </div>
     <div class="chat-order-bar" id="chatOrderBar" style="display:none"></div>
     <div class="chat-messages" id="chatMessages"><div class="chat-empty">Début de la conversation 👋</div></div>
@@ -1770,13 +1784,48 @@ async function adminSupport(el) {
     var uname = (tk.profiles && tk.profiles.username) || '—';
     var sb = tk.status === 'open' ? '<span class="badge-wait">Ouvert</span>' : '<span class="badge-ok">Résolu</span>';
     var act = tk.status === 'open' ? '<button onclick="adminResolveTicket(' + tk.id + ')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Résolu</button>' : '—';
-    html += '<div class="admin-table-row" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span style="font-weight:600">' + escHtml(uname) + '<br><span style="font-size:10px;color:var(--muted)">' + new Date(tk.created_at).toLocaleString('fr-FR') + '</span></span><span style="color:var(--muted2);font-size:11px">' + escHtml(tk.message || '') + '</span>' + sb + '<span>' + act + '</span></div>';
+    html += '<div class="admin-table-row" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span style="font-weight:600">' + escHtml(uname) + '<br><span style="font-size:10px;color:var(--muted)">' + new Date(tk.created_at).toLocaleString('fr-FR') + '</span></span><span style="color:var(--muted2);font-size:11px">' + (tk.type==='report'?'🚩 ':'🤖 ') + escHtml(tk.message || '') + '</span>' + sb + '<span>' + act + '</span></div>';
   });
   content.innerHTML = html + '</div>';
 }
 async function adminResolveTicket(id) {
   await db.from('support_tickets').update({ status:'resolved' }).eq('id', id);
   adminSupport(document.querySelector('.admin-tab.active'));
+}
+
+var currentPromoteId = null;
+function openPromote(id) {
+  currentPromoteId = id;
+  var bal = userProfile ? parseFloat(userProfile.balance || 0) : 0;
+  document.getElementById('promoteBalance').textContent = bal.toFixed(2) + '€';
+  var tiers = [{d:1,c:5,l:'24 heures'},{d:3,c:10,l:'3 jours'},{d:7,c:20,l:'7 jours'},{d:30,c:50,l:'30 jours'}];
+  document.getElementById('promoteTiers').innerHTML = tiers.map(function(t){
+    var ok = bal >= t.c;
+    return '<button onclick="doPromote(' + t.d + ')" ' + (ok?'':'disabled') + ' style="width:100%;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;background:' + (ok?'rgba(251,191,36,0.12)':'rgba(255,255,255,0.04)') + ';border:1px solid ' + (ok?'rgba(251,191,36,0.3)':'var(--border)') + ';color:' + (ok?'#fff':'var(--muted)') + ';padding:13px 15px;border-radius:10px;cursor:' + (ok?'pointer':'not-allowed') + ';font-family:Inter,sans-serif;font-size:13px"><span>⭐ ' + t.l + '</span><strong style="color:#FBBF24">' + t.c + '€</strong></button>';
+  }).join('') + (bal < 5 ? '<p class="settings-desc" style="text-align:center;margin-top:6px">Solde insuffisant — recharge ton compte pour promouvoir.</p>' : '');
+  document.getElementById('promoteAlert').innerHTML = '';
+  showModal('promoteModal');
+}
+async function doPromote(days) {
+  if (!currentPromoteId) return;
+  var res = await db.rpc('promote_listing', { p_listing_id: currentPromoteId, p_days: days });
+  if (res.error) return showAlert('promoteAlert','error', rpcMsg(res.error));
+  hideModal('promoteModal');
+  showToast('Annonce promue ⭐ Elle remonte en tête !','success');
+  await loadProfile(); loadMyListings(); loadListings();
+}
+
+async function reportUser() {
+  if (!currentUser) { showToast('Connecte-toi pour signaler.','error'); return; }
+  if (!currentChatOther) return;
+  var reason = prompt('Pourquoi signales-tu cet utilisateur ? (arnaque, spam, insultes, contenu interdit…)');
+  if (!reason) return;
+  var other = (document.getElementById('chatTitle') || {}).textContent || 'utilisateur';
+  try {
+    var r = await db.from('support_tickets').insert({ user_id: currentUser.id, type:'report', message: '🚩 Signalement de ' + other + ' (' + currentChatOther + ') : ' + reason.slice(0,400) });
+    if (r.error) throw r.error;
+    showToast('Signalement envoyé à l équipe. Merci 🙏','success');
+  } catch(e){ showToast('Active le SQL support_tickets pour les signalements.','error'); }
 }
 
 async function logout() {
@@ -1900,6 +1949,12 @@ async function loadListings() {
     var res = await query;
     document.getElementById('listingsLoader').style.display = 'none';
     if (!res.data) return;
+    var nowTs = Date.now();
+    res.data.sort(function(a,b){
+      var ap = (a.promoted_until && new Date(a.promoted_until).getTime() > nowTs) ? 1 : 0;
+      var bp = (b.promoted_until && new Date(b.promoted_until).getTime() > nowTs) ? 1 : 0;
+      return bp - ap;
+    });
     renderListings(res.data, 'listingsGrid');
     document.getElementById('statListings').textContent = res.data.length;
     document.getElementById('statSellers').textContent = new Set(res.data.map(function(l){return l.user_id;})).size;
@@ -1945,6 +2000,7 @@ function renderListings(listings, targetId) {
     if (firstImg) html += '<img src="' + escHtml(firstImg) + '" alt="' + escHtml(l.title) + '" onerror="imgErrFallback(this,\'' + escHtml(l.game) + '\')">';
     else html += gameImgFallback(l.game, icon);
     html += '<div class="lc-online"></div>';
+    if (l.promoted_until && new Date(l.promoted_until).getTime() > Date.now()) html += '<div class="lc-promoted">⭐ Sponsorisé</div>';
     if (!isOwn) html += '<button class="lc-cart" onclick="event.stopPropagation();addToCart(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + escHtml(l.game) + '\',' + l.price + ',' + (firstImg ? '\'' + escHtml(firstImg) + '\'' : 'null') + ',\'' + l.user_id + '\')">🛒</button>';
     html += '</div>';
     html += '<div class="lc-body">';
@@ -2505,7 +2561,8 @@ async function loadMyListings() {
     html += '<div class="dtr"><span>' + (GAME_ICONS[l.game]||'🎮') + ' ' + escHtml(l.title) + '</span>';
     html += '<span style="color:var(--blue2);font-weight:700">' + parseFloat(l.price).toFixed(2) + '€</span>';
     html += '<span style="color:var(--muted)">' + escHtml(l.game) + '</span>';
-    html += '<span><button onclick="deleteListing(' + l.id + ')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">Supprimer</button></span></div>';
+    var promo = (l.promoted_until && new Date(l.promoted_until).getTime() > Date.now()) ? '<span style="font-size:10px;color:#FBBF24;align-self:center">⭐ promu</span>' : '';
+    html += '<span style="display:flex;gap:6px;justify-content:flex-end">' + promo + '<button onclick="openPromote(' + l.id + ')" style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:#FBBF24;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">🚀 Promouvoir</button><button onclick="deleteListing(' + l.id + ')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">Supprimer</button></span></div>';
   });
   body.innerHTML = html;
   var salesRes = await db.from('orders').select('price').eq('seller_id', currentUser.id).eq('status','completed');
