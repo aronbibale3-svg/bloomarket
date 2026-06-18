@@ -847,26 +847,25 @@ body.auth-loading #userNav{display:none!important}
     <div id="registerAlert"></div>
     <div class="fg"><label>Pseudo</label><input type="text" id="registerUsername" placeholder="TonPseudo"></div>
     <div class="fg"><label>Email</label><input type="email" id="registerEmail" placeholder="ton@email.com"></div>
-    <div class="fg"><label>Téléphone <span style="color:var(--muted);font-weight:400">(pour récupérer ton compte par SMS)</span></label><input type="tel" id="registerPhone" placeholder="+33 6 12 34 56 78"></div>
     <div class="fg"><label>Mot de passe</label><input type="password" id="registerPassword" placeholder="Minimum 6 caractères" onkeydown="if(event.key==='Enter')doRegister()"></div>
     <button class="btn-submit" id="registerBtn" onclick="doRegister()">Créer mon compte</button>
     <p class="sw">Déjà un compte ? <a onclick="switchModal('registerModal','loginModal')">Se connecter</a></p>
   </div>
 </div>
 
-<!-- Forgot password (reset par code SMS, sur le site) -->
+<!-- Forgot password (reset par code email, sur le site) -->
 <div class="overlay" id="forgotModal" onclick="closeOnBg(event,'forgotModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('forgotModal')">✕</button>
     <div class="modal-h">Mot de passe oublié 🔑</div>
-    <div class="modal-sub">Réinitialise-le ici avec un code reçu par SMS.</div>
+    <div class="modal-sub">Réinitialise-le ici avec un code reçu par email.</div>
     <div id="forgotAlert"></div>
     <div id="fpStep1">
-      <div class="fg"><label>Numéro de téléphone du compte</label><input type="tel" id="fpPhone" placeholder="+33 6 12 34 56 78"></div>
+      <div class="fg"><label>Email du compte</label><input type="email" id="fpEmail" placeholder="ton@email.com"></div>
       <button class="btn-submit" id="fpSendBtn" onclick="sendResetCode()">Envoyer le code</button>
     </div>
     <div id="fpStep2" style="display:none">
-      <div class="fg"><label>Code reçu par SMS</label><input type="text" id="fpCode" placeholder="Code à 6 chiffres" inputmode="numeric"></div>
+      <div class="fg"><label>Code reçu par email</label><input type="text" id="fpCode" placeholder="Code à 6 chiffres" inputmode="numeric"></div>
       <button class="btn-submit" id="fpVerifyBtn" onclick="verifyResetCode()">Vérifier le code</button>
       <p class="sw"><a onclick="sendResetCode()">Renvoyer un code</a></p>
     </div>
@@ -964,20 +963,6 @@ body.auth-loading #userNav{display:none!important}
       <div class="settings-label">🔐 Changer le mot de passe</div>
       <div class="fg"><input type="password" id="newPwInput" placeholder="Nouveau mot de passe (min. 6)"></div>
       <button class="btn-blue" style="width:100%" onclick="doChangePassword()">Mettre à jour le mot de passe</button>
-    </div>
-    <div class="settings-divider"></div>
-    <div class="settings-section">
-      <div class="settings-label">📱 Téléphone (récupération par SMS)</div>
-      <p class="settings-desc">Lie ton numéro pour pouvoir réinitialiser ton mot de passe par code SMS si tu l oublies.</p>
-      <div id="phoneLinkAlert"></div>
-      <div id="phoneLinkStep1">
-        <div class="fg"><input type="tel" id="linkPhoneInput" placeholder="+33 6 12 34 56 78"></div>
-        <button class="btn-blue" style="width:100%" onclick="linkPhoneSend()">Envoyer le code</button>
-      </div>
-      <div id="phoneLinkStep2" style="display:none">
-        <div class="fg"><input type="text" id="linkPhoneCode" placeholder="Code SMS à 6 chiffres" inputmode="numeric"></div>
-        <button class="btn-blue" style="width:100%" onclick="linkPhoneVerify()">Vérifier le code</button>
-      </div>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
@@ -1451,46 +1436,44 @@ async function doRegister() {
   if (check.data) return showAlert('registerAlert','error','Nom d\'utilisateur indisponible.');
   setBtn('registerBtn', true, 'Création…');
   var refCode = localStorage.getItem('bm_ref') || '';
-  var phoneEl = document.getElementById('registerPhone');
-  var phone = phoneEl ? phoneEl.value.trim().replace(/[\s().-]/g,'') : '';
-  var res = await db.auth.signUp({email, password: pwd, options:{data:{username, ref_code: refCode, phone: phone}}});
+  var res = await db.auth.signUp({email, password: pwd, options:{data:{username, ref_code: refCode}}});
   setBtn('registerBtn', false, 'Créer mon compte');
   if (res.error) return showAlert('registerAlert','error', res.error.message);
   hideModal('registerModal');
   showToast('Compte créé ! Vérifie ton email 🎉','success');
 }
 
-/* ══ Reset mot de passe par code SMS (sur le site, sans lien email) ══ */
-var fpPhoneNumber = '';
+/* ══ Reset mot de passe par code email (sur le site, sans lien) ══ */
+var fpResetEmail = '';
 function resetForgotFlow() {
-  fpPhoneNumber = '';
+  fpResetEmail = '';
   var s1=document.getElementById('fpStep1'), s2=document.getElementById('fpStep2'), s3=document.getElementById('fpStep3');
   if(s1)s1.style.display='block'; if(s2)s2.style.display='none'; if(s3)s3.style.display='none';
-  ['fpPhone','fpCode','fpNewPw'].forEach(function(id){var e=document.getElementById(id); if(e)e.value='';});
+  ['fpEmail','fpCode','fpNewPw'].forEach(function(id){var e=document.getElementById(id); if(e)e.value='';});
   var a=document.getElementById('forgotAlert'); if(a)a.innerHTML='';
 }
 async function sendResetCode() {
-  var phone = (document.getElementById('fpPhone').value || '').trim().replace(/[\s().-]/g,'');
-  if (!phone || phone.length < 8) return showAlert('forgotAlert','error','Numéro invalide. Mets l indicatif, ex. +33…');
-  fpPhoneNumber = phone;
+  var email = (document.getElementById('fpEmail').value || '').trim();
+  if (!email || email.indexOf('@') === -1) return showAlert('forgotAlert','error','Entre un email valide.');
+  fpResetEmail = email;
   setBtn('fpSendBtn', true, 'Envoi…');
-  var res = await db.auth.signInWithOtp({ phone: phone, options: { shouldCreateUser: false } });
+  var res = await db.auth.signInWithOtp({ email: email, options: { shouldCreateUser: false } });
   setBtn('fpSendBtn', false, 'Envoyer le code');
   if (res.error) return showAlert('forgotAlert','error', res.error.message);
   document.getElementById('fpStep1').style.display = 'none';
   document.getElementById('fpStep2').style.display = 'block';
-  showAlert('forgotAlert','success','Code envoyé par SMS au ' + phone + '.');
+  showAlert('forgotAlert','success','Code envoyé par email à ' + email + '.');
 }
 async function verifyResetCode() {
   var code = (document.getElementById('fpCode').value || '').trim();
-  if (!code) return showAlert('forgotAlert','error','Entre le code reçu par SMS.');
+  if (!code) return showAlert('forgotAlert','error','Entre le code reçu par email.');
   setBtn('fpVerifyBtn', true, 'Vérification…');
-  var res = await db.auth.verifyOtp({ phone: fpPhoneNumber, token: code, type: 'sms' });
+  var res = await db.auth.verifyOtp({ email: fpResetEmail, token: code, type: 'email' });
   setBtn('fpVerifyBtn', false, 'Vérifier le code');
   if (res.error) return showAlert('forgotAlert','error','Code incorrect ou expiré.');
   document.getElementById('fpStep2').style.display = 'none';
   document.getElementById('fpStep3').style.display = 'block';
-  showAlert('forgotAlert','success','Téléphone vérifié ✅ Choisis ton nouveau mot de passe.');
+  showAlert('forgotAlert','success','Email vérifié ✅ Choisis ton nouveau mot de passe.');
 }
 async function saveResetPassword() {
   var pwd = document.getElementById('fpNewPw').value;
@@ -1503,31 +1486,6 @@ async function saveResetPassword() {
   resetForgotFlow();
   showToast('Mot de passe changé ✅ Tu es connecté.','success');
   showPage('home');
-}
-
-/* ══ Lier un téléphone au compte (Paramètres) ══ */
-var linkPhoneNumber = '';
-async function linkPhoneSend() {
-  if (!currentUser) return;
-  var phone = (document.getElementById('linkPhoneInput').value || '').trim().replace(/[\s().-]/g,'');
-  if (!phone || phone.length < 8) return showAlert('phoneLinkAlert','error','Numéro invalide (avec indicatif).');
-  linkPhoneNumber = phone;
-  var res = await db.auth.updateUser({ phone: phone });
-  if (res.error) return showAlert('phoneLinkAlert','error', res.error.message);
-  document.getElementById('phoneLinkStep1').style.display = 'none';
-  document.getElementById('phoneLinkStep2').style.display = 'block';
-  showAlert('phoneLinkAlert','success','Code envoyé par SMS.');
-}
-async function linkPhoneVerify() {
-  var code = (document.getElementById('linkPhoneCode').value || '').trim();
-  if (!code) return showAlert('phoneLinkAlert','error','Entre le code reçu.');
-  var res = await db.auth.verifyOtp({ phone: linkPhoneNumber, token: code, type: 'phone_change' });
-  if (res.error) return showAlert('phoneLinkAlert','error','Code incorrect ou expiré.');
-  document.getElementById('phoneLinkStep2').style.display = 'none';
-  document.getElementById('phoneLinkStep1').style.display = 'block';
-  document.getElementById('linkPhoneInput').value = '';
-  document.getElementById('linkPhoneCode').value = '';
-  showAlert('phoneLinkAlert','success','Téléphone vérifié et lié ✅');
 }
 
 async function doResetPassword() {
