@@ -529,6 +529,12 @@ body.auth-loading #userNav{display:none!important}
 .item-opt{padding:9px 12px;font-size:13px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted2)}
 .item-opt:hover{background:rgba(30,111,255,0.16);color:#fff}
 .item-opt-empty{padding:11px 12px;font-size:12px;color:var(--muted)}
+.settings-section{margin:6px 0}
+.settings-label{font-size:13px;font-weight:700;color:#fff;margin-bottom:8px}
+.settings-desc{font-size:12px;color:var(--muted);margin:0 0 10px;line-height:1.5}
+.settings-divider{height:1px;background:var(--border);margin:16px 0}
+.btn-danger{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.32);color:#FCA5A5;padding:10px;border-radius:9px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.btn-danger:hover{background:rgba(239,68,68,0.25)}
 </style>
 </head>
 <body class="auth-loading">
@@ -575,6 +581,7 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-item" onclick="showPage('dashboard')">📊 Dashboard</div>
         <div class="ud-item" onclick="showPage('orders')">📦 Mes commandes</div>
         <div class="ud-item" onclick="showPage('messages')">💬 Messages</div>
+        <div class="ud-item" onclick="showModal('settingsModal')">⚙️ Paramètres</div>
         <div class="ud-sep"></div>
         <div class="ud-item" id="becomeSellerItem" onclick="showModal('sellerVerifyModal')">🛡️ Devenir vendeur vérifié</div>
         <div class="ud-item" onclick="openShop()">🔷 Boutique Bloobux</div>
@@ -662,6 +669,7 @@ body.auth-loading #userNav{display:none!important}
       </div>
     </div>
     <button class="btn-blue" onclick="showModal('editProfileModal')">✏️ Modifier profil</button>
+    <button class="btn-ghost" onclick="showModal('settingsModal')" style="margin-left:8px">⚙️ Paramètres</button>
   </div>
   <div class="section-title">Parrainage 🎁</div>
   <div class="referral-box" id="referralBox" style="margin-bottom:22px">
@@ -922,6 +930,45 @@ body.auth-loading #userNav{display:none!important}
   </div>
 </div>
 
+<!-- Reset password (depuis le lien email) -->
+<div class="overlay" id="resetPasswordModal" onclick="closeOnBg(event,'resetPasswordModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('resetPasswordModal')">✕</button>
+    <div class="modal-h">Nouveau mot de passe 🔐</div>
+    <div class="modal-sub">Choisis un nouveau mot de passe pour ton compte.</div>
+    <div id="resetPwAlert"></div>
+    <div class="fg"><label>Nouveau mot de passe</label><input type="password" id="resetPwInput" placeholder="Minimum 6 caractères" onkeydown="if(event.key==='Enter')doResetPassword()"></div>
+    <button class="btn-submit" id="resetPwBtn" onclick="doResetPassword()">Mettre à jour</button>
+  </div>
+</div>
+
+<!-- Paramètres du compte -->
+<div class="overlay" id="settingsModal" onclick="closeOnBg(event,'settingsModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('settingsModal')">✕</button>
+    <div class="modal-h">Paramètres du compte ⚙️</div>
+    <div id="settingsAlert"></div>
+    <div class="settings-section">
+      <div class="settings-label">🔐 Changer le mot de passe</div>
+      <div class="fg"><input type="password" id="newPwInput" placeholder="Nouveau mot de passe (min. 6)"></div>
+      <button class="btn-blue" style="width:100%" onclick="doChangePassword()">Mettre à jour le mot de passe</button>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="settings-label">⏸️ Désactiver le compte</div>
+      <p class="settings-desc">Ton profil et tes annonces seront masqués. Tu pourras réactiver à ta prochaine connexion.</p>
+      <button class="btn-ghost" style="width:100%" onclick="deactivateAccount()">Désactiver mon compte</button>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="settings-label" style="color:#FCA5A5">🗑️ Supprimer le compte</div>
+      <p class="settings-desc">Action <strong>définitive</strong> : compte, annonces et données supprimés. Tape <strong>SUPPRIMER</strong> pour confirmer.</p>
+      <div class="fg"><input type="text" id="deleteConfirmInput" placeholder="Tape SUPPRIMER" autocomplete="off"></div>
+      <button class="btn-danger" style="width:100%" onclick="deleteAccount()">Supprimer définitivement</button>
+    </div>
+  </div>
+</div>
+
 <!-- Detail -->
 <div class="overlay" id="detailModal" onclick="closeOnBg(event,'detailModal')">
   <div class="modal listing-detail"><button class="modal-close" onclick="hideModal('detailModal')">✕</button><div id="detailContent"></div></div>
@@ -1099,7 +1146,7 @@ var RARITY_COLORS = {
 function rarityColor(r){ return (r && RARITY_COLORS[r]) ? RARITY_COLORS[r] : '#64748B'; }
 
 var ITEM_CATALOG = {
-  'Steal A Brainrot':['Noobini Pizzanini','Fishini Bossini','Lirili Larilla','Tim Cheese','Fluriura','Penguino Cocosino','Svinina Bombardino','Pipi Kiwi','Pip Avacado','Trippi Troppi','Tung Tung Tung Sahur','Gangster Footera','Boneca Ambalabu','Pipi Corni','Ta Ta Ta Sahur','Burbelloni Watermeloni','Pipi Potato','Cappucino Assassino','Brr Brr Patapim','Trulimero Trulicina','Bananita Dolphinita','Los Lirilitos','Salamino Penguino','Tric Trac Baraboom','Los Tung Tuncitos','Tukanno Bananno','Blueberrinni Octopussini','Spijuniro Golubrio','Penguini Zucchini','Blueberrinni Tatticini','Gingobalo Gingobali','Burbalona Loliloli','Chimpanzini Bananini','Ballerina Cappuccina','Chef Crabracadabra','Glorbo Fruttodillo','Catco Hipoptamo','Ballerino Lololo','Lerulerulerule','Bambini Crostini','Francescoo','Zibra Zubra Zibralini','Bambu di Miale','Octopuss Coconuss','Mangolini Parrocini','Leonelli Cactuselli','Sigma Boy','Frigo Camelo','Orangutini Ananassini','Bombardiro Crocodilo','Bombardillo Crocodilo','Bombini Gusini','Gorilo Watermelondrillo','Matteo','Los Spijuniritos','Ganganzelli Trulala','Te Te Te Sahur','Strawberrelli Flamingelli','Elefantino Frigofero','To To To Sahur','Antoniooo','Girafa Celeste','Mr Peppermint','Perochello Lemonchello','Tang Tang Kelentang','Avocadorilla','Patapiimus Maximus','Tirilikalika Tirilikaiko','Santoinooo','Los Matteos','Ti Ti Ti Sahur','Fishinis Santinis','Cocofanto Elefanto','Tob Tobi Tob','Tralalero Tralala','Odin Din Din Dun','Akulini Cactusini','ChacheChiCha','Espressona Signora','La Vacca Saturno Saturnita','Centralucci Nucleaarucci','Ecco Cavallo Virtuoso','Los Vaquitas Saturnitas','Bulbito Bandito Traktorito','Bananananito Bandito','Chilin Chili','Trippi Troppi Troppa Trippa','BrriBicis Dicus','Cioccolatini Pancioncioni','Ber Es The Patipum','Torrtuginni Dragonfrutinni','Los Bros','Bambini Tankini','Hotti Coccolli','Jiqi Jiqi Shizhon','Los Crocodilitos','Agarrini La Palini','Alessioooooo','Karkerkar Kurkur','Piccionetta Machina','Pipoqueira Motoqueira','Il Piccione Musculone','Noooo My Present','Job Job Job Sahur','Las Sis','La Matcha Assassino','Il Mastondontico Telepiedone','Los Christmas Bros','Il Bisonte Giuppitere','Malame Amarale','Belugelo Beluga','Bella PanCasita','Missilpython Turbozzo','Los Tralaleritos','Los Tralaleritas','Trenostruzzo Turbo 3000','Trenostruzzo Turbo 4000','Kravilino Cekicino','Los Orcaleritos','Las Agarrinis','Los Couples','Piccione Macchina','Peelin Peely','Pakrahmatmamatcita','Pakrahmatmamat','Pickolini Malakini','Los Job Job Citos','Anpali Babel','Los Karkeritos','Orcalero Orcala','Frogino Assassino','Ketchuru and Musturu','Pot Hotspotina','Pot Hotspot','Tatoruman','Los Mobilis','Nooo My Hotspot','Elf Elf Elf','Garamaramadungdung','Pirilitoita Bicicleteira','Il Sacro Cabrospaghetti','Chicleteirina Bicileterina','La Grande Combinacion','Yess My Hotspot','Los Santacitos','Le Golem De Frigider','Cornball Sahur','Los Esok Sekolitos','Coccoblade','Cacasito Satelito','Chicleteira Bicileteira','La Christmas Combinaction','Ketupat Kepat Prekupat','Catino Timeno','Nooo My Bicileteira','Dul Dul Dul','W or L','Cookipat','Los Garamadungcitos','Aquanaunt','Liriliralilu','La Esok Sekolah','Pitiata Baem','Yule Yule Il Reino','Chimpanzini Kingini','Ticrac Tictac Sahur','Klombo','Shtekerito El Bulbolito','Gorgonzilla','Spagehtti Tulaetti','Santatini El Treeetini','Cabritos Brotheritos','Cannelloni Dragoni','La Crazy Combinacion','Giglitraktos Spirobos','Tiramisubmarini','Garbagzilla','Cannone Maledettone','Nuclearo Dinossauro','Sammyini Spyderini','John Pork','Strawberry Elephant','Meowl','Headless Horseman','Spyder Elephant','Skibidi Toilet','Smurf Cat','Mythic Lucky Block','Brainrot God Lucky Block','Secret Lucky Block','Admin Lucky Block','Taco Lucky Block','Los Lucky Blocks','Los Taco Blocks','Spooky Lucky Block','Festive Lucky Block','Heart Lucky Block','Leprechaun Lucky Block','Egg Lucky Block','Octo Lucky Block','Carloo','Crabbo Limonetta','Blackhole Goat','Guerriro Digitale','67','Sammyni Fattini','La Grande Combinasion','Gattito Tacoto','Quesadilla Crocodila','Burrito Bandito','Los Tipi Tacos','La Food Combinasion','Chihuanini Taconini','Celestial Pegasus','Jackorilla'],
+  'Steal A Brainrot':['Noobini Pizzanini','Fishini Bossini','Lirilì Larilà','Tim Cheese','Fluriflura','Penguino Cocosino','Svinina Bombardino','Pipi Kiwi','Pipi Avocado','Trippi Troppi','Tung Tung Tung Sahur','Gangster Footera','Boneca Ambalabu','Pipi Corni','Ta Ta Ta Sahur','Burbelloni Watermeloni','Pipi Potato','Cappucino Assassino','Brr Brr Patapim','Trulimero Trulicina','Bananita Dolphinita','Los Lirilitos','Salamino Penguino','Tric Trac Baraboom','Los Tung Tuncitos','Tukanno Bananno','Blueberrinni Octopusini','Spioniro Golubiro','Penguini Zucchini','Blueberrinni Tatticini','Gingobalo Gingobali','Burbalona Loliloli','Chimpanzini Bananini','Ballerina Cappuccina','Chef Crabracadabra','Glorbo Fruttodillo','Cacto Hipopotamo','Ballerino Lololo','Lerulerulerule','Bambini Crostini','Francescoo','Zibra Zubra Zibralini','Bambu di Miale','Octopuss Coconuss','Mangolini Parrocini','Leonelli Cactuselli','Sigma Boy','Frigo Camelo','Orangutini Ananassini','Bombardiro Crocodilo','Bombardillo Crocodilo','Bombini Gusini','Gorillo Watermelondrillo','Matteo','Los Spijuniritos','Ganganzelli Trulala','Te Te Te Sahur','Strawberrelli Flamingelli','Elefantino Frigofero','To To To Sahur','Antoniooo','Girafa Celeste','Mr Peppermint','Perochello Lemonchello','Tang Tang Kelentang','Avocadorilla','Patapiimus Maximus','Tirilikalika Tirilikaiko','Santoinooo','Los Matteos','Ti Ti Ti Sahur','Fishinis Santinis','Cocofanto Elefanto','Tob Tobi Tob','Tralalero Tralala','Odin Din Din Dun','Akulini Cactusini','ChacheChiCha','Espressona Signora','La Vacca Saturno Saturnita','Centralucci Nucleaarucci','Ecco Cavallo Virtuoso','Los Vaquitas Saturnitas','Bulbito Bandito Traktorito','Bananananito Bandito','Chilin Chili','Trippi Troppi Troppa Trippa','BrriBicis Dicus','Cioccolatini Pancioncioni','Ber Es The Patipum','Torrtuginni Dragonfrutinni','Los Bros','Bambini Tankini','Hotti Coccolli','Jiqi Jiqi Shizhon','Los Crocodilitos','Agarrini La Palini','Alessioooooo','Karkerkar Kurkur','Piccionetta Machina','Pipoqueira Motoqueira','Il Piccione Musculone','Noooo My Present','Job Job Job Sahur','Las Sis','La Matcha Assassino','Il Mastondontico Telepiedone','Los Christmas Bros','Il Bisonte Giuppitere','Malame Amarale','Belugelo Beluga','Bella PanCasita','Missilpython Turbozzo','Los Tralaleritos','Los Tralaleritas','Trenostruzzo Turbo 3000','Trenostruzzo Turbo 4000','Kravilino Cekicino','Los Orcaleritos','Las Agarrinis','Los Couples','Piccione Macchina','Peelin Peely','Pakrahmatmamatcita','Pakrahmatmamat','Pickolini Malakini','Los Job Job Citos','Anpali Babel','Los Karkeritos','Orcalero Orcala','Frogino Assassino','Ketchuru and Musturu','Pot Hotspotina','Pot Hotspot','Tatoruman','Los Mobilis','Nooo My Hotspot','Elf Elf Elf','Garamaramadungdung','Pirilitoita Bicicleteira','Il Sacro Cabrospaghetti','Chicleteirina Bicileterina','La Grande Combinacion','Yess My Hotspot','Los Santacitos','Le Golem De Frigider','Cornball Sahur','Los Esok Sekolitos','Coccoblade','Cacasito Satelito','Chicleteira Bicileteira','La Christmas Combinaction','Ketupat Kepat Prekupat','Catino Timeno','Nooo My Bicileteira','Dul Dul Dul','W or L','Cookipat','Los Garamadungcitos','Aquanaunt','Liriliralilu','La Esok Sekolah','Pitiata Baem','Yule Yule Il Reino','Chimpanzini Kingini','Ticrac Tictac Sahur','Klombo','Shtekerito El Bulbolito','Gorgonzilla','Spagehtti Tulaetti','Santatini El Treeetini','Cabritos Brotheritos','Cannelloni Dragoni','La Crazy Combinacion','Giglitraktos Spirobos','Tiramisubmarini','Garbagzilla','Cannone Maledettone','Nuclearo Dinossauro','Sammyini Spyderini','John Pork','Strawberry Elephant','Meowl','Headless Horseman','Spyder Elephant','Skibidi Toilet','Smurf Cat','Mythic Lucky Block','Brainrot God Lucky Block','Secret Lucky Block','Admin Lucky Block','Taco Lucky Block','Los Lucky Blocks','Los Taco Blocks','Spooky Lucky Block','Festive Lucky Block','Heart Lucky Block','Leprechaun Lucky Block','Egg Lucky Block','Octo Lucky Block','Carloo','Crabbo Limonetta','Blackhole Goat','Guerriro Digitale','67','Sammyni Fattini','La Grande Combinasion','Gattito Tacoto','Quesadilla Crocodila','Burrito Bandito','Los Tipi Tacos','La Food Combinasion','Chihuanini Taconini','Celestial Pegasus','Jackorilla','Talpa Di Fero','Garama and Madundung','Noobini Santanini','Raccooni Jandelini','Tartaragno','Holy Arepa','Bandito Bobritto','Ta Ta Ta Ta Sahur','Cupcake Koala','Frogo Elfo','Pengolino Nuvoletto','Pinealotto Fruttarino','Avocadini Antilopini','Brri Brri Bicus Dicus Bombicus','Avocadini Guffo','Wombo Rollo','Frogato Pirato','Gato Celesto','Doi Doi Do','Penguin Tree','Quivioli Ameleonni','Pandaccini Bananini','Clickerino Crabo','Caramello Filtrello','Cocosini Mama','Bandito Axolito','Quackula','Pi Pi Watermelon','Buho del Cielo','Chocco Bunny','Sigma Girl','Sealo Regalo','Rhino Toasterino','Tracoducotulu Delapeladustuz','Cachorrito Melonito','Toiletto Focaccino','Brutto Gialutto','Tigrilini Watermelini','Cavallo Virtuoso','Tacorita Bicicleta','Los Primos','Chicleteira Summerini','House House Bear','Chimpanzini Spiderini','Statutino Libertino','Gattatino Neonino','Antonio','Chocco Milko','Coco Yoyo','Tortuginni Dragonfruitini','Las Tralaleritas'],
   'Blox Fruits':['Rocket','Spin','Chop','Spring','Bomb','Smoke','Spike','Flame','Falcon','Ice','Sand','Dark','Diamond','Light','Rubber','Barrier','Magma','Quake','Buddha','Love','Spider','Sound','Phoenix','Portal','Rumble','Paw','Gravity','Dough','Shadow','Venom','Control','Spirit','Dragon','Leopard','Kitsune','Gas','Blizzard','Yeti','T-Rex','Mammoth','Eagle','West Dragon','East Dragon','Compte Blox Fruits'],
   'Murder Mystery 2':['Chroma Lightbringer','Chroma Shadowbringer','Chroma Gemstone','Chroma Heat','Chroma Seer','Chroma Laser','Chroma Saw','Eternal','Eternal Cane','Elderwood Scythe','Elderwood Blade','Batwing','Ginger Knife','Gingerscope','Nikilis Scythe','Corrupt','Seer','Heat','Luger','Laser','Gemstone','Ginger','Icebreaker','Prince','Harvester','Vampire','Tides','Saw','Blizzard','Flames','Bloodfest','Compte MM2'],
   'Grow A Garden':['Carrot','Strawberry','Blueberry','Tomato','Cauliflower','Watermelon','Rafflesia','Green Apple','Avocado','Banana','Pineapple','Kiwi','Bell Pepper','Prickly Pear','Loquat','Feijoa','Pitcher Plant','Sugar Apple','Bone Blossom','Beanstalk','Dragon Fruit','Mango','Grape','Mushroom','Pepper','Cacao','Pumpkin','Coconut','Dragonfly','Raccoon','Queen Bee','Disco Bee','Butterfly'],
@@ -1226,6 +1273,7 @@ new MutationObserver(function(){
 async function init() {
   try { var _ref = new URLSearchParams(location.search).get('ref'); if (_ref) localStorage.setItem('bm_ref', _ref.toUpperCase()); } catch(e){}
   handlePaymentReturn();
+  if (/type=recovery/.test(location.hash) || /[?&]type=recovery/.test(location.search)) { setTimeout(function(){ revealAuthUI(); showModal('resetPasswordModal'); }, 600); }
   updateCartBadge();
   renderSellAttrFields();
   db.auth.onAuthStateChange(function(event, session) { handleAuthChange(event, session); });
@@ -1243,6 +1291,7 @@ function revealAuthUI() {
 }
 
 function handleAuthChange(event, session) {
+  if (event === 'PASSWORD_RECOVERY') { revealAuthUI(); showModal('resetPasswordModal'); return; }
   var user = session ? session.user : null;
   if (user) {
     if (currentUserId === user.id && event !== 'SIGNED_IN') { revealAuthUI(); return; }
@@ -1268,6 +1317,16 @@ async function setUser(user) {
   db.from('profiles').update({last_seen:new Date().toISOString()}).eq('id', user.id).then(function(){});
   revealAuthUI();
   await loadProfile();
+  if (userProfile && userProfile.disabled) {
+    if (confirm('Ton compte est désactivé. Le réactiver maintenant ?')) {
+      await db.from('profiles').update({disabled:false}).eq('id', currentUser.id);
+      await db.from('listings').update({active:true}).eq('user_id', currentUser.id);
+      userProfile.disabled = false;
+      showToast('Compte réactivé ✅','success');
+    } else {
+      await db.auth.signOut(); clearUser(); showPage('home'); return;
+    }
+  }
   await checkUnreadMessages();
   await loadNotifications();
 }
@@ -1338,6 +1397,52 @@ async function doForgotPassword() {
   setBtn('forgotBtn', false, 'Envoyer le lien');
   if (res.error) return showAlert('forgotAlert','error', res.error.message);
   showAlert('forgotAlert','success','Lien envoyé ! Vérifie ta boîte mail.');
+}
+
+async function doResetPassword() {
+  var pwd = document.getElementById('resetPwInput').value;
+  if (!pwd || pwd.length < 6) return showAlert('resetPwAlert','error','Mot de passe trop court (min. 6).');
+  setBtn('resetPwBtn', true, 'Mise à jour…');
+  var res = await db.auth.updateUser({ password: pwd });
+  setBtn('resetPwBtn', false, 'Mettre à jour');
+  if (res.error) return showAlert('resetPwAlert','error', res.error.message);
+  hideModal('resetPasswordModal');
+  try { history.replaceState({}, '', location.origin + location.pathname); } catch(e){}
+  document.getElementById('resetPwInput').value = '';
+  showToast('Mot de passe mis à jour ✅','success');
+  showPage('home');
+}
+
+async function doChangePassword() {
+  if (!currentUser) return;
+  var pwd = document.getElementById('newPwInput').value;
+  if (!pwd || pwd.length < 6) return showAlert('settingsAlert','error','Mot de passe trop court (min. 6).');
+  var res = await db.auth.updateUser({ password: pwd });
+  if (res.error) return showAlert('settingsAlert','error', res.error.message);
+  document.getElementById('newPwInput').value = '';
+  showAlert('settingsAlert','success','Mot de passe mis à jour ✅');
+}
+
+async function deactivateAccount() {
+  if (!currentUser) return;
+  if (!confirm('Désactiver ton compte ?\n\nTon profil et tes annonces seront masqués. Tu pourras réactiver en te reconnectant.')) return;
+  await db.from('listings').update({active:false}).eq('user_id', currentUser.id);
+  await db.from('profiles').update({disabled:true}).eq('id', currentUser.id);
+  hideModal('settingsModal');
+  await db.auth.signOut(); clearUser(); showPage('home');
+  showToast('Compte désactivé. Reconnecte-toi pour le réactiver.','info');
+}
+
+async function deleteAccount() {
+  if (!currentUser) return;
+  var conf = (document.getElementById('deleteConfirmInput').value || '').trim();
+  if (conf !== 'SUPPRIMER') return showAlert('settingsAlert','error','Tape SUPPRIMER (en majuscules) pour confirmer.');
+  if (!confirm('Dernière confirmation : supprimer DÉFINITIVEMENT ton compte ?')) return;
+  var res = await db.rpc('delete_my_account');
+  if (res.error) return showAlert('settingsAlert','error','Suppression impossible : ' + rpcMsg(res.error) + '. Lance le SQL delete_my_account ou contacte le support.');
+  hideModal('settingsModal');
+  await db.auth.signOut(); clearUser(); showPage('home');
+  showToast('Compte supprimé. À bientôt 👋','success');
 }
 
 async function logout() {
