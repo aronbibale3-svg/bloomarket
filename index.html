@@ -1364,6 +1364,11 @@ function toggleTheme() {
   document.addEventListener('DOMContentLoaded', function(){ applyTheme(t); });
 })();
 
+/* ══ TRACKING VISITEURS ══ */
+var VISITOR_ID = (function(){ try { var v = localStorage.getItem('bm_visitor'); if (!v) { v = 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2,8); localStorage.setItem('bm_visitor', v); } return v; } catch(e){ return 'anon'; } })();
+function trackVisit(){ try { db.rpc('track_visit', { p_visitor: VISITOR_ID }); } catch(e){} }
+document.addEventListener('DOMContentLoaded', function(){ trackVisit(); setInterval(trackVisit, 60000); });
+
 /* ══ LIGHTBOX (zoom image) ══ */
 function openLightbox(src) {
   var ov = document.getElementById('lightbox');
@@ -3042,9 +3047,10 @@ async function loadAdminPage() {
   var totalRevenue = (revenueRes.data || []).reduce(function(s,o){return s + parseFloat(o.commission||0);},0);
   var withdrawsRes = await db.from('withdrawals').select('id',{count:'exact',head:true}).eq('status','pending');
   var sellersRes = await db.from('profiles').select('id',{count:'exact',head:true}).eq('id_verified', true);
+  var vsRes = await db.rpc('visit_stats'); var v = (vsRes && vsRes.data) ? vsRes.data : {};
   document.getElementById('adminStats').innerHTML = [
     {l:'Utilisateurs', v:usersRes.count||0}, {l:'Annonces actives', v:listingsRes.count||0},
-    {l:'Commandes', v:ordersRes.count||0}, {l:'Vendeurs vérifiés', v:sellersRes.count||0}, {l:'Revenus plateforme', v:totalRevenue.toFixed(2)+'€'}, {l:'Retraits en attente', v:withdrawsRes.count||0}
+    {l:'Commandes', v:ordersRes.count||0}, {l:'Vendeurs vérifiés', v:sellersRes.count||0}, {l:'Revenus plateforme', v:totalRevenue.toFixed(2)+'€'}, {l:'Retraits en attente', v:withdrawsRes.count||0}, {l:'🟢 Actifs maintenant', v:(v.active||0)}, {l:'Visiteurs aujourd hui', v:(v.today||0)}, {l:'Visiteurs (7 jours)', v:(v.week||0)}, {l:'Visiteurs (30 jours)', v:(v.month||0)}
   ].map(function(s){return '<div class="dc"><div class="dc-l">'+s.l+'</div><div class="dc-v">'+s.v+'</div></div>';}).join('');
   adminTab('users');
 }
