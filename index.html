@@ -1992,8 +1992,9 @@ async function uploadAvatar(input) {
   var path = currentUser.id + '/avatar.' + ext;
   var up = await db.storage.from('avatars').upload(path, file, {upsert:true});
   if (up.error) { console.error('Upload avatar:', up.error); return showToast('Upload échoué : ' + (up.error.message || 'bucket "avatars" manquant ?'), 'error'); }
-  var url = db.storage.from('avatars').getPublicUrl(path).data.publicUrl;
+  var url = db.storage.from('avatars').getPublicUrl(path).data.publicUrl + '?t=' + Date.now();
   await db.from('profiles').update({avatar_url: url}).eq('id', currentUser.id);
+  if (userProfile) userProfile.avatar_url = url;
   showToast('Avatar mis à jour !','success');
   await loadProfile();
   await loadProfilePage();
