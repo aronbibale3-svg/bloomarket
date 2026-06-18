@@ -39,6 +39,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .btn-ghost:hover{color:#fff;border-color:rgba(255,255,255,0.2)}
 .btn-blue{background:var(--blue3);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;white-space:nowrap}
 .btn-blue:hover{background:var(--blue)}
+.sell-btn{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1E6FFF,#3b82f6);border:none;color:#fff;border-radius:8px;width:36px;height:34px;font-size:24px;font-weight:300;line-height:1;cursor:pointer;transition:all .15s;box-shadow:0 2px 10px rgba(30,111,255,0.35);flex-shrink:0}
+.sell-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
 .cart-btn{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 10px;cursor:pointer;font-size:16px;line-height:1;transition:all .15s}
 .cart-btn:hover{border-color:var(--border2)}
 .cart-badge{position:absolute;top:-5px;right:-5px;background:var(--blue3);color:#fff;font-size:9px;font-weight:800;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 3px}
@@ -514,6 +516,14 @@ body.auth-loading #userNav{display:none!important}
 .sp-stat{text-align:center}
 .sp-stat-n{font-size:15px;font-weight:800}
 .sp-stat-l{font-size:9px;color:var(--muted);text-transform:uppercase}
+.chat-order-bar{padding:10px 14px;background:rgba(30,111,255,0.07);border-bottom:1px solid var(--border)}
+.cob-row{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap;margin:2px 0}
+.cob-info{display:flex;align-items:center;gap:8px;min-width:0}
+.cob-lock{font-size:16px;flex-shrink:0}
+.cob-title{font-size:12px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.cob-sub{font-size:10px;color:var(--muted)}
+.cob-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.cob-wait{font-size:11px;color:var(--muted2)}
 </style>
 </head>
 <body class="auth-loading">
@@ -535,6 +545,7 @@ body.auth-loading #userNav{display:none!important}
       <button class="btn-blue" onclick="showModal('registerModal')">Inscription</button>
     </div>
     <div id="userNav" style="display:none;align-items:center;gap:7px">
+      <div class="sell-btn" onclick="quickSell()" title="Vendre un item">+</div>
       <div class="cart-btn" onclick="openCartModal()" title="Mon panier">
         🛒<div class="cart-badge" id="cartBadge">0</div>
       </div>
@@ -912,6 +923,7 @@ body.auth-loading #userNav{display:none!important}
       <div><div class="chat-title" id="chatTitle">Chat</div><div class="chat-sub">En ligne</div></div>
       <button class="modal-close" style="position:static;margin-left:auto" onclick="hideModal('chatModal')">✕</button>
     </div>
+    <div class="chat-order-bar" id="chatOrderBar" style="display:none"></div>
     <div class="chat-messages" id="chatMessages"><div class="chat-empty">Début de la conversation 👋</div></div>
     <div class="chat-input-row">
       <input class="chat-input" id="chatInput" placeholder="Ton message…" onkeydown="if(event.key==='Enter')sendMessage()">
@@ -1160,7 +1172,7 @@ var ADMIN_EMAILS = ['aronbibale@gmail.com']; // compte admin du site
 /* ── STATE ── */
 var currentUser = null, userProfile = null;
 var currentFilter = 'all', currentSort = 'created_at', searchQuery = '';
-var currentChatConvId = null, chatChannel = null;
+var currentChatConvId = null, chatChannel = null, currentChatOther = null;
 var currentOrderTab = 'buying', reviewRating = 0;
 var cart = JSON.parse(localStorage.getItem('bm_cart') || '[]');
 var sellImageFiles = [];
@@ -1467,7 +1479,7 @@ function renderListings(listings, targetId) {
     if (firstImg) html += '<img src="' + escHtml(firstImg) + '" alt="' + escHtml(l.title) + '" onerror="imgErrFallback(this,\'' + escHtml(l.game) + '\')">';
     else html += gameImgFallback(l.game, icon);
     html += '<div class="lc-online"></div>';
-    if (!isOwn) html += '<button class="lc-cart" onclick="event.stopPropagation();addToCart(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + escHtml(l.game) + '\',' + l.price + ',' + (firstImg ? '\'' + escHtml(firstImg) + '\'' : 'null') + ')">🛒</button>';
+    if (!isOwn) html += '<button class="lc-cart" onclick="event.stopPropagation();addToCart(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + escHtml(l.game) + '\',' + l.price + ',' + (firstImg ? '\'' + escHtml(firstImg) + '\'' : 'null') + ',\'' + l.user_id + '\')">🛒</button>';
     html += '</div>';
     html += '<div class="lc-body">';
     html += '<div class="lc-game-tag">' + gameBadgeIc(l.game) + '<span>' + escHtml(l.game) + '</span></div>';
@@ -1537,7 +1549,7 @@ function openDetail(l) {
     } else {
       html += '<div class="ld-actions">';
       html += '<button class="btn-buy-now" onclick="handleBuy(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + l.user_id + '\',' + l.price + ')">⚡ Acheter maintenant</button>';
-      html += '<button class="btn-cart-add" onclick="addToCart(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + escHtml(l.game) + '\',' + l.price + ',' + (imgs.length ? '\'' + escHtml(imgs[0]) + '\'' : 'null') + ');hideModal(\'detailModal\')">🛒 Ajouter au panier</button>';
+      html += '<button class="btn-cart-add" onclick="addToCart(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + escHtml(l.game) + '\',' + l.price + ',' + (imgs.length ? '\'' + escHtml(imgs[0]) + '\'' : 'null') + ',\'' + l.user_id + '\');hideModal(\'detailModal\')">🛒 Ajouter au panier</button>';
       html += '</div>';
     }
   } else html += '<span style="font-size:12px;color:var(--muted)">Ton annonce</span>';
@@ -1721,7 +1733,33 @@ async function handleBuy(listingId, title, sellerId, price) {
   if (!currentUser) { hideModal('detailModal'); showModal('loginModal'); return; }
   if (currentUser.id === sellerId) { showToast("Tu ne peux pas acheter ta propre annonce !", 'error'); return; }
   hideModal('detailModal');
-  openPayment({ amount: parseFloat(price), title: title, listingIds: [listingId], kind: 'order' });
+  startPurchase([listingId], parseFloat(price), title, 'order');
+}
+
+// Achat malin : si le solde suffit on paie depuis le solde (pas de minimum, ex. 0,10€).
+// Sinon on passe par la carte (Stripe) — recharge si le montant est trop bas pour la carte.
+function startPurchase(listingIds, total, title, kind) {
+  if (!currentUser) { showModal('loginModal'); return; }
+  var bal = parseFloat(userProfile ? userProfile.balance : 0) || 0;
+  if (bal + 1e-9 >= total) { buyFromBalance(listingIds, total, kind); return; }
+  if (total < 0.50) {
+    showToast('Solde insuffisant — recharge ton solde pour acheter cet article','info');
+    showModal('addFundsModal');
+    return;
+  }
+  openPayment({ amount: total, title: title, listingIds: listingIds, kind: kind });
+}
+
+async function buyFromBalance(listingIds, total, kind) {
+  showToast('Achat en cours…','info');
+  for (var i = 0; i < listingIds.length; i++) {
+    var r = await db.rpc('buy_listing', { p_listing_id: listingIds[i] });
+    if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
+  }
+  if (kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); hideModal('cartModal'); }
+  await loadProfile();
+  showToast('Achat réussi ✅ (payé avec ton solde)','success');
+  if (typeof loadListings === 'function') loadListings();
 }
 
 /* ══ PAIEMENT DIRECT (Stripe Payment Element : Carte + Apple Pay + Google Pay) ══ */
@@ -1822,7 +1860,7 @@ async function handlePaymentReturn() {
 }
 
 /* ══ CART ══ */
-function addToCart(id, title, game, price, imgUrl) {
+function addToCart(id, title, game, price, imgUrl, sellerId) {
   if (!currentUser) { showToast('Connecte-toi pour utiliser le panier','error'); showModal('loginModal'); return; }
   var exists = cart.find(function(c){ return c.id === id; });
   if (exists) { showToast('Déjà dans le panier','info'); return; }
@@ -1830,6 +1868,7 @@ function addToCart(id, title, game, price, imgUrl) {
   localStorage.setItem('bm_cart', JSON.stringify(cart));
   updateCartBadge();
   showToast('Ajouté au panier 🛒','success');
+  if (sellerId && currentUser && sellerId !== currentUser.id) { try { db.rpc('notify_cart_add', { p_listing_id: id }); } catch(e){} }
 }
 
 function removeFromCart(id) {
@@ -1844,6 +1883,8 @@ function updateCartBadge() {
   if (cart.length > 0) { badge.textContent = cart.length; badge.style.display = 'flex'; }
   else badge.style.display = 'none';
 }
+
+function quickSell() { if (!currentUser) { showModal('loginModal'); return; } showModal('sellModal'); }
 
 function openCartModal() {
   renderCartModal();
@@ -1879,8 +1920,7 @@ async function checkoutCart() {
   var total = cart.reduce(function(s,c){ return s + parseFloat(c.price); }, 0);
   var ids = cart.map(function(c){ return c.id; });
   var title = cart.length === 1 ? cart[0].title : (cart.length + ' articles');
-  hideModal('cartModal');
-  openPayment({ amount: total, title: title, listingIds: ids, kind: 'cart' });
+  startPurchase(ids, total, title, 'cart');
 }
 
 async function handleBuyDirect(listingId, title, sellerId, price) {
@@ -2043,6 +2083,7 @@ async function confirmOrder(orderId, sellerId) {
   if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
   showToast('Réception confirmée ✅ Fonds versés au vendeur','success');
   loadOrders();
+  loadChatOrder();
   setTimeout(function(){openReviewModal(orderId, sellerId);}, 500);
 }
 
@@ -2055,6 +2096,33 @@ async function openDispute(orderId) {
   if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
   showToast('Litige ouvert ⚖️ Un administrateur va vérifier','info');
   loadOrders();
+  loadChatOrder();
+}
+
+/* ══ VALIDATION COMMANDE DANS LE CHAT ══ */
+async function loadChatOrder() {
+  var bar = document.getElementById('chatOrderBar');
+  if (!bar) return;
+  if (!currentUser || !currentChatOther) { bar.style.display='none'; bar.innerHTML=''; return; }
+  var f = 'and(buyer_id.eq.'+currentUser.id+',seller_id.eq.'+currentChatOther+'),and(buyer_id.eq.'+currentChatOther+',seller_id.eq.'+currentUser.id+')';
+  var res = await db.from('orders').select('*').or(f).eq('status','pending').order('created_at',{ascending:false}).limit(5);
+  if (!res.data || !res.data.length) { bar.style.display='none'; bar.innerHTML=''; return; }
+  var html = '';
+  res.data.forEach(function(o){
+    var iAmBuyer = o.buyer_id === currentUser.id;
+    html += '<div class="cob-row">';
+    html += '<div class="cob-info"><span class="cob-lock">🔒</span><div><div class="cob-title">'+escHtml(o.title||'Commande')+'</div><div class="cob-sub">'+parseFloat(o.price||0).toFixed(2)+'€ · en séquestre</div></div></div>';
+    html += '<div class="cob-actions">';
+    if (iAmBuyer) {
+      html += '<button class="btn-sm btn-sm-green" onclick="confirmOrder('+o.id+',\''+o.seller_id+'\')">✅ J\'ai bien reçu</button>';
+      html += '<button class="btn-sm btn-sm-red" onclick="openDispute('+o.id+')">⚖️ Problème</button>';
+    } else {
+      html += '<span class="cob-wait">⏳ En attente que l\'acheteur confirme</span>';
+    }
+    html += '</div></div>';
+  });
+  bar.innerHTML = html;
+  bar.style.display = 'block';
 }
 
 /* ══ CHAT ══ */
@@ -2070,6 +2138,8 @@ async function openChat(otherUserId, otherUsername, listingId) {
   }
   if (!conv) { showToast('Erreur chat','error'); return; }
   currentChatConvId = conv.id;
+  currentChatOther = otherUserId;
+  loadChatOrder();
   document.getElementById('chatTitle').textContent = otherUsername;
   document.getElementById('chatAvatar').textContent = otherUsername[0].toUpperCase();
   showModal('chatModal');
@@ -2143,6 +2213,8 @@ async function loadConversations() {
 
 async function openChatById(convId, otherUserId, otherUsername) {
   currentChatConvId = convId;
+  currentChatOther = otherUserId;
+  loadChatOrder();
   document.getElementById('chatTitle').textContent = otherUsername;
   document.getElementById('chatAvatar').textContent = otherUsername[0].toUpperCase();
   showModal('chatModal');
