@@ -407,6 +407,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .listing-card:hover .lc-img-game{transform:scale(1.08) translateY(-1px)}
 .lc-game-badge{display:flex;align-items:center;justify-content:center}
 .lc-badge-ic{width:16px;height:16px;border-radius:4px;object-fit:cover;display:block}
+.lc-game-tag{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+.lc-game-tag .lc-badge-ic{width:14px;height:14px;border-radius:3px}
+.lc-game-tag span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cat-emoji-ic{width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:transform .2s ease}
 .cat-tab:hover .cat-emoji-ic{transform:scale(1.18) rotate(-4deg)}
 
@@ -1463,10 +1466,11 @@ function renderListings(listings, targetId) {
     html += '<div class="lc-img">';
     if (firstImg) html += '<img src="' + escHtml(firstImg) + '" alt="' + escHtml(l.title) + '" onerror="imgErrFallback(this,\'' + escHtml(l.game) + '\')">';
     else html += gameImgFallback(l.game, icon);
-    html += '<div class="lc-game-badge" title="' + escHtml(l.game) + '">' + gameBadgeIc(l.game) + '</div><div class="lc-online"></div>';
+    html += '<div class="lc-online"></div>';
     if (!isOwn) html += '<button class="lc-cart" onclick="event.stopPropagation();addToCart(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + escHtml(l.game) + '\',' + l.price + ',' + (firstImg ? '\'' + escHtml(firstImg) + '\'' : 'null') + ')">🛒</button>';
     html += '</div>';
     html += '<div class="lc-body">';
+    html += '<div class="lc-game-tag">' + gameBadgeIc(l.game) + '<span>' + escHtml(l.game) + '</span></div>';
     html += '<div class="lc-title">' + escHtml(l.title) + '</div>';
     if (rar) html += '<span class="lc-rarity-tag" style="background:' + rarityColor(rar) + '">' + escHtml(rar) + '</span>';
     if (aline) html += '<div class="lc-attr-line">' + escHtml(aline) + '</div>';
