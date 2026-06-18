@@ -524,6 +524,11 @@ body.auth-loading #userNav{display:none!important}
 .cob-sub{font-size:10px;color:var(--muted)}
 .cob-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .cob-wait{font-size:11px;color:var(--muted2)}
+.item-picker{position:relative}
+.item-dropdown{position:absolute;left:0;right:0;top:100%;margin-top:4px;background:#0d0f1a;border:1px solid var(--border);border-radius:10px;max-height:230px;overflow-y:auto;z-index:60;box-shadow:0 14px 34px rgba(0,0,0,0.5)}
+.item-opt{padding:9px 12px;font-size:13px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--muted2)}
+.item-opt:hover{background:rgba(30,111,255,0.16);color:#fff}
+.item-opt-empty{padding:11px 12px;font-size:12px;color:var(--muted)}
 </style>
 </head>
 <body class="auth-loading">
@@ -545,6 +550,7 @@ body.auth-loading #userNav{display:none!important}
       <button class="btn-blue" onclick="showModal('registerModal')">Inscription</button>
     </div>
     <div id="userNav" style="display:none;align-items:center;gap:7px">
+      <div class="cart-btn" onclick="showPage('messages')" title="Messages" style="position:relative">💬<div class="cart-badge" id="msgBadge" style="display:none">0</div></div>
       <div class="sell-btn" onclick="quickSell()" title="Vendre un item">+</div>
       <div class="cart-btn" onclick="openCartModal()" title="Mon panier">
         🛒<div class="cart-badge" id="cartBadge">0</div>
@@ -572,7 +578,7 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-sep"></div>
         <div class="ud-item" id="becomeSellerItem" onclick="showModal('sellerVerifyModal')">🛡️ Devenir vendeur vérifié</div>
         <div class="ud-item" onclick="openShop()">🔷 Boutique Bloobux</div>
-        <div class="ud-item" onclick="showModal('sellModal')">➕ Vendre un item</div>
+        <div class="ud-item" onclick="openSellModal()">➕ Vendre un item</div>
         <div class="ud-item" onclick="showPage('withdrawPage')">💸 Retirer des fonds</div>
         <div id="adminMenuItem" style="display:none"><div class="ud-sep"></div><div class="ud-item" onclick="showPage('adminPage')" style="color:#FBBF24">⚙️ Administration</div></div>
         <div class="ud-sep"></div>
@@ -673,7 +679,7 @@ body.auth-loading #userNav{display:none!important}
 <div id="dashPage" class="page">
   <div class="dash-header">
     <div><div class="dash-title">Tableau de bord</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Bienvenue, <span id="dashUsername">-</span></div></div>
-    <button class="btn-blue" onclick="showModal('sellModal')">➕ Nouvelle annonce</button>
+    <button class="btn-blue" onclick="openSellModal()">➕ Nouvelle annonce</button>
   </div>
   <div class="wallet-box">
     <div><div class="wallet-label">Solde disponible</div><div class="wallet-amount" id="dashBalance">0.00€</div><div class="wallet-sub">Disponible pour acheter ou retirer</div></div>
@@ -771,7 +777,7 @@ body.auth-loading #userNav{display:none!important}
       <div class="footer-title">Navigation</div>
       <ul class="footer-links">
         <li><a onclick="showPage('home')">Marketplace</a></li>
-        <li><a onclick="showModal('sellModal')">Vendre un item</a></li>
+        <li><a onclick="openSellModal()">Vendre un item</a></li>
         <li><a onclick="showPage('messages')">Messages</a></li>
         <li><a onclick="showPage('orders')">Mes commandes</a></li>
       </ul>
@@ -859,7 +865,13 @@ body.auth-loading #userNav{display:none!important}
     <div class="modal-h" style="text-align:left;margin-bottom:4px">Mettre en vente ➕</div>
     <div class="modal-sub" style="text-align:left;margin-bottom:18px">Remplis les infos de ton annonce</div>
     <div id="sellAlert"></div>
-    <div class="fg"><label>Titre</label><input type="text" id="sellTitle" placeholder="Ex: Blox Fruit Legendary x5"></div>
+    <div class="fg"><label>Item (à choisir dans la liste)</label>
+      <div class="item-picker">
+        <input type="text" id="sellItemSearch" placeholder="Rechercher ton item…" autocomplete="off" oninput="filterItemList()" onfocus="filterItemList()" onblur="setTimeout(function(){var l=document.getElementById('sellItemList');if(l)l.style.display='none';},180)">
+        <input type="hidden" id="sellTitle">
+        <div class="item-dropdown" id="sellItemList" style="display:none"></div>
+      </div>
+    </div>
     <div class="sell-form-grid">
       <div class="fg"><label>Jeu</label>
         <select id="sellGame" onchange="renderSellAttrFields()">
@@ -883,10 +895,10 @@ body.auth-loading #userNav{display:none!important}
     <div class="fg"><label>Stock (quantité disponible)</label><input type="number" id="sellStock" placeholder="1" min="1" step="1" value="1"></div>
     <div class="fg"><label>Description</label><textarea id="sellDesc" placeholder="Décris ton item en détail…"></textarea></div>
     <div class="fg">
-      <label>Photos (jusqu'à 5)</label>
+      <label>Photos (3 minimum — 5 max)</label>
       <div class="img-upload-zone" onclick="document.getElementById('sellImages').click()">
         <div class="ico">📷</div>
-        <p>Clique pour ajouter des photos</p>
+        <p>Clique pour ajouter des photos (au moins 3)</p>
         <p style="font-size:11px;margin-top:4px;color:var(--muted)">JPG, PNG — max 5 Mo chacune</p>
       </div>
       <input type="file" id="sellImages" accept="image/*" multiple style="display:none" onchange="previewSellImages(this)">
@@ -1086,11 +1098,25 @@ var RARITY_COLORS = {
 };
 function rarityColor(r){ return (r && RARITY_COLORS[r]) ? RARITY_COLORS[r] : '#64748B'; }
 
+var ITEM_CATALOG = {
+  'Steal A Brainrot':['Noobini Pizzanini','Fishini Bossini','Lirili Larilla','Tim Cheese','Fluriura','Penguino Cocosino','Svinina Bombardino','Pipi Kiwi','Pip Avacado','Trippi Troppi','Tung Tung Tung Sahur','Gangster Footera','Boneca Ambalabu','Pipi Corni','Ta Ta Ta Sahur','Burbelloni Watermeloni','Pipi Potato','Cappuccino Assassino','Brr Brr Patapim','Trulimero Trulicina','Bananita Dolphinita','Los Lirilitos','Salamino Penguino','Tric Trac Baraboom','Los Tung Tuncitos','Tukanno Bananno','Blueberrinni Octopussini','Spijuniro Golubrio','Penguini Zucchini','Burbaloni Loliloli','Chimpanzini Bananini','Ballerina Cappuccina','Chef Crabracadabra','Lionel Cactuseli','Glorbo Fruttodrillo','Eletro Quacko','Buho De Fuego','Puffaball','Seraphino Gruyero','Sigma Boy','Kirilikalika Kirilikalato','Frigo Camelo','Orangutini Ananassini','Rhino Toasterino','Bombardiro Crocodilo','Bombombini Gusini','Avocadorila','Cavallo Virtuoso','Lerulerulerule','Fizzy Soda','Los Noobinis','Bee Loco','Orbi Mochi','Ganganzelli Trulala','Cocofanto Elefanto','Gattatino Nyanino','Girafa Celestre','Chihuanini Taconini','Matteo','Tralalero Tralala','Los Crocodilitos','Tigroligre Frutonni','Odin Din Din Dun','Alessio','Tipi Topi Taco','Tortugini Sandcastlini','Piccione Macchina','La Vacca Saturno Saturnita','Karkerkar Kurkur','Nuclearo Dinossauro','Strawberry Elephant','Craburger','Rocketini Frostini','Octoball','Sushi Inu','Girafini Raftini','Frullato Framingo','Los Fruits','Sand Sand Sand','Bearito Cabinito','Venuspino','Kraken','Headless Horseman','Skibidi Toilet','Meowl','Las Vaquitas Saturnitas','Signore Carapace','Love Love Bear','Spyder Elephant','La Grande Combinasion','Mythic Lucky Block','Brainrot God Lucky Block','Secret Lucky Block','Festive Lucky Block','Heart Lucky Block'],
+  'Blox Fruits':['Rocket','Spin','Chop','Spring','Bomb','Smoke','Spike','Flame','Falcon','Ice','Sand','Dark','Diamond','Light','Rubber','Barrier','Magma','Quake','Buddha','Love','Spider','Sound','Phoenix','Portal','Rumble','Paw','Gravity','Dough','Shadow','Venom','Control','Spirit','Dragon','Leopard','Kitsune','Gas','Blizzard','Yeti','T-Rex','Mammoth','Eagle','West Dragon','East Dragon','Compte Blox Fruits'],
+  'Murder Mystery 2':['Chroma Lightbringer','Chroma Shadowbringer','Chroma Gemstone','Chroma Heat','Chroma Seer','Chroma Laser','Chroma Saw','Eternal','Eternal Cane','Elderwood Scythe','Elderwood Blade','Batwing','Ginger Knife','Gingerscope','Nikilis Scythe','Corrupt','Seer','Heat','Luger','Laser','Gemstone','Ginger','Icebreaker','Prince','Harvester','Vampire','Tides','Saw','Blizzard','Flames','Bloodfest','Compte MM2'],
+  'Grow A Garden':['Carrot','Strawberry','Blueberry','Tomato','Cauliflower','Watermelon','Rafflesia','Green Apple','Avocado','Banana','Pineapple','Kiwi','Bell Pepper','Prickly Pear','Loquat','Feijoa','Pitcher Plant','Sugar Apple','Bone Blossom','Beanstalk','Dragon Fruit','Mango','Grape','Mushroom','Pepper','Cacao','Pumpkin','Coconut','Dragonfly','Raccoon','Queen Bee','Disco Bee','Butterfly'],
+  'Adopt Me':['Shadow Dragon','Frost Dragon','Giraffe','Unicorn','Bat Dragon','Owl','Parrot','Crow','Kangaroo','Turtle','Kitsune','Arctic Reindeer','Evil Unicorn','Dragon','Griffin','Cow','Albino Monkey','Golden Unicorn','Diamond Unicorn','Robo Dog','Frost Fury','Queen Bee','Metal Ox','Skele-Rex'],
+  'Pet Simulator 99':['Huge Cat','Huge Pixel Cat','Titanic Hippo Melon','Huge Hell Rock','Huge Happy Rock','Huge Dragon','Huge Empyrean Dragon','Titanic Cat','Huge Storm Agony','Huge Festive Cat','Huge Balloon Cat','Titanic Jelly Cat','Gargantuan Dark Dragon','Cat','Dog','Bunny','Agony','Demon','Corgi'],
+  'Toilet Tower Defense':['Cameraman','Camerawoman','Speakerman','TV Man','Large TV Man','Titan Cameraman','Titan Speakerman','Titan TV Man','Titan Drill Man','Titan Clockman','Upgraded Titan Cinemaman','Upgraded Titan Clockman','Scientist Cameraman','Jetpack Cameraman','Corrupted Cameraman','Mech Cameraman','Astro Cameraman','Chief Clockman'],
+  'Grand Piece Online':['Mochi','Magma','Light','Lightning','Flame','Sand','Ice','Quake','Phoenix','Falcon','Venom','Buddha','Op-Op','Dark','Gomu','Bomu','Kilo','Barrier','Spin','Shisui','Yoru','Saddi','Wado','Race V4','Marine Cape'],
+  'Da Hood':['Cash 1M','Cash 5M','Cash 10M','Cash 25M','Cash 50M','Cash 100M','Skin Visage','Skin Tenue','Aimer','Compte Da Hood'],
+  'Royale High':['Halloween Halo 2019','Halloween Halo 2020','Halloween Halo 2021','Valentine Halo 2020','Valentine Halo 2021','Spring Halo 2020','Spring Halo 2021','Autumn Halo 2019','Mermaid Halo 2021','Mermaid Halo 2022','Winter Halo 2019','Winter Halo 2020','Lucky Halo 2021','Lucky Halo 2022','Everfriend Halo 2024','Dream Dust Halo','Diamonds 100k','Diamonds 500k','Diamonds 1M','Goddess of Triumph Set','Posesy Set'],
+  'Grow A Garden 2':['Carrot','Strawberry','Blueberry','Tomato','Cauliflower','Watermelon','Rafflesia','Green Apple','Avocado','Banana','Pineapple','Kiwi','Bell Pepper','Prickly Pear','Loquat','Feijoa','Pitcher Plant','Sugar Apple','Bone Blossom','Beanstalk','Dragon Fruit','Mango','Grape','Mushroom','Pepper','Cacao','Pumpkin','Coconut','Dragonfly','Raccoon','Queen Bee','Disco Bee','Butterfly']
+};
 var GAME_ATTRS = {
   'Steal A Brainrot':[
     {key:'rarity',label:'Rareté',type:'select',options:['Common','Rare','Epic','Legendary','Mythic','Brainrot God','Secret']},
     {key:'mutation',label:'Mutation',type:'select',options:['Aucune','Gold','Diamond','Rainbow','Lava','Bloodrot','Celestial']},
-    {key:'income',label:'Revenu /s',type:'number'}
+    {key:'income',label:'Revenu',type:'number'},
+    {key:'income_unit',label:'Unité',type:'select',options:['/s','K/s','M/s','B/s']}
   ],
   'Blox Fruits':[
     {key:'rarity',label:'Rareté',type:'select',options:['Common','Uncommon','Rare','Legendary','Mythical']},
@@ -1154,7 +1180,8 @@ function attrLine(attributes){
     if(k==='rarity') continue;
     var v=attributes[k];
     if(v===null||v===undefined||v===''||v==='Aucune'||v==='Aucun') continue;
-    if(k==='income') parts.push('💰 '+v+'/s');
+    if(k==='income_unit') continue;
+    if(k==='income') parts.push('💰 '+v+(attributes.income_unit||'/s'));
     else if(k==='weight') parts.push('⚖️ '+v+' kg');
     else parts.push(String(v));
   }
@@ -1670,6 +1697,7 @@ function renderSellAttrFields() {
   });
   h += '</div>';
   el.innerHTML = h;
+  renderItemPicker();
 }
 
 function collectSellAttrs() {
@@ -1699,7 +1727,10 @@ async function doSell() {
   var desc = document.getElementById('sellDesc').value.trim();
   var stock = parseInt(document.getElementById('sellStock').value);
   if (isNaN(stock) || stock < 1) stock = 1;
+  var catList = (typeof ITEM_CATALOG !== 'undefined' && ITEM_CATALOG[game]) ? ITEM_CATALOG[game] : [];
+  if (catList.length && catList.indexOf(title) === -1) return showAlert('sellAlert','error','Choisis ton item dans la liste.');
   if (!title || !price || !desc) return showAlert('sellAlert','error','Remplis tous les champs !');
+  if (sellImageFiles.length < 3) return showAlert('sellAlert','error','Ajoute au moins 3 photos.');
   if (price <= 0) return showAlert('sellAlert','error','Prix invalide.');
   setBtn('sellBtn', true, 'Publication…');
   var imageUrls = [];
@@ -1716,7 +1747,7 @@ async function doSell() {
   setBtn('sellBtn', false, "Publier l'annonce");
   if (res.error) return showAlert('sellAlert','error','Erreur : ' + res.error.message);
   hideModal('sellModal');
-  document.getElementById('sellTitle').value = '';
+  document.getElementById('sellTitle').value = ''; renderItemPicker();
   document.getElementById('sellPrice').value = '';
   document.getElementById('sellDesc').value = '';
   document.getElementById('sellStock').value = '1';
@@ -1884,7 +1915,32 @@ function updateCartBadge() {
   else badge.style.display = 'none';
 }
 
-function quickSell() { if (!currentUser) { showModal('loginModal'); return; } showModal('sellModal'); }
+function openSellModal() { showModal('sellModal'); renderSellAttrFields(); }
+function quickSell() { if (!currentUser) { showModal('loginModal'); return; } openSellModal(); }
+
+function renderItemPicker() {
+  var search = document.getElementById('sellItemSearch');
+  var hid = document.getElementById('sellTitle');
+  var list = document.getElementById('sellItemList');
+  if (search) search.value = '';
+  if (hid) hid.value = '';
+  if (list) { list.innerHTML = ''; list.style.display = 'none'; }
+}
+function filterItemList() {
+  var sel = document.getElementById('sellGame'); if (!sel) return;
+  var items = (typeof ITEM_CATALOG !== 'undefined' && ITEM_CATALOG[sel.value]) ? ITEM_CATALOG[sel.value] : [];
+  var q = (document.getElementById('sellItemSearch').value || '').toLowerCase();
+  var list = document.getElementById('sellItemList'); if (!list) return;
+  var matches = items.filter(function(it){ return it.toLowerCase().indexOf(q) !== -1; }).slice(0, 60);
+  if (!matches.length) { list.innerHTML = '<div class="item-opt-empty">Aucun item trouvé pour ce jeu</div>'; list.style.display = 'block'; return; }
+  list.innerHTML = matches.map(function(it){ return '<div class="item-opt" data-v="' + escHtml(it) + '" onmousedown="chooseItem(this.dataset.v)">' + escHtml(it) + '</div>'; }).join('');
+  list.style.display = 'block';
+}
+function chooseItem(name) {
+  var hid = document.getElementById('sellTitle'); if (hid) hid.value = name;
+  var search = document.getElementById('sellItemSearch'); if (search) search.value = name;
+  var list = document.getElementById('sellItemList'); if (list) list.style.display = 'none';
+}
 
 function openCartModal() {
   renderCartModal();
@@ -2232,11 +2288,12 @@ async function checkUnreadMessages() {
   var convRes = await db.from('conversations')
     .select('id')
     .or('user1_id.eq.' + currentUser.id + ',user2_id.eq.' + currentUser.id);
-  if (!convRes.data || !convRes.data.length) return;
+  if (!convRes.data || !convRes.data.length) { var mb0=document.getElementById('msgBadge'); if(mb0) mb0.style.display='none'; return; }
   var convIds = convRes.data.map(function(c){return c.id;});
   var res = await db.from('messages').select('id',{count:'exact',head:true}).eq('read',false).neq('sender_id', currentUser.id).in('conversation_id', convIds);
   var count = res.count || 0;
-  var badge = document.getElementById('notifBadge');
+  var badge = document.getElementById('msgBadge');
+  if (badge) { if (count > 0) { badge.textContent = count > 9 ? '9+' : count; badge.style.display = 'flex'; } else { badge.style.display = 'none'; } }
 }
 
 /* ══ NOTIFICATIONS ══ */
@@ -2252,6 +2309,7 @@ async function loadNotifications() {
   if (unread > 0) { badge.textContent = unread > 9 ? '9+' : unread; badge.style.display = 'flex'; }
   else badge.style.display = 'none';
   renderNotifications(res.data || []);
+  checkUnreadMessages();
   if (!notifChannel) {
     notifChannel = db.channel('notifs_' + currentUser.id).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:'user_id=eq.' + currentUser.id},function(){loadNotifications();}).subscribe();
   }
