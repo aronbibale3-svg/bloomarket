@@ -535,6 +535,25 @@ body.auth-loading #userNav{display:none!important}
 .settings-divider{height:1px;background:var(--border);margin:16px 0}
 .btn-danger{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.32);color:#FCA5A5;padding:10px;border-radius:9px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
 .btn-danger:hover{background:rgba(239,68,68,0.25)}
+#aiFab{position:fixed;right:20px;bottom:20px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue2));display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;box-shadow:0 8px 26px rgba(30,111,255,0.45);z-index:900;transition:transform .15s}
+#aiFab:hover{transform:scale(1.08)}
+#aiPanel{position:fixed;right:20px;bottom:88px;width:340px;max-width:calc(100vw - 32px);height:480px;max-height:calc(100vh - 130px);background:var(--bg2);border:1px solid var(--border);border-radius:16px;display:none;flex-direction:column;overflow:hidden;z-index:900;box-shadow:0 18px 50px rgba(0,0,0,0.5)}
+#aiPanel.open{display:flex}
+.ai-head{display:flex;align-items:center;padding:14px 16px;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff}
+.ai-head-t{font-weight:800;font-size:14px;flex:1}
+.ai-close{background:none;border:none;color:#fff;font-size:16px;cursor:pointer}
+.ai-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.ai-msg{max-width:86%;padding:9px 12px;border-radius:12px;font-size:13px;line-height:1.5;white-space:normal}
+.ai-msg.bot{background:#141826;color:var(--text);align-self:flex-start;border:1px solid var(--border)}
+.ai-msg.user{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;align-self:flex-end}
+.ai-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ai-act{background:rgba(30,111,255,0.14);border:1px solid rgba(30,111,255,0.3);color:var(--blue2);font-size:11px;padding:5px 9px;border-radius:8px;cursor:pointer}
+.ai-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px}
+.ai-chip{background:#141826;border:1px solid var(--border);color:var(--muted2);font-size:11px;padding:6px 10px;border-radius:14px;cursor:pointer}
+.ai-chip:hover{color:#fff;border-color:var(--blue2)}
+.ai-input-row{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border)}
+.ai-input-row input{flex:1;background:#141826;border:1px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif}
+.ai-input-row button{background:linear-gradient(135deg,var(--blue),var(--blue2));border:none;color:#fff;width:42px;border-radius:10px;cursor:pointer;font-size:15px}
 </style>
 </head>
 <body class="auth-loading">
@@ -763,6 +782,7 @@ body.auth-loading #userNav{display:none!important}
     <button class="admin-tab" onclick="adminTab('disputes',this)">⚖️ Litiges</button>
     <button class="admin-tab" onclick="adminTab('withdraws',this)">💸 Retraits</button>
     <button class="admin-tab" onclick="adminTab('aconv',this)">💬 Conversations</button>
+    <button class="admin-tab" onclick="adminSupport(this)">🤖 Signalements IA</button>
   </div>
   <div id="adminContent"></div>
 </div>
@@ -1646,6 +1666,117 @@ async function submitMfaLogin() {
   hideModal('mfaLoginModal');
   showToast('Connexion réussie ! 🎉','success');
   logLogin();
+}
+
+/* ══ ASSISTANT IA ══ */
+var AI_ENDPOINT = '/api/ai-assistant';
+var aiOpen = false, aiGreeted = false, aiLastQ = '';
+function toggleAi() {
+  var p = document.getElementById('aiPanel');
+  aiOpen = !aiOpen;
+  p.classList.toggle('open', aiOpen);
+  if (aiOpen && !aiGreeted) { aiGreet(); aiGreeted = true; }
+}
+function aiGreet() {
+  aiAddMsg('Salut ! 👋 Je suis l assistant BlooMarket. Comment puis-je t aider ?', 'bot');
+  var chips = ['Comment acheter ?','Comment vendre ?','Récupérer un paiement','Un litige ?','Devenir vendeur vérifié'];
+  document.getElementById('aiChips').innerHTML = chips.map(function(t){ return '<span class="ai-chip" onclick="aiChip(this.textContent)">' + t + '</span>'; }).join('');
+}
+function aiAddMsg(text, who, actions, id) {
+  var box = document.getElementById('aiMsgs'); if (!box) return;
+  var d = document.createElement('div');
+  d.className = 'ai-msg ' + (who || 'bot');
+  if (id) d.id = id;
+  d.innerHTML = escHtml(text).replace(/\n/g,'<br>');
+  if (actions && actions.length) {
+    var a = '<div class="ai-actions">';
+    for (var i=0;i<actions.length;i++){ a += '<button class="ai-act" onclick="' + actions[i].onclick + '">' + escHtml(actions[i].label) + '</button>'; }
+    d.innerHTML += a + '</div>';
+  }
+  box.appendChild(d); box.scrollTop = box.scrollHeight;
+}
+function aiChip(text) {
+  aiAddMsg(text, 'user'); aiLastQ = text;
+  var ans = aiAnswer(text);
+  aiAddMsg(ans.text, 'bot', ans.actions);
+  if (ans.escalate) aiAddMsg('Tu veux que je transmette ça à un admin ?', 'bot', [{label:'Oui, prévenir un admin', onclick:'aiEscalate()'}]);
+}
+async function aiSend() {
+  var inp = document.getElementById('aiInput');
+  var q = (inp.value || '').trim(); if (!q) return;
+  inp.value = ''; aiAddMsg(q, 'user'); aiLastQ = q;
+  aiAddMsg('…', 'bot', null, 'aiTyping');
+  var llm = await aiTryLLM(q);
+  var t = document.getElementById('aiTyping'); if (t) t.remove();
+  if (llm) { aiAddMsg(llm, 'bot'); return; }
+  var ans = aiAnswer(q);
+  aiAddMsg(ans.text, 'bot', ans.actions);
+  if (ans.escalate) aiAddMsg('Tu veux que je transmette ça à un admin ?', 'bot', [{label:'Oui, prévenir un admin', onclick:'aiEscalate()'}]);
+}
+async function aiTryLLM(q) {
+  try {
+    var ctrl = new AbortController();
+    var to = setTimeout(function(){ ctrl.abort(); }, 12000);
+    var r = await fetch(AI_ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ question: q }), signal: ctrl.signal });
+    clearTimeout(to);
+    if (!r.ok) return null;
+    var data = await r.json();
+    return (data && data.answer) ? data.answer : null;
+  } catch(e) { return null; }
+}
+function aiAnswer(q) {
+  var s = (q || '').toLowerCase();
+  function has(){ for (var i=0;i<arguments.length;i++){ if (s.indexOf(arguments[i]) !== -1) return true; } return false; }
+  if (has('achet','buy'))
+    return {text:'Pour acheter : recharge ton solde, ouvre une annonce et clique « Acheter ». Ton paiement reste en séquestre jusqu à ce que tu confirmes la réception. 🛒', actions:[{label:'Voir les annonces', onclick:"toggleAi();showPage(\'home\')"}]};
+  if (has('vend','sell','annonce'))
+    return {text:'Pour vendre : clique sur « + Vendre », choisis le jeu puis l item dans la liste, ajoute au moins 3 photos, fixe ton prix et publie. 📦', actions:[{label:'Créer une annonce', onclick:'toggleAi();openSellModal()'}]};
+  if (has('paiement','payé','payer','retir','retrait','argent','withdraw','gagn','solde'))
+    return {text:'Tes ventes créditent ton solde (tu touches 90 %, commission 10 %). Pour récupérer ton argent : Dashboard → « Retirer des fonds » (PayPal), traité sous 24-48h. 💸', actions:[{label:'Mon dashboard', onclick:"toggleAi();showPage(\'dashboard\')"}]};
+  if (has('litige','dispute','arnaqu','probleme','problème','scam','rembours'))
+    return {text:'Souci sur une commande ? Ouvre la conversation de la commande et clique « ⚖️ Problème ». Un admin examine les preuves (garde tes captures) et tranche. ⚖️', actions:[{label:'Mes messages', onclick:"toggleAi();showPage(\'messages\')"}], escalate:true};
+  if (has('verifi','vérifi','badge','identit','kyc','18'))
+    return {text:'Pour devenir vendeur vérifié ✅ : lance « Devenir vendeur » depuis ton compte, envoie ta pièce d identité + un selfie et confirme tes 18 ans. L admin valide sous 24-48h, puis le badge ✅ apparaît partout sur ton profil.', actions:[{label:'Mon profil', onclick:"toggleAi();showPage(\'profile\')"}]};
+  if (has('bloobux','fidélit','fidelit','points'))
+    return {text:'Les Bloobux sont des points de fidélité 🎁 (gagnés via achats, parrainage, events). Ils donnent des avantages et réductions mais ne sont PAS de l argent : impossible de les retirer ou de les convertir en euros.'};
+  if (has('commission','frais','pourcentage'))
+    return {text:'La commission BlooMarket est de 10 % par vente. Le vendeur reçoit 90 % du prix. 💰'};
+  if (has('contact','admin','humain','support','aide','parler','signal'))
+    return {text:'Je peux prévenir un admin pour toi. Décris ton souci et je le transmets. 🧑‍💼', escalate:true};
+  if (has('bonjour','salut','hello','coucou','hey','yo'))
+    return {text:'Salut ! 👋 Pose-moi ta question : acheter, vendre, paiement, litige, vendeur vérifié…'};
+  return {text:'Je ne suis pas sûr d avoir compris 🤔. Choisis un sujet ci-dessous, ou je peux transmettre ta question à un admin.', escalate:true};
+}
+async function aiEscalate() {
+  if (!currentUser) { aiAddMsg('Connecte-toi d abord pour qu un admin puisse te recontacter. 🔑', 'bot'); return; }
+  try {
+    var r = await db.from('support_tickets').insert({ user_id: currentUser.id, message: (aiLastQ || 'Demande d assistance').slice(0,500), type:'ai_escalation', status:'open' });
+    if (r.error) throw r.error;
+    aiAddMsg('✅ C est transmis ! Un admin va voir ton message et revenir vers toi.', 'bot');
+  } catch(e) { aiAddMsg('La remontée admin n est pas encore activée (lance le SQL support_tickets).', 'bot'); }
+}
+
+/* ══ ADMIN : signalements IA ══ */
+async function adminSupport(el) {
+  document.querySelectorAll('.admin-tab').forEach(function(t){ t.classList.remove('active'); });
+  if (el) el.classList.add('active');
+  var content = document.getElementById('adminContent');
+  content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Chargement…</div>';
+  var res = await db.from('support_tickets').select('*, profiles(username)').order('created_at',{ascending:false}).limit(100);
+  if (res.error) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Active le SQL support_tickets pour voir les signalements remontés par l IA.</div>'; return; }
+  if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucun signalement.</div>'; return; }
+  var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span>Utilisateur</span><span>Message</span><span>Statut</span><span>Action</span></div>';
+  res.data.forEach(function(tk){
+    var uname = (tk.profiles && tk.profiles.username) || '—';
+    var sb = tk.status === 'open' ? '<span class="badge-wait">Ouvert</span>' : '<span class="badge-ok">Résolu</span>';
+    var act = tk.status === 'open' ? '<button onclick="adminResolveTicket(' + tk.id + ')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Résolu</button>' : '—';
+    html += '<div class="admin-table-row" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span style="font-weight:600">' + escHtml(uname) + '<br><span style="font-size:10px;color:var(--muted)">' + new Date(tk.created_at).toLocaleString('fr-FR') + '</span></span><span style="color:var(--muted2);font-size:11px">' + escHtml(tk.message || '') + '</span>' + sb + '<span>' + act + '</span></div>';
+  });
+  content.innerHTML = html + '</div>';
+}
+async function adminResolveTicket(id) {
+  await db.from('support_tickets').update({ status:'resolved' }).eq('id', id);
+  adminSupport(document.querySelector('.admin-tab.active'));
 }
 
 async function logout() {
@@ -3113,5 +3244,13 @@ async function redeemPerk(perk, value) {
 document.addEventListener('DOMContentLoaded', function(){ renderSellAttrFields(); });
 init();
 </script>
+<!-- ── ASSISTANT IA ── -->
+<div id="aiFab" onclick="toggleAi()" title="Assistant BlooMarket">🤖</div>
+<div id="aiPanel">
+  <div class="ai-head"><div class="ai-head-t">🤖 Assistant BlooMarket</div><button class="ai-close" onclick="toggleAi()">✕</button></div>
+  <div class="ai-msgs" id="aiMsgs"></div>
+  <div class="ai-chips" id="aiChips"></div>
+  <div class="ai-input-row"><input id="aiInput" placeholder="Pose ta question…" onkeydown="if(event.key==='Enter')aiSend()"><button onclick="aiSend()">➤</button></div>
+</div>
 </body>
 </html>
