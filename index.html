@@ -21,6 +21,15 @@
   --green:#22C55E;--red:#EF4444;--yellow:#FBBF24;
   --text:#F1F5F9;--muted:#64748B;--muted2:#94A3B8;
 }
+[data-theme="light"]{
+  --bg:#eef2f9;--bg2:#ffffff;--bg3:#f3f6fb;
+  --surface:rgba(15,23,42,0.035);--surface2:rgba(15,23,42,0.06);
+  --border:rgba(15,23,42,0.10);--border2:rgba(30,111,255,0.40);
+  --text:#0f172a;--muted:#64748B;--muted2:#475569;
+}
+[data-theme="light"] body{background:#eef2f9;color:#0f172a}
+[data-theme="light"] .lc-img{background:#f3f6fb}
+[data-theme="light"] .ld-imgs{background:#f3f6fb}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;min-height:100vh}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--blue3);border-radius:10px}
 
@@ -94,8 +103,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .listings{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
 .listing-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
 .listing-card:hover{border-color:rgba(30,111,255,0.4);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
-.lc-img{height:120px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.02);position:relative;overflow:hidden}
-.lc-img img{width:100%;height:100%;object-fit:cover}
+.lc-img{height:150px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.02);position:relative;overflow:hidden}
+.lc-img img{width:100%;height:100%;object-fit:contain;padding:8px;transition:transform .25s ease}
+.listing-card:hover .lc-img img{transform:scale(1.06)}
 .lc-img-fallback{font-size:44px}
 .lc-game-badge{position:absolute;top:4px;left:4px;background:rgba(7,8,15,0.6);border:1px solid rgba(255,255,255,0.1);padding:2px;border-radius:6px;backdrop-filter:blur(3px)}
 .lc-online{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 6px rgba(34,197,94,0.6)}
@@ -196,8 +206,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 
 /* ── LISTING DETAIL ── */
 .listing-detail{max-width:600px}
-.ld-imgs{position:relative;border-radius:10px;overflow:hidden;margin-bottom:18px;background:rgba(255,255,255,0.02);height:180px;display:flex;align-items:center;justify-content:center}
-.ld-imgs img{width:100%;height:100%;object-fit:cover}
+.ld-imgs{position:relative;border-radius:12px;overflow:hidden;margin-bottom:18px;background:rgba(255,255,255,0.03);height:300px;display:flex;align-items:center;justify-content:center}
+.ld-imgs img{width:100%;height:100%;object-fit:contain;padding:10px;cursor:zoom-in}
 .ld-imgs .fallback-icon{font-size:64px}
 .ld-img-nav{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px}
 .ld-img-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all .2s}
@@ -286,6 +296,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .cart-item-price{font-size:14px;font-weight:800;color:var(--blue2);flex-shrink:0}
 .cart-item-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px;flex-shrink:0}
 .cart-item-del:hover{color:var(--red)}
+.cart-qty{display:inline-flex;align-items:center;gap:8px;margin-top:5px}
+.cart-qty button{width:22px;height:22px;border-radius:6px;border:1px solid var(--border2);background:var(--surface);color:#fff;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;font-family:Inter,sans-serif}
+.cart-qty button:hover{border-color:var(--blue3)}
+.cart-qty span{min-width:18px;text-align:center;font-weight:700;font-size:13px}
 .cart-total-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-top:1px solid var(--border);margin-top:4px}
 .cart-total-label{font-size:13px;color:var(--muted)}
 .cart-total-price{font-size:20px;font-weight:900;color:var(--blue2)}
@@ -571,6 +585,7 @@ body.auth-loading #userNav{display:none!important}
   </div>
   <div class="nav-r">
     <div id="authLoader" class="auth-loader"><span class="auth-spin"></span></div>
+    <button class="cart-btn" id="themeToggle" onclick="toggleTheme()" title="Thème clair / sombre" style="font-size:15px">🌙</button>
     <div id="guestNav" style="display:flex;gap:7px">
       <button class="btn-ghost" onclick="showModal('loginModal')">Connexion</button>
       <button class="btn-blue" onclick="showModal('registerModal')">Inscription</button>
@@ -1326,7 +1341,46 @@ var currentUser = null, userProfile = null;
 var currentFilter = 'all', currentSort = 'created_at', searchQuery = '';
 var currentChatConvId = null, chatChannel = null, currentChatOther = null;
 var currentOrderTab = 'buying', reviewRating = 0;
+var LISTING_CACHE = {};
 var cart = JSON.parse(localStorage.getItem('bm_cart') || '[]');
+cart.forEach(function(c){ if (!c.qty) c.qty = 1; });
+
+/* ══ THÈME CLAIR / SOMBRE ══ */
+function applyTheme(t) {
+  if (t === 'light') document.documentElement.setAttribute('data-theme','light');
+  else document.documentElement.removeAttribute('data-theme');
+  var meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', t === 'light' ? '#eef2f9' : '#07080f');
+  var b = document.getElementById('themeToggle'); if (b) b.textContent = (t === 'light' ? '☀️' : '🌙');
+}
+function toggleTheme() {
+  var cur = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  var nx = cur === 'light' ? 'dark' : 'light';
+  try { localStorage.setItem('bm_theme', nx); } catch(e){}
+  applyTheme(nx);
+}
+(function(){
+  var t = 'dark'; try { if (localStorage.getItem('bm_theme') === 'light') t = 'light'; } catch(e){}
+  applyTheme(t);
+  document.addEventListener('DOMContentLoaded', function(){ applyTheme(t); });
+})();
+
+/* ══ LIGHTBOX (zoom image) ══ */
+function openLightbox(src) {
+  var ov = document.getElementById('lightbox');
+  if (!ov) {
+    ov = document.createElement('div'); ov.id = 'lightbox';
+    ov.onclick = function(){ ov.style.display = 'none'; };
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;z-index:99999;cursor:zoom-out';
+    var im = document.createElement('img'); im.id = 'lightboxImg';
+    im.style.cssText = 'max-width:92%;max-height:92%;object-fit:contain;border-radius:12px;box-shadow:0 10px 50px rgba(0,0,0,0.6)';
+    ov.appendChild(im); document.body.appendChild(ov);
+  }
+  document.getElementById('lightboxImg').src = src;
+  ov.style.display = 'flex';
+}
+document.addEventListener('click', function(e){
+  if (e.target && e.target.matches && e.target.matches('.ld-imgs img')) openLightbox(e.target.src);
+});
 var sellImageFiles = [];
 var stripeElements, cardElement;
 var authReady = false, notifChannel = null, currentUserId = null;
@@ -1957,6 +2011,7 @@ async function loadListings() {
       var bp = (b.promoted_until && new Date(b.promoted_until).getTime() > nowTs) ? 1 : 0;
       return bp - ap;
     });
+    res.data.forEach(function(x){ LISTING_CACHE[x.id] = x; });
     renderListings(res.data, 'listingsGrid');
     document.getElementById('statListings').textContent = res.data.length;
     document.getElementById('statSellers').textContent = new Set(res.data.map(function(l){return l.user_id;})).size;
@@ -2266,16 +2321,17 @@ async function handleBuy(listingId, title, sellerId, price) {
 
 // Achat malin : si le solde suffit on paie depuis le solde (pas de minimum, ex. 0,10€).
 // Sinon on passe par la carte (Stripe) — recharge si le montant est trop bas pour la carte.
-function startPurchase(listingIds, total, title, kind) {
+function startPurchase(listingIds, total, title, kind, quantities) {
   if (!currentUser) { showModal('loginModal'); return; }
+  quantities = quantities || listingIds.map(function(){ return 1; });
   var bal = parseFloat(userProfile ? userProfile.balance : 0) || 0;
-  if (bal + 1e-9 >= total) { buyFromBalance(listingIds, total, kind); return; }
+  if (bal + 1e-9 >= total) { buyFromBalance(listingIds, total, kind, quantities); return; }
   if (total < 0.50) {
     showToast('Solde insuffisant — recharge ton solde pour acheter cet article','info');
     showModal('addFundsModal');
     return;
   }
-  openPayment({ amount: total, title: title, listingIds: listingIds, kind: kind });
+  openPayment({ amount: total, title: title, listingIds: listingIds, kind: kind, quantities: quantities });
 }
 
 async function ensureOrderChat(listingId) {
@@ -2299,10 +2355,11 @@ async function ensureOrderChat(listingId) {
   } catch(e) {}
 }
 
-async function buyFromBalance(listingIds, total, kind) {
+async function buyFromBalance(listingIds, total, kind, quantities) {
+  quantities = quantities || listingIds.map(function(){ return 1; });
   showToast('Achat en cours…','info');
   for (var i = 0; i < listingIds.length; i++) {
-    var r = await db.rpc('buy_listing', { p_listing_id: listingIds[i] });
+    var r = await db.rpc('buy_listing', { p_listing_id: listingIds[i], p_qty: quantities[i] || 1 });
     if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
     await ensureOrderChat(listingIds[i]);
   }
@@ -2354,7 +2411,7 @@ async function submitPayElement() {
   if (!payElements || !payClientSecret) return;
   setBtn('payNowBtn', true, 'Paiement…');
   document.getElementById('pay-errors').textContent = '';
-  try { localStorage.setItem('bm_pending_order', JSON.stringify({ listingIds: (payContext&&payContext.listingIds)||[], kind: (payContext&&payContext.kind)||'order' })); } catch(e){}
+  try { localStorage.setItem('bm_pending_order', JSON.stringify({ listingIds: (payContext&&payContext.listingIds)||[], quantities: (payContext&&payContext.quantities)||[], kind: (payContext&&payContext.kind)||'order' })); } catch(e){}
   var result = await stripe.confirmPayment({
     elements: payElements,
     confirmParams: { return_url: location.origin + location.pathname },
@@ -2370,9 +2427,10 @@ async function submitPayElement() {
   if (st === 'succeeded' || st === 'processing') {
     localStorage.removeItem('bm_pending_order');
     var ids = (payContext && payContext.listingIds) || [];
+    var qts = (payContext && payContext.quantities) || [];
     var created = 0;
     for (var i = 0; i < ids.length; i++) {
-      var r = await db.rpc('create_paid_order', { p_listing_id: ids[i] });
+      var r = await db.rpc('create_paid_order', { p_listing_id: ids[i], p_qty: qts[i] || 1 });
       if (!r.error) { created++; await ensureOrderChat(ids[i]); }
     }
     if (payContext && payContext.kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); }
@@ -2401,7 +2459,7 @@ async function handlePaymentReturn() {
   if (!currentUser) return;
   var created = 0;
   for (var i = 0; i < pend.listingIds.length; i++) {
-    var r = await db.rpc('create_paid_order', { p_listing_id: pend.listingIds[i] });
+    var r = await db.rpc('create_paid_order', { p_listing_id: pend.listingIds[i], p_qty: (pend.quantities && pend.quantities[i]) || 1 });
     if (!r.error) { created++; await ensureOrderChat(pend.listingIds[i]); }
   }
   if (pend.kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); }
@@ -2410,15 +2468,40 @@ async function handlePaymentReturn() {
 }
 
 /* ══ CART ══ */
+function cartStockOf(id) {
+  var l = LISTING_CACHE[id];
+  if (!l) return null;
+  return (l.stock === null || l.stock === undefined || l.stock === '') ? null : parseInt(l.stock);
+}
 function addToCart(id, title, game, price, imgUrl, sellerId) {
   if (!currentUser) { showToast('Connecte-toi pour utiliser le panier','error'); showModal('loginModal'); return; }
+  var st = cartStockOf(id);
   var exists = cart.find(function(c){ return c.id === id; });
-  if (exists) { showToast('Déjà dans le panier','info'); return; }
-  cart.push({id, title, game, price, imgUrl});
+  if (exists) {
+    if (st !== null && (exists.qty || 1) >= st) { showToast('Stock maximum atteint (' + st + ')','info'); return; }
+    exists.qty = (exists.qty || 1) + 1; exists.stock = st;
+    localStorage.setItem('bm_cart', JSON.stringify(cart));
+    updateCartBadge(); renderCartModal();
+    showToast('Quantité +1 🛒','success');
+    return;
+  }
+  if (st !== null && st <= 0) { showToast('Article en rupture de stock','error'); return; }
+  cart.push({id: id, title: title, game: game, price: price, imgUrl: imgUrl, qty: 1, stock: st});
   localStorage.setItem('bm_cart', JSON.stringify(cart));
   updateCartBadge();
   showToast('Ajouté au panier 🛒','success');
   if (sellerId && currentUser && sellerId !== currentUser.id) { try { db.rpc('notify_cart_add', { p_listing_id: id }); } catch(e){} }
+}
+function cartQty(id, delta) {
+  var it = cart.find(function(c){ return c.id === id; });
+  if (!it) return;
+  var st = (it.stock === null || it.stock === undefined) ? cartStockOf(id) : it.stock;
+  var q = (it.qty || 1) + delta;
+  if (q < 1) q = 1;
+  if (st !== null && q > st) { q = st; showToast('Stock maximum : ' + st,'info'); }
+  it.qty = q;
+  localStorage.setItem('bm_cart', JSON.stringify(cart));
+  updateCartBadge(); renderCartModal();
 }
 
 function removeFromCart(id) {
@@ -2430,7 +2513,8 @@ function removeFromCart(id) {
 
 function updateCartBadge() {
   var badge = document.getElementById('cartBadge');
-  if (cart.length > 0) { badge.textContent = cart.length; badge.style.display = 'flex'; }
+  var n = cart.reduce(function(s,c){ return s + (c.qty || 1); }, 0);
+  if (n > 0) { badge.textContent = n; badge.style.display = 'flex'; }
   else badge.style.display = 'none';
 }
 
@@ -2487,12 +2571,15 @@ function renderCartModal() {
   var total = 0;
   var html = '';
   cart.forEach(function(item) {
-    total += parseFloat(item.price);
+    var q = item.qty || 1;
+    total += parseFloat(item.price) * q;
     var icon = GAME_ICONS[item.game] || '🎮';
+    var sub = escHtml(item.game) + (item.stock != null ? (' · stock ' + item.stock) : '');
     html += '<div class="cart-item">';
     html += '<div class="cart-item-icon">' + (item.imgUrl ? '<img src="' + escHtml(item.imgUrl) + '" onerror="this.parentNode.textContent=\'' + icon + '\'">' : gameCartIc(item.game, icon)) + '</div>';
-    html += '<div class="cart-item-info"><div class="cart-item-title">' + escHtml(item.title) + '</div><div class="cart-item-sub">' + escHtml(item.game) + '</div></div>';
-    html += '<div class="cart-item-price">' + parseFloat(item.price).toFixed(2) + '€</div>';
+    html += '<div class="cart-item-info"><div class="cart-item-title">' + escHtml(item.title) + '</div><div class="cart-item-sub">' + sub + '</div>';
+    html += '<div class="cart-qty"><button onclick="cartQty(' + item.id + ',-1)">−</button><span>' + q + '</span><button onclick="cartQty(' + item.id + ',1)">+</button></div></div>';
+    html += '<div class="cart-item-price">' + (parseFloat(item.price) * q).toFixed(2) + '€</div>';
     html += '<button class="cart-item-del" onclick="removeFromCart(' + item.id + ')">✕</button>';
     html += '</div>';
   });
@@ -2503,10 +2590,11 @@ function renderCartModal() {
 async function checkoutCart() {
   if (!currentUser) { showModal('loginModal'); return; }
   if (!cart.length) return;
-  var total = cart.reduce(function(s,c){ return s + parseFloat(c.price); }, 0);
+  var total = cart.reduce(function(s,c){ return s + parseFloat(c.price) * (c.qty || 1); }, 0);
   var ids = cart.map(function(c){ return c.id; });
-  var title = cart.length === 1 ? cart[0].title : (cart.length + ' articles');
-  startPurchase(ids, total, title, 'cart');
+  var qtys = cart.map(function(c){ return c.qty || 1; });
+  var title = cart.length === 1 ? (cart[0].title + ((cart[0].qty||1) > 1 ? (' x' + cart[0].qty) : '')) : (cart.length + ' articles');
+  startPurchase(ids, total, title, 'cart', qtys);
 }
 
 async function handleBuyDirect(listingId, title, sellerId, price) {
@@ -2953,9 +3041,10 @@ async function loadAdminPage() {
   var revenueRes = await db.from('orders').select('commission');
   var totalRevenue = (revenueRes.data || []).reduce(function(s,o){return s + parseFloat(o.commission||0);},0);
   var withdrawsRes = await db.from('withdrawals').select('id',{count:'exact',head:true}).eq('status','pending');
+  var sellersRes = await db.from('profiles').select('id',{count:'exact',head:true}).eq('id_verified', true);
   document.getElementById('adminStats').innerHTML = [
     {l:'Utilisateurs', v:usersRes.count||0}, {l:'Annonces actives', v:listingsRes.count||0},
-    {l:'Commandes', v:ordersRes.count||0}, {l:'Revenus plateforme', v:totalRevenue.toFixed(2)+'€'}, {l:'Retraits en attente', v:withdrawsRes.count||0}
+    {l:'Commandes', v:ordersRes.count||0}, {l:'Vendeurs vérifiés', v:sellersRes.count||0}, {l:'Revenus plateforme', v:totalRevenue.toFixed(2)+'€'}, {l:'Retraits en attente', v:withdrawsRes.count||0}
   ].map(function(s){return '<div class="dc"><div class="dc-l">'+s.l+'</div><div class="dc-v">'+s.v+'</div></div>';}).join('');
   adminTab('users');
 }
