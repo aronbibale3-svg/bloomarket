@@ -581,7 +581,7 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-item" onclick="showPage('dashboard')">📊 Dashboard</div>
         <div class="ud-item" onclick="showPage('orders')">📦 Mes commandes</div>
         <div class="ud-item" onclick="showPage('messages')">💬 Messages</div>
-        <div class="ud-item" onclick="showModal('settingsModal')">⚙️ Paramètres</div>
+        <div class="ud-item" onclick="openSettings()">⚙️ Paramètres</div>
         <div class="ud-sep"></div>
         <div class="ud-item" id="becomeSellerItem" onclick="showModal('sellerVerifyModal')">🛡️ Devenir vendeur vérifié</div>
         <div class="ud-item" onclick="openShop()">🔷 Boutique Bloobux</div>
@@ -669,7 +669,7 @@ body.auth-loading #userNav{display:none!important}
       </div>
     </div>
     <button class="btn-blue" onclick="showModal('editProfileModal')">✏️ Modifier profil</button>
-    <button class="btn-ghost" onclick="showModal('settingsModal')" style="margin-left:8px">⚙️ Paramètres</button>
+    <button class="btn-ghost" onclick="openSettings()" style="margin-left:8px">⚙️ Paramètres</button>
   </div>
   <div class="section-title">Parrainage 🎁</div>
   <div class="referral-box" id="referralBox" style="margin-bottom:22px">
@@ -981,6 +981,27 @@ body.auth-loading #userNav{display:none!important}
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
+      <div class="settings-label">🔐 Double authentification (2FA)</div>
+      <p class="settings-desc">Ajoute un code temporaire (Google Authenticator, Authy…) en plus du mot de passe.</p>
+      <div id="mfaAlert"></div>
+      <div id="mfaStatus" class="settings-desc">Chargement…</div>
+      <div id="mfaEnrollBox" style="display:none">
+        <div style="text-align:center;margin:10px 0"><img id="mfaQr" alt="QR 2FA" style="width:168px;height:168px;background:#fff;border-radius:10px;padding:6px"></div>
+        <p class="settings-desc">Scanne le QR, ou entre la clé : <code id="mfaSecret" style="color:var(--blue2);font-size:11px;word-break:break-all"></code></p>
+        <div class="fg"><input type="text" id="mfaCode" placeholder="Code à 6 chiffres" inputmode="numeric"></div>
+        <button class="btn-blue" style="width:100%" onclick="mfaVerifyEnroll()">Confirmer et activer</button>
+      </div>
+      <button class="btn-blue" id="mfaToggleBtn" style="width:100%" onclick="mfaStart()">Activer la 2FA</button>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="settings-label">💻 Sessions &amp; appareils</div>
+      <p class="settings-desc">Tes 5 dernières connexions.</p>
+      <div id="loginHistoryBox" class="settings-desc">—</div>
+      <button class="btn-ghost" style="width:100%;margin-top:10px" onclick="logoutAllSessions()">Déconnecter toutes les sessions</button>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section">
       <div class="settings-label">⏸️ Désactiver le compte</div>
       <p class="settings-desc">Ton profil et tes annonces seront masqués. Tu pourras réactiver à ta prochaine connexion.</p>
       <button class="btn-ghost" style="width:100%" onclick="deactivateAccount()">Désactiver mon compte</button>
@@ -992,6 +1013,18 @@ body.auth-loading #userNav{display:none!important}
       <div class="fg"><input type="text" id="deleteConfirmInput" placeholder="Tape SUPPRIMER" autocomplete="off"></div>
       <button class="btn-danger" style="width:100%" onclick="deleteAccount()">Supprimer définitivement</button>
     </div>
+  </div>
+</div>
+
+<!-- 2FA à la connexion -->
+<div class="overlay" id="mfaLoginModal" onclick="closeOnBg(event,'mfaLoginModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('mfaLoginModal')">✕</button>
+    <div class="modal-h">Vérification en 2 étapes 🔐</div>
+    <div class="modal-sub">Entre le code de ton application d authentification.</div>
+    <div id="mfaLoginAlert"></div>
+    <div class="fg"><label>Code à 6 chiffres</label><input type="text" id="mfaLoginCode" placeholder="123456" inputmode="numeric" onkeydown="if(event.key==='Enter')submitMfaLogin()"></div>
+    <button class="btn-submit" id="mfaLoginBtn" onclick="submitMfaLogin()">Valider</button>
   </div>
 </div>
 
@@ -1393,8 +1426,18 @@ async function doLogin() {
   var res = await db.auth.signInWithPassword({email, password: pwd});
   setBtn('loginBtn', false, 'Se connecter');
   if (res.error) return showAlert('loginAlert','error','Email ou mot de passe incorrect.');
+  try {
+    var aal = await db.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (aal.data && aal.data.currentLevel === 'aal1' && aal.data.nextLevel === 'aal2') {
+      hideModal('loginModal');
+      document.getElementById('mfaLoginCode').value = '';
+      showModal('mfaLoginModal');
+      return;
+    }
+  } catch(e){}
   hideModal('loginModal');
   showToast('Connexion réussie ! 🎉','success');
+  logLogin();
 }
 
 async function doRegister() {
@@ -1531,6 +1574,120 @@ async function deleteAccount() {
   hideModal('settingsModal');
   await db.auth.signOut(); clearUser(); showPage('home');
   showToast('Compte supprimé. À bientôt 👋','success');
+}
+
+function openSettings() { showModal('settingsModal'); refreshMfaStatus(); loadLoginHistory(); }
+
+function parseDevice() {
+  var ua = navigator.userAgent || '';
+  var br = 'Navigateur';
+  if (/Edg\//.test(ua)) br='Edge'; else if (/OPR\//.test(ua)) br='Opera'; else if (/Chrome\//.test(ua)) br='Chrome'; else if (/Firefox\//.test(ua)) br='Firefox'; else if (/Safari\//.test(ua)) br='Safari';
+  var os = 'Appareil';
+  if (/Windows/.test(ua)) os='Windows'; else if (/Android/.test(ua)) os='Android'; else if (/iPhone|iPad|iOS/.test(ua)) os='iOS'; else if (/Mac OS/.test(ua)) os='macOS'; else if (/Linux/.test(ua)) os='Linux';
+  return br + ' · ' + os;
+}
+async function logLogin() {
+  try {
+    var u = await db.auth.getUser();
+    var uid = (u && u.data && u.data.user) ? u.data.user.id : null;
+    if (!uid) return;
+    await db.from('login_logs').insert({ user_id: uid, user_agent: (navigator.userAgent||'').slice(0,300), device: parseDevice() });
+  } catch(e){}
+}
+async function loadLoginHistory() {
+  var box = document.getElementById('loginHistoryBox');
+  if (!box || !currentUser) return;
+  try {
+    var res = await db.from('login_logs').select('created_at,device,user_agent').eq('user_id', currentUser.id).order('created_at',{ascending:false}).limit(5);
+    if (res.error) { box.innerHTML = 'Active l historique : lance le SQL login_logs.'; return; }
+    if (!res.data || !res.data.length) { box.innerHTML = 'Aucune connexion enregistrée pour le moment.'; return; }
+    box.innerHTML = res.data.map(function(r){
+      var d = new Date(r.created_at).toLocaleString('fr-FR');
+      return '<div style="padding:6px 0;border-bottom:1px solid var(--border)">🕑 ' + d + '<br><span style="color:var(--muted)">' + escHtml(r.device || r.user_agent || '') + '</span></div>';
+    }).join('');
+  } catch(e){ box.innerHTML = 'Historique indisponible.'; }
+}
+async function logoutAllSessions() {
+  if (!confirm('Déconnecter TOUTES tes sessions sur tous les appareils ?')) return;
+  try { await db.auth.signOut({ scope: 'global' }); } catch(e){ await db.auth.signOut(); }
+  clearUser(); showPage('home');
+  showToast('Toutes les sessions ont été déconnectées.','success');
+}
+
+/* ══ 2FA (TOTP) via Supabase MFA ══ */
+async function refreshMfaStatus() {
+  var statusEl = document.getElementById('mfaStatus');
+  var toggle = document.getElementById('mfaToggleBtn');
+  var enrollBox = document.getElementById('mfaEnrollBox');
+  if (!statusEl || !toggle) return;
+  if (enrollBox) enrollBox.style.display = 'none';
+  toggle.style.display = 'block';
+  try {
+    var res = await db.auth.mfa.listFactors();
+    var list = (res.data && res.data.totp) ? res.data.totp : [];
+    var verified = list.filter(function(f){ return f.status === 'verified'; });
+    if (verified.length) {
+      statusEl.innerHTML = '✅ 2FA activée sur ton compte.';
+      toggle.textContent = 'Désactiver la 2FA';
+      toggle.onclick = function(){ mfaDisable(verified[0].id); };
+    } else {
+      statusEl.innerHTML = '❌ 2FA non activée.';
+      toggle.textContent = 'Activer la 2FA';
+      toggle.onclick = function(){ mfaStart(); };
+    }
+  } catch(e){ statusEl.innerHTML = '2FA indisponible (vérifie que MFA est activé dans Supabase).'; }
+}
+async function mfaStart() {
+  showAlert('mfaAlert','info','Préparation…');
+  try {
+    // nettoie un éventuel facteur non vérifié resté en attente
+    var f = await db.auth.mfa.listFactors();
+    var pending = ((f.data && f.data.all) ? f.data.all : []).filter(function(x){ return x.status !== 'verified'; });
+    for (var i=0;i<pending.length;i++){ try { await db.auth.mfa.unenroll({ factorId: pending[i].id }); } catch(e){} }
+  } catch(e){}
+  var res = await db.auth.mfa.enroll({ factorType:'totp' });
+  if (res.error) return showAlert('mfaAlert','error', res.error.message);
+  window._mfaFactorId = res.data.id;
+  var qr = res.data.totp.qr_code;
+  document.getElementById('mfaQr').src = qr;
+  document.getElementById('mfaSecret').textContent = res.data.totp.secret;
+  document.getElementById('mfaEnrollBox').style.display = 'block';
+  document.getElementById('mfaToggleBtn').style.display = 'none';
+  document.getElementById('mfaAlert').innerHTML = '';
+}
+async function mfaVerifyEnroll() {
+  var code = (document.getElementById('mfaCode').value || '').trim();
+  if (!code) return showAlert('mfaAlert','error','Entre le code de ton app.');
+  var ch = await db.auth.mfa.challenge({ factorId: window._mfaFactorId });
+  if (ch.error) return showAlert('mfaAlert','error', ch.error.message);
+  var v = await db.auth.mfa.verify({ factorId: window._mfaFactorId, challengeId: ch.data.id, code: code });
+  if (v.error) return showAlert('mfaAlert','error','Code incorrect, réessaie.');
+  document.getElementById('mfaCode').value = '';
+  showAlert('mfaAlert','success','2FA activée ✅');
+  refreshMfaStatus();
+}
+async function mfaDisable(factorId) {
+  if (!confirm('Désactiver la double authentification ?')) return;
+  var res = await db.auth.mfa.unenroll({ factorId: factorId });
+  if (res.error) return showAlert('mfaAlert','error', res.error.message);
+  showAlert('mfaAlert','success','2FA désactivée.');
+  refreshMfaStatus();
+}
+async function submitMfaLogin() {
+  var code = (document.getElementById('mfaLoginCode').value || '').trim();
+  if (!code) return showAlert('mfaLoginAlert','error','Entre le code.');
+  setBtn('mfaLoginBtn', true, 'Vérification…');
+  var f = await db.auth.mfa.listFactors();
+  var totp = ((f.data && f.data.totp) ? f.data.totp : []).filter(function(x){ return x.status==='verified'; })[0];
+  if (!totp) { setBtn('mfaLoginBtn', false, 'Valider'); return showAlert('mfaLoginAlert','error','Aucun facteur 2FA trouvé.'); }
+  var ch = await db.auth.mfa.challenge({ factorId: totp.id });
+  if (ch.error) { setBtn('mfaLoginBtn', false, 'Valider'); return showAlert('mfaLoginAlert','error', ch.error.message); }
+  var v = await db.auth.mfa.verify({ factorId: totp.id, challengeId: ch.data.id, code: code });
+  setBtn('mfaLoginBtn', false, 'Valider');
+  if (v.error) return showAlert('mfaLoginAlert','error','Code incorrect ou expiré.');
+  hideModal('mfaLoginModal');
+  showToast('Connexion réussie ! 🎉','success');
+  logLogin();
 }
 
 async function logout() {
