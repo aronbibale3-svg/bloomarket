@@ -1491,18 +1491,18 @@ async function sendResetCode() {
   if (!email || email.indexOf('@') === -1) return showAlert('forgotAlert','error','Entre un email valide.');
   fpResetEmail = email;
   setBtn('fpSendBtn', true, 'Envoi…');
-  var res = await db.auth.signInWithOtp({ email: email, options: { shouldCreateUser: false } });
+  var res = await db.auth.resetPasswordForEmail(email);
   setBtn('fpSendBtn', false, 'Envoyer le code');
   if (res.error) return showAlert('forgotAlert','error', res.error.message);
   document.getElementById('fpStep1').style.display = 'none';
   document.getElementById('fpStep2').style.display = 'block';
-  showAlert('forgotAlert','success','Code envoyé par email à ' + email + '.');
+  showAlert('forgotAlert','success','Si un compte existe avec ' + email + ', un code vient d être envoyé par mail.');
 }
 async function verifyResetCode() {
   var code = (document.getElementById('fpCode').value || '').trim();
   if (!code) return showAlert('forgotAlert','error','Entre le code reçu par email.');
   setBtn('fpVerifyBtn', true, 'Vérification…');
-  var res = await db.auth.verifyOtp({ email: fpResetEmail, token: code, type: 'email' });
+  var res = await db.auth.verifyOtp({ email: fpResetEmail, token: code, type: 'recovery' });
   setBtn('fpVerifyBtn', false, 'Vérifier le code');
   if (res.error) return showAlert('forgotAlert','error','Code incorrect ou expiré.');
   document.getElementById('fpStep2').style.display = 'none';
