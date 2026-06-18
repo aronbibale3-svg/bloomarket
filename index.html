@@ -569,6 +569,12 @@ body.auth-loading #userNav{display:none!important}
 .ai-input-row input{flex:1;background:#141826;border:1px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif}
 .ai-input-row button{background:linear-gradient(135deg,var(--blue),var(--blue2));border:none;color:#fff;width:42px;border-radius:10px;cursor:pointer;font-size:15px}
 .lc-promoted{position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#F59E0B,#FBBF24);color:#1a1205;font-size:10px;font-weight:800;padding:3px 8px;border-radius:7px;z-index:3;box-shadow:0 3px 10px rgba(245,158,11,0.4)}
+@media(max-width:640px){
+  .nav-r{gap:5px}
+  .account-name,.account-arrow{display:none}
+  .account-icon{padding:2px 4px}
+  #themeToggle{display:none}
+}
 </style>
 </head>
 <body class="auth-loading">
@@ -613,6 +619,7 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-balance" style="color:var(--blue2)" title="Points de fidélité (non convertibles)">🔷 <span id="dropBloobux">0</span> Bloobux</div>
         <div class="ud-verify-status unverified" id="udVerifyStatus">⚠ Non vérifié</div>
         <div class="ud-item" onclick="showPage('profile')">👤 Mon profil</div>
+        <div class="ud-item" onclick="toggleTheme()">🌙 Thème clair / sombre</div>
         <div class="ud-item" onclick="showPage('dashboard')">📊 Dashboard</div>
         <div class="ud-item" onclick="showPage('orders')">📦 Mes commandes</div>
         <div class="ud-item" onclick="showPage('messages')">💬 Messages</div>
@@ -766,7 +773,7 @@ body.auth-loading #userNav{display:none!important}
 <div id="withdrawPage" class="page">
   <div class="dash-header"><div class="dash-title">Retirer des fonds 💸</div></div>
   <div class="wallet-box" style="margin-bottom:22px">
-    <div><div class="wallet-label">Solde disponible</div><div class="wallet-amount" id="withdrawBalance">0.00€</div><div class="wallet-sub">Minimum de retrait : 5€</div></div>
+    <div><div class="wallet-label">Solde disponible</div><div class="wallet-amount" id="withdrawBalance">0.00€</div><div class="wallet-sub">Minimum de retrait : 1€</div></div>
   </div>
   <div style="max-width:480px">
     <div class="fg"><label>Méthode de retrait</label>
@@ -776,7 +783,7 @@ body.auth-loading #userNav{display:none!important}
       </select>
     </div>
     <div class="fg"><label>Adresse / IBAN</label><input type="text" id="withdrawAddress" placeholder="Ex: votre@email.com ou IBAN"></div>
-    <div class="fg"><label>Montant (€)</label><input type="number" id="withdrawAmount" placeholder="Ex: 20" min="5" step="0.01"></div>
+    <div class="fg"><label>Montant (€)</label><input type="number" id="withdrawAmount" placeholder="Ex: 5" min="1" step="0.01"></div>
     <div id="withdrawAlert"></div>
     <button class="btn-submit" onclick="requestWithdraw()">Demander le retrait</button>
   </div>
@@ -1062,8 +1069,8 @@ body.auth-loading #userNav{display:none!important}
 </div>
 
 <!-- Detail -->
-<div class="overlay" id="detailModal" onclick="closeOnBg(event,'detailModal')">
-  <div class="modal listing-detail"><button class="modal-close" onclick="hideModal('detailModal')">✕</button><div id="detailContent"></div></div>
+<div class="overlay" id="detailModal" onclick="closeDetailBg(event)">
+  <div class="modal listing-detail"><button class="modal-close" onclick="closeDetail()">✕</button><div id="detailContent"></div></div>
 </div>
 
 <!-- Chat -->
@@ -1342,6 +1349,7 @@ var currentFilter = 'all', currentSort = 'created_at', searchQuery = '';
 var currentChatConvId = null, chatChannel = null, currentChatOther = null;
 var currentOrderTab = 'buying', reviewRating = 0;
 var LISTING_CACHE = {};
+var currentDetailId = null;
 var cart = JSON.parse(localStorage.getItem('bm_cart') || '[]');
 cart.forEach(function(c){ if (!c.qty) c.qty = 1; });
 
@@ -2081,11 +2089,31 @@ function renderListings(listings, targetId) {
 
 async function openDetailById(id) {
   var res = await db.from('listings').select('*, profiles(username, id_verified, avatar_url, premium_badge)').eq('id', id).single();
+  if (res.data) {
+    openDetail(res.data);
+    if (location.hash !== '#/listing/' + id) { location.hash = '#/listing/' + id; }
+  } else { showToast('Annonce introuvable','error'); }
+}
+function closeDetail() {
+  hideModal('detailModal'); currentDetailId = null;
+  try { if (location.hash.indexOf('#/listing/') === 0) history.replaceState(null, '', location.pathname + location.search); }
+  catch(e) { location.hash = ''; }
+}
+function closeDetailBg(e) { if (e.target && e.target.id === 'detailModal') closeDetail(); }
+async function routeListing() {
+  var m = (location.hash || '').match(/^#\/listing\/(\d+)/);
+  if (!m) { if (currentDetailId !== null) { currentDetailId = null; hideModal('detailModal'); } return; }
+  var id = parseInt(m[1]);
+  if (id === currentDetailId) return;
+  var res = await db.from('listings').select('*, profiles(username, id_verified, avatar_url, premium_badge)').eq('id', id).single();
   if (res.data) openDetail(res.data);
 }
+window.addEventListener('hashchange', routeListing);
+window.addEventListener('load', function(){ setTimeout(routeListing, 500); });
 
 /* ══ BLOC 7 : fiche détail enrichie (attrs + rareté + stock + vendeur cliquable) ══ */
 function openDetail(l) {
+  currentDetailId = l.id;
   var icon = GAME_ICONS[l.game] || '🎮';
   var seller = (l.profiles && l.profiles.username) ? l.profiles.username : 'Vendeur';
   var verified = l.profiles && l.profiles.id_verified;
@@ -2331,11 +2359,6 @@ function startPurchase(listingIds, total, title, kind, quantities) {
   quantities = quantities || listingIds.map(function(){ return 1; });
   var bal = parseFloat(userProfile ? userProfile.balance : 0) || 0;
   if (bal + 1e-9 >= total) { buyFromBalance(listingIds, total, kind, quantities); return; }
-  if (total < 0.50) {
-    showToast('Solde insuffisant — recharge ton solde pour acheter cet article','info');
-    showModal('addFundsModal');
-    return;
-  }
   openPayment({ amount: total, title: title, listingIds: listingIds, kind: kind, quantities: quantities });
 }
 
@@ -3009,7 +3032,7 @@ async function requestWithdraw() {
   var amount = parseFloat(document.getElementById('withdrawAmount').value);
   var method = document.getElementById('withdrawMethod').value;
   var address = document.getElementById('withdrawAddress').value.trim();
-  if (!amount || amount < 5) return showAlert('withdrawAlert','error','Montant minimum : 5€');
+  if (!amount || amount < 1) return showAlert('withdrawAlert','error','Montant minimum : 1€');
   if (!address) return showAlert('withdrawAlert','error','Remplis ton adresse ' + method + '.');
   var balance = parseFloat(userProfile ? userProfile.balance : 0);
   if (balance < amount) return showAlert('withdrawAlert','error','Solde insuffisant (' + balance.toFixed(2) + '€)');
