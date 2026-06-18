@@ -575,6 +575,8 @@ body.auth-loading #userNav{display:none!important}
   .account-icon{padding:2px 4px}
   #themeToggle{display:none}
 }
+.order-deadline{font-size:12px;color:var(--blue2);margin:4px 0 2px;font-weight:600}
+.order-deadline.late{color:var(--red)}
 </style>
 </head>
 <body class="auth-loading">
@@ -2100,6 +2102,14 @@ function closeDetail() {
   catch(e) { location.hash = ''; }
 }
 function closeDetailBg(e) { if (e.target && e.target.id === 'detailModal') closeDetail(); }
+function copyListingLink(id) {
+  var url = location.origin + location.pathname + '#/listing/' + id;
+  function fallback(){ try { prompt('Copie ce lien :', url); } catch(e){} }
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(function(){ showToast('Lien copié ✅','success'); }, fallback);
+    else fallback();
+  } catch(e) { fallback(); }
+}
 async function routeListing() {
   var m = (location.hash || '').match(/^#\/listing\/(\d+)/);
   if (!m) { if (currentDetailId !== null) { currentDetailId = null; hideModal('detailModal'); } return; }
@@ -2155,6 +2165,7 @@ function openDetail(l) {
   if (!isOwn) html += '<button class="btn-msg" style="margin-left:auto" onclick="event.stopPropagation();openChat(\'' + l.user_id + '\',\'' + escHtml(seller) + '\',' + l.id + ')">💬 Contacter</button>';
   html += '</div>';
   html += '<div class="ld-price-row"><div class="ld-price">' + parseFloat(l.price).toFixed(2) + '€</div></div>';
+  html += '<button class="btn-cart-add" style="margin-bottom:12px" onclick="copyListingLink(' + l.id + ')">🔗 Copier le lien de l annonce</button>';
   if (!isOwn) {
     if (stock !== null && stock <= 0) {
       html += '<div style="font-size:13px;color:var(--red);font-weight:700">Cet article est en rupture de stock.</div>';
@@ -2377,7 +2388,7 @@ async function ensureOrderChat(listingId) {
       convId = (nc && nc.data) ? nc.data.id : null;
     }
     if (!convId) return;
-    var msg = '🛒 Achat effectué : « ' + title + ' ». Commande en séquestre — merci de finaliser la livraison ici.';
+    var msg = '🛒 Achat effectué : « ' + title + ' ». 🔒 Paiement en séquestre. Le vendeur a 48h pour livrer — merci de finaliser la livraison ici.';
     await db.from('messages').insert({conversation_id:convId, sender_id:currentUser.id, content:msg, read:false});
     await db.from('conversations').update({last_message:msg, updated_at:new Date().toISOString()}).eq('id', convId);
   } catch(e) {}
@@ -2757,6 +2768,17 @@ async function loadOrders() {
   var html = '';
   res.data.forEach(function(o) {
     var other = currentOrderTab === 'buying' ? ((o.seller && o.seller.username) || 'Vendeur') : ((o.buyer && o.buyer.username) || 'Acheteur');
+    var _dlMs = new Date(o.created_at).getTime() + 48*3600*1000;
+    var _rem = _dlMs - Date.now();
+    var deadlineHtml = '';
+    if (o.status === 'pending') {
+      if (_rem > 0) {
+        var _h = Math.floor(_rem/3600000), _m = Math.floor((_rem%3600000)/60000);
+        deadlineHtml = '<div class="order-deadline">⏳ Livraison sous 48h — il reste <strong>' + _h + 'h ' + _m + 'm</strong></div>';
+      } else {
+        deadlineHtml = '<div class="order-deadline late">⏰ Délai de 48h dépassé' + (currentOrderTab === 'selling' ? ' — livre au plus vite !' : '') + '</div>';
+      }
+    }
     var statusHtml = o.status === 'pending' ? '<span class="badge-wait">🔒 Séquestre</span>' :
                      o.status === 'completed' ? '<span class="badge-ok">✅ Complété</span>' :
                      o.status === 'disputed' ? '<span class="badge-cancel">⚖️ Litige</span>' :
@@ -2772,10 +2794,13 @@ async function loadOrders() {
     } else if (o.status === 'completed' && currentOrderTab === 'buying' && !o.reviewed) {
       actions += '<button class="btn-sm btn-sm-blue" onclick="openReviewModal(' + o.id + ',\'' + o.seller_id + '\')">⭐ Laisser un avis</button>';
     }
+    if (currentOrderTab === 'buying' && o.status === 'pending' && _rem <= 0) {
+      actions += '<button class="btn-sm btn-sm-red" onclick="claimLateRefund(' + o.id + ')">↩️ Réclamer un remboursement</button>';
+    }
     var commission = o.commission ? ' · Commission : ' + parseFloat(o.commission).toFixed(2) + '€' : '';
     html += '<div class="order-item"><div class="order-header"><div class="order-title">' + escHtml(o.title||'Commande') + '</div>' + statusHtml + '</div>';
     html += '<div class="order-meta">' + (currentOrderTab==='buying'?'Vendeur':'Acheteur') + ' : <strong>' + escHtml(other) + '</strong> · ' + parseFloat(o.price||0).toFixed(2) + '€' + commission + ' · ' + new Date(o.created_at).toLocaleDateString('fr-FR') + '</div>';
-    html += '<div class="order-actions">' + actions + '</div></div>';
+    html += deadlineHtml + '<div class="order-actions">' + actions + '</div></div>';
   });
   el.innerHTML = html;
 }
@@ -2790,6 +2815,13 @@ async function confirmOrder(orderId, sellerId) {
   setTimeout(function(){openReviewModal(orderId, sellerId);}, 500);
 }
 
+async function claimLateRefund(orderId) {
+  if (!confirm('Le vendeur a dépassé le délai de 48h pour livrer.\n\nDemander un remboursement ? Un litige prioritaire sera ouvert et un administrateur traitera le remboursement de ton paiement en séquestre.')) return;
+  var r = await db.rpc('open_dispute', { p_order_id: orderId, p_reason: 'Délai de livraison de 48h dépassé — remboursement demandé' });
+  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
+  showToast('Remboursement demandé ↩️ Un admin va traiter le litige','info');
+  loadOrders();
+}
 async function openDispute(orderId) {
   var reason = prompt("Décris le problème (item non reçu, incorrect, tentative d'arnaque...) :");
   if (reason === null) return;
