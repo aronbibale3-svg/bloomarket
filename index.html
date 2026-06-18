@@ -589,19 +589,20 @@ body.auth-loading #userNav{display:none!important}
   </div>
   <div class="search-main">
     <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Rechercher un item Roblox..." oninput="handleSearch()">
+    <input type="text" id="searchInput" data-i18n-ph="search_ph" placeholder="Rechercher un item Roblox..." oninput="handleSearch()">
   </div>
   <div class="nav-r">
     <div id="authLoader" class="auth-loader"><span class="auth-spin"></span></div>
+    <button class="cart-btn" id="langToggle" onclick="toggleLang()" title="Language / Langue" style="font-size:12px;font-weight:800">FR</button>
     <button class="cart-btn" id="themeToggle" onclick="toggleTheme()" title="Thème clair / sombre" style="font-size:15px">🌙</button>
     <div id="guestNav" style="display:flex;gap:7px">
-      <button class="btn-ghost" onclick="showModal('loginModal')">Connexion</button>
-      <button class="btn-blue" onclick="showModal('registerModal')">Inscription</button>
+      <button class="btn-ghost" data-i18n="login" onclick="showModal('loginModal')">Connexion</button>
+      <button class="btn-blue" data-i18n="register" onclick="showModal('registerModal')">Inscription</button>
     </div>
     <div id="userNav" style="display:none;align-items:center;gap:7px">
-      <div class="cart-btn" onclick="showPage('messages')" title="Messages" style="position:relative">💬<div class="cart-badge" id="msgBadge" style="display:none">0</div></div>
-      <div class="sell-btn" onclick="quickSell()" title="Vendre un item">+</div>
-      <div class="cart-btn" onclick="openCartModal()" title="Mon panier">
+      <div class="cart-btn" onclick="showPage('messages')" data-i18n-title="nav_messages" title="Messages" style="position:relative">💬<div class="cart-badge" id="msgBadge" style="display:none">0</div></div>
+      <div class="sell-btn" onclick="quickSell()" data-i18n-title="nav_sell" title="Vendre un item">+</div>
+      <div class="cart-btn" onclick="openCartModal()" data-i18n-title="nav_cart" title="Mon panier">
         🛒<div class="cart-badge" id="cartBadge">0</div>
       </div>
       <div class="notif-btn" style="position:relative" onclick="toggleNotifPanel()">
@@ -646,12 +647,12 @@ body.auth-loading #userNav{display:none!important}
 <div id="homePage" class="page show">
   <div class="hero-banner">
     <div>
-      <div class="hb-title">La marketplace Roblox de référence 🎮</div>
-      <div class="hb-sub">Achète et vends tes items en toute sécurité · Paiement Stripe · Messagerie intégrée</div>
+      <div class="hb-title" data-i18n="hero_title">La marketplace Roblox de référence 🎮</div>
+      <div class="hb-sub" data-i18n="hero_sub">Achète et vends tes items en toute sécurité · Paiement Stripe · Messagerie intégrée</div>
       <div class="hb-stats">
-        <div><div class="hb-stat-n" id="statListings">0</div><div class="hb-stat-l">Annonces</div></div>
-        <div><div class="hb-stat-n" id="statSellers">0</div><div class="hb-stat-l">Vendeurs</div></div>
-        <div><div class="hb-stat-n">24/7</div><div class="hb-stat-l">Support</div></div>
+        <div><div class="hb-stat-n" id="statListings">0</div><div class="hb-stat-l" data-i18n="stat_listings">Annonces</div></div>
+        <div><div class="hb-stat-n" id="statSellers">0</div><div class="hb-stat-l" data-i18n="stat_sellers">Vendeurs</div></div>
+        <div><div class="hb-stat-n">24/7</div><div class="hb-stat-l" data-i18n="stat_support">Support</div></div>
       </div>
     </div>
     <div style="font-size:64px;opacity:.7;flex-shrink:0">🛒</div>
@@ -824,7 +825,7 @@ body.auth-loading #userNav{display:none!important}
   <div class="footer-grid">
     <div class="footer-brand">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><img class="logo-img" src="data:image/png;base64,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" alt="BlooMarket"><span class="logo-name"><span class="b">BLOO</span><span class="w">MARKET</span></span></div>
-      <p class="footer-desc">La marketplace Roblox de référence. Achetez et vendez vos items en toute sécurité grâce à notre système de paiement sécurisé et notre messagerie intégrée.</p>
+      <p class="footer-desc" data-i18n="footer_desc">La marketplace Roblox de référence. Achetez et vendez vos items en toute sécurité grâce à notre système de paiement sécurisé et notre messagerie intégrée.</p>
     </div>
     <div>
       <div class="footer-title">Navigation</div>
@@ -872,14 +873,14 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="loginModal" onclick="closeOnBg(event,'loginModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('loginModal')">✕</button>
-    <div class="modal-h">Content de te revoir 👋</div>
-    <div class="modal-sub">Connecte-toi à ton compte</div>
+    <div class="modal-h" data-i18n="login_h">Content de te revoir 👋</div>
+    <div class="modal-sub" data-i18n="login_sub">Connecte-toi à ton compte</div>
     <div id="loginAlert"></div>
-    <div class="fg"><label>Email</label><input type="email" id="loginEmail" placeholder="ton@email.com"></div>
-    <div class="fg"><label>Mot de passe</label><input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div style="text-align:right;margin-top:-6px;margin-bottom:13px"><a style="font-size:12px;color:var(--blue2);cursor:pointer" onclick="resetForgotFlow();switchModal('loginModal','forgotModal')">Mot de passe oublié ?</a></div>
-    <button class="btn-submit" id="loginBtn" onclick="doLogin()">Se connecter</button>
-    <p class="sw">Pas de compte ? <a onclick="switchModal('loginModal','registerModal')">S'inscrire</a></p>
+    <div class="fg"><label data-i18n="email">Email</label><input type="email" id="loginEmail" placeholder="ton@email.com"></div>
+    <div class="fg"><label data-i18n="password">Mot de passe</label><input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div style="text-align:right;margin-top:-6px;margin-bottom:13px"><a style="font-size:12px;color:var(--blue2);cursor:pointer" data-i18n="forgot" onclick="resetForgotFlow();switchModal('loginModal','forgotModal')">Mot de passe oublié ?</a></div>
+    <button class="btn-submit" id="loginBtn" data-i18n="login_btn" onclick="doLogin()">Se connecter</button>
+    <p class="sw"><span data-i18n="no_account">Pas de compte ?</span> <a data-i18n="signup_link" onclick="switchModal('loginModal','registerModal')">S'inscrire</a></p>
   </div>
 </div>
 
@@ -887,14 +888,14 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="registerModal" onclick="closeOnBg(event,'registerModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('registerModal')">✕</button>
-    <div class="modal-h">Rejoins BlooMarket 🚀</div>
-    <div class="modal-sub">Crée ton compte gratuitement</div>
+    <div class="modal-h" data-i18n="reg_h">Rejoins BlooMarket 🚀</div>
+    <div class="modal-sub" data-i18n="reg_sub">Crée ton compte gratuitement</div>
     <div id="registerAlert"></div>
-    <div class="fg"><label>Pseudo</label><input type="text" id="registerUsername" placeholder="TonPseudo"></div>
-    <div class="fg"><label>Email</label><input type="email" id="registerEmail" placeholder="ton@email.com"></div>
-    <div class="fg"><label>Mot de passe</label><input type="password" id="registerPassword" placeholder="Minimum 6 caractères" onkeydown="if(event.key==='Enter')doRegister()"></div>
-    <button class="btn-submit" id="registerBtn" onclick="doRegister()">Créer mon compte</button>
-    <p class="sw">Déjà un compte ? <a onclick="switchModal('registerModal','loginModal')">Se connecter</a></p>
+    <div class="fg"><label data-i18n="username">Pseudo</label><input type="text" id="registerUsername" placeholder="TonPseudo"></div>
+    <div class="fg"><label data-i18n="email">Email</label><input type="email" id="registerEmail" placeholder="ton@email.com"></div>
+    <div class="fg"><label data-i18n="password">Mot de passe</label><input type="password" id="registerPassword" data-i18n-ph="pw_min" placeholder="Minimum 6 caractères" onkeydown="if(event.key==='Enter')doRegister()"></div>
+    <button class="btn-submit" id="registerBtn" data-i18n="reg_btn" onclick="doRegister()">Créer mon compte</button>
+    <p class="sw"><span data-i18n="have_account">Déjà un compte ?</span> <a data-i18n="login_link" onclick="switchModal('registerModal','loginModal')">Se connecter</a></p>
   </div>
 </div>
 
@@ -1119,7 +1120,7 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="cartModal" onclick="closeOnBg(event,'cartModal')">
   <div class="modal" style="max-width:460px">
     <button class="modal-close" onclick="hideModal('cartModal')">✕</button>
-    <div class="modal-h" style="text-align:left;margin-bottom:18px">Mon panier 🛒</div>
+    <div class="modal-h" style="text-align:left;margin-bottom:18px" data-i18n="cart_title">Mon panier 🛒</div>
     <div id="cartItems"></div>
     <div id="cartEmpty" class="empty-state" style="display:none;padding:30px 0"><div class="ico">🛒</div><h3>Panier vide</h3><p>Explore la marketplace !</p></div>
     <div id="cartFooter" style="display:none">
@@ -1354,6 +1355,54 @@ var LISTING_CACHE = {};
 var currentDetailId = null;
 var cart = JSON.parse(localStorage.getItem('bm_cart') || '[]');
 cart.forEach(function(c){ if (!c.qty) c.qty = 1; });
+
+/* ══ I18N (FR / EN) ══ */
+var I18N = {
+  fr: {
+    hero_title: "La marketplace Roblox de référence 🎮",
+    hero_sub: "Achète et vends tes items en toute sécurité · Paiement Stripe · Messagerie intégrée",
+    stat_listings: "Annonces", stat_sellers: "Vendeurs", stat_support: "Support",
+    search_ph: "Rechercher un item Roblox...",
+    login: "Connexion", register: "Inscription",
+    nav_messages: "Messages", nav_sell: "Vendre un item", nav_cart: "Mon panier",
+    cart_title: "Mon panier 🛒",
+    footer_desc: "La marketplace Roblox de référence. Achetez et vendez vos items en toute sécurité grâce à notre système de paiement sécurisé et notre messagerie intégrée.",
+    login_h: "Content de te revoir 👋", login_sub: "Connecte-toi à ton compte",
+    email: "Email", password: "Mot de passe", forgot: "Mot de passe oublié ?",
+    login_btn: "Se connecter", no_account: "Pas de compte ?", signup_link: "S'inscrire",
+    reg_h: "Rejoins BlooMarket 🚀", reg_sub: "Crée ton compte gratuitement",
+    username: "Pseudo", pw_min: "Minimum 6 caractères",
+    reg_btn: "Créer mon compte", have_account: "Déjà un compte ?", login_link: "Se connecter"
+  },
+  en: {
+    hero_title: "The reference Roblox marketplace 🎮",
+    hero_sub: "Buy and sell your items safely · Stripe payment · Built-in messaging",
+    stat_listings: "Listings", stat_sellers: "Sellers", stat_support: "Support",
+    search_ph: "Search a Roblox item...",
+    login: "Login", register: "Sign up",
+    nav_messages: "Messages", nav_sell: "Sell an item", nav_cart: "My cart",
+    cart_title: "My cart 🛒",
+    footer_desc: "The reference Roblox marketplace. Buy and sell your items safely thanks to our secure payment system and built-in messaging.",
+    login_h: "Welcome back 👋", login_sub: "Sign in to your account",
+    email: "Email", password: "Password", forgot: "Forgot password?",
+    login_btn: "Sign in", no_account: "No account?", signup_link: "Sign up",
+    reg_h: "Join BlooMarket 🚀", reg_sub: "Create your free account",
+    username: "Username", pw_min: "At least 6 characters",
+    reg_btn: "Create my account", have_account: "Already have an account?", login_link: "Sign in"
+  }
+};
+var LANG = (function(){ try { return localStorage.getItem('bm_lang') || 'fr'; } catch(e){ return 'fr'; } })();
+function t(k){ return (I18N[LANG] && I18N[LANG][k]) || (I18N.fr[k]) || k; }
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = t(el.getAttribute('data-i18n')); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){ el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph'))); });
+  document.querySelectorAll('[data-i18n-title]').forEach(function(el){ el.setAttribute('title', t(el.getAttribute('data-i18n-title'))); });
+  document.documentElement.setAttribute('lang', LANG);
+  var b = document.getElementById('langToggle'); if (b) b.textContent = LANG.toUpperCase();
+}
+function setLang(l){ LANG = l; try { localStorage.setItem('bm_lang', l); } catch(e){} applyI18n(); }
+function toggleLang(){ setLang(LANG === 'fr' ? 'en' : 'fr'); }
+document.addEventListener('DOMContentLoaded', applyI18n);
 
 /* ══ THÈME CLAIR / SOMBRE ══ */
 function applyTheme(t) {
