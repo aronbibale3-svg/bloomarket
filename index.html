@@ -1491,12 +1491,14 @@ async function sendResetCode() {
   if (!email || email.indexOf('@') === -1) return showAlert('forgotAlert','error','Entre un email valide.');
   fpResetEmail = email;
   setBtn('fpSendBtn', true, 'Envoi…');
+  var ex = await db.rpc('email_exists', { p_email: email });
+  if (!ex.error && ex.data === false) { setBtn('fpSendBtn', false, 'Envoyer le code'); return showAlert('forgotAlert','error','Aucun compte n est associé à cet email.'); }
   var res = await db.auth.resetPasswordForEmail(email);
   setBtn('fpSendBtn', false, 'Envoyer le code');
   if (res.error) return showAlert('forgotAlert','error', res.error.message);
   document.getElementById('fpStep1').style.display = 'none';
   document.getElementById('fpStep2').style.display = 'block';
-  showAlert('forgotAlert','success','Si un compte existe avec ' + email + ', un code vient d être envoyé par mail.');
+  showAlert('forgotAlert','success','Code envoyé à ' + email + '. Vérifie tes mails (pense aux spams).');
 }
 async function verifyResetCode() {
   var code = (document.getElementById('fpCode').value || '').trim();
