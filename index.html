@@ -110,6 +110,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .lc-game-badge{position:absolute;top:4px;left:4px;background:rgba(7,8,15,0.6);border:1px solid rgba(255,255,255,0.1);padding:2px;border-radius:6px;backdrop-filter:blur(3px)}
 .lc-online{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 6px rgba(34,197,94,0.6)}
 .lc-cart{position:absolute;bottom:7px;right:7px;background:rgba(7,8,15,0.85);border:1px solid var(--border2);border-radius:7px;padding:5px 8px;font-size:12px;cursor:pointer;opacity:0;transition:all .2s;color:#fff}
+.lc-fav{position:absolute;bottom:7px;left:7px;background:rgba(7,8,15,0.85);border:1px solid var(--border2);border-radius:7px;padding:4px 8px;font-size:13px;cursor:pointer;color:#fff;display:flex;align-items:center;gap:3px;font-family:Inter,sans-serif;z-index:3}
+.lc-fav.faved{color:#FB7185;border-color:rgba(251,113,133,0.5)}
+.lc-fav span{font-size:11px;font-weight:700}
 .listing-card:hover .lc-cart{opacity:1}
 .lc-body{padding:10px 12px}
 .lc-title{font-size:13px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1074,7 +1077,7 @@ body.auth-loading #userNav{display:none!important}
     <div class="modal-h">Promote listing 🚀</div>
     <div class="modal-sub">Your listing goes to the top of results with a ⭐ Sponsored badge.</div>
     <div id="promoteAlert"></div>
-    <p class="settings-desc">Paid from your balance: <strong id="promoteBalance" style="color:var(--blue2)">0€</strong></p>
+    <p class="settings-desc">💳 Paid securely by card — your listing jumps to the top with a ⭐ Sponsored badge.</p>
     <div id="promoteTiers"></div>
   </div>
 </div>
@@ -1369,6 +1372,7 @@ var currentFilter = 'all', currentSort = 'created_at', searchQuery = '';
 var currentChatConvId = null, chatChannel = null, currentChatOther = null;
 var currentOrderTab = 'buying', reviewRating = 0;
 var LISTING_CACHE = {};
+var MY_FAVORITES = {};
 var currentDetailId = null;
 var cart = JSON.parse(localStorage.getItem('bm_cart') || '[]');
 cart.forEach(function(c){ if (!c.qty) c.qty = 1; });
@@ -1503,6 +1507,8 @@ async function setUser(user) {
     }
   }
   await checkUnreadMessages();
+  await loadMyFavorites();
+  if (typeof loadListings === 'function') loadListings();
   await loadNotifications();
 }
 
@@ -1945,23 +1951,20 @@ async function adminResolveTicket(id) {
 var currentPromoteId = null;
 function openPromote(id) {
   currentPromoteId = id;
-  var bal = userProfile ? parseFloat(userProfile.balance || 0) : 0;
-  document.getElementById('promoteBalance').textContent = bal.toFixed(2) + '€';
-  var tiers = [{d:1,c:5,l:'24 heures'},{d:3,c:10,l:'3 jours'},{d:7,c:20,l:'7 jours'},{d:30,c:50,l:'30 jours'}];
+  var tiers = [{d:1,c:5,l:'24 hours'},{d:3,c:10,l:'3 days'},{d:7,c:20,l:'7 days'},{d:30,c:50,l:'30 days'}];
   document.getElementById('promoteTiers').innerHTML = tiers.map(function(t){
-    var ok = bal >= t.c;
-    return '<button onclick="doPromote(' + t.d + ')" ' + (ok?'':'disabled') + ' style="width:100%;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;background:' + (ok?'rgba(251,191,36,0.12)':'rgba(255,255,255,0.04)') + ';border:1px solid ' + (ok?'rgba(251,191,36,0.3)':'var(--border)') + ';color:' + (ok?'#fff':'var(--muted)') + ';padding:13px 15px;border-radius:10px;cursor:' + (ok?'pointer':'not-allowed') + ';font-family:Inter,sans-serif;font-size:13px"><span>⭐ ' + t.l + '</span><strong style="color:#FBBF24">' + t.c + '€</strong></button>';
-  }).join('') + (bal < 5 ? '<p class="settings-desc" style="text-align:center;margin-top:6px">Insufficient balance — top up your account to promote.</p>' : '');
+    return '<button onclick="doPromote(' + t.d + ')" style="width:100%;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:#fff;padding:13px 15px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;font-size:13px"><span>⭐ ' + t.l + '</span><strong style="color:#FBBF24">' + t.c + '€</strong></button>';
+  }).join('');
   document.getElementById('promoteAlert').innerHTML = '';
   showModal('promoteModal');
 }
-async function doPromote(days) {
+function doPromote(days) {
   if (!currentPromoteId) return;
-  var res = await db.rpc('promote_listing', { p_listing_id: currentPromoteId, p_days: days });
-  if (res.error) return showAlert('promoteAlert','error', rpcMsg(res.error));
+  var costs = {1:5,3:10,7:20,30:50};
+  var labels = {1:'24 hours',3:'3 days',7:'7 days',30:'30 days'};
+  var cost = costs[days]; if (!cost) return;
   hideModal('promoteModal');
-  showToast('Listing promoted ⭐ It moves to the top!','success');
-  await loadProfile(); loadMyListings(); loadListings();
+  openPayment({ amount: cost, title: 'Promote listing (' + labels[days] + ')', kind: 'promote', promoteId: currentPromoteId, promoteDays: days, listingIds: [] });
 }
 
 async function reportUser() {
@@ -2151,15 +2154,17 @@ function renderListings(listings, targetId) {
     if (firstImg) html += '<img src="' + escHtml(firstImg) + '" alt="' + escHtml(l.title) + '" onerror="imgErrFallback(this,\'' + escHtml(l.game) + '\')">';
     else html += gameImgFallback(l.game, icon);
     html += '<div class="lc-online"></div>';
-    if (l.promoted_until && new Date(l.promoted_until).getTime() > Date.now()) html += '<div class="lc-promoted">⭐ Sponsorisé</div>';
+    if (l.promoted_until && new Date(l.promoted_until).getTime() > Date.now()) html += '<div class="lc-promoted">⭐ Sponsored</div>';
     if (!isOwn) html += '<button class="lc-cart" onclick="event.stopPropagation();addToCart(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + escHtml(l.game) + '\',' + l.price + ',' + (firstImg ? '\'' + escHtml(firstImg) + '\'' : 'null') + ',\'' + l.user_id + '\')">🛒</button>';
+    var favd = !!MY_FAVORITES[l.id];
+    html += '<button class="lc-fav' + (favd ? ' faved' : '') + '" onclick="event.stopPropagation();toggleFavorite(' + l.id + ',this)" title="Favorite">' + (favd ? '♥' : '♡') + ' <span>' + (l.favorites_count || 0) + '</span></button>';
     html += '</div>';
     html += '<div class="lc-body">';
     html += '<div class="lc-game-tag">' + gameBadgeIc(l.game) + '<span>' + escHtml(l.game) + '</span></div>';
     html += '<div class="lc-title">' + escHtml(l.title) + '</div>';
     if (rar) html += '<span class="lc-rarity-tag" style="background:' + rarityColor(rar) + '">' + escHtml(rar) + '</span>';
     if (aline) html += '<div class="lc-attr-line">' + escHtml(aline) + '</div>';
-    html += '<div class="lc-seller"><div class="lc-seller-dot"></div>' + escHtml(seller) + (verified ? ' <span class="verified-badge">✓</span>' : '') + ((l.profiles && l.profiles.premium_badge) ? ' <span title="Premium seller">👑</span>' : '') + (isOwn ? ' <em style="font-size:10px;color:var(--muted)">(toi)</em>' : '') + '</div>';
+    html += '<div class="lc-seller"><div class="lc-seller-dot"></div>' + escHtml(seller) + (verified ? ' <span class="verified-badge">✓</span>' : '') + ((l.profiles && l.profiles.premium_badge) ? ' <span title="Premium seller">👑</span>' : '') + (isOwn ? ' <em style="font-size:10px;color:var(--muted)">(you)</em>' : '') + '</div>';
     if (stock !== null) html += '<div class="lc-stock' + (stock <= 0 ? ' out' : '') + '">' + (stock <= 0 ? 'Rupture de stock' : ('En stock : ' + stock)) + '</div>';
     html += '<div class="lc-footer"><div class="lc-price">' + parseFloat(l.price).toFixed(2) + '€</div>';
     html += '<button class="lc-buy" onclick="event.stopPropagation();openDetailById(' + l.id + ')">Voir</button></div>';
@@ -2181,6 +2186,22 @@ function closeDetail() {
   catch(e) { location.hash = ''; }
 }
 function closeDetailBg(e) { if (e.target && e.target.id === 'detailModal') closeDetail(); }
+async function loadMyFavorites() {
+  if (!currentUser) { MY_FAVORITES = {}; return; }
+  try { var r = await db.rpc('my_favorites'); MY_FAVORITES = {}; if (r.data) r.data.forEach(function(x){ MY_FAVORITES[x] = true; }); } catch(e){}
+}
+async function toggleFavorite(id, btn) {
+  if (!currentUser) { showToast('Log in to add favorites','info'); showModal('loginModal'); return; }
+  var r = await db.rpc('toggle_favorite', { p_listing_id: id });
+  if (r.error || !r.data) { showToast('Run the favorites SQL to enable this.','error'); return; }
+  var fav = r.data.favorited, cnt = r.data.count;
+  if (fav) MY_FAVORITES[id] = true; else delete MY_FAVORITES[id];
+  if (LISTING_CACHE[id]) LISTING_CACHE[id].favorites_count = cnt;
+  if (btn) {
+    if (btn.classList.contains('lc-fav')) { btn.classList.toggle('faved', fav); btn.innerHTML = (fav ? '♥' : '♡') + ' <span>' + cnt + '</span>'; }
+    else { btn.innerHTML = (fav ? '♥ Favorited' : '♡ Add to favorites') + ' (' + cnt + ')'; btn.style.color = fav ? '#FB7185' : ''; }
+  }
+}
 function copyListingLink(id) {
   var url = location.origin + location.pathname + '#/listing/' + id;
   function fallback(){ try { prompt('Copie ce lien :', url); } catch(e){} }
@@ -2241,10 +2262,12 @@ function openDetail(l) {
   html += '<div class="ld-seller-box" style="cursor:pointer" onclick="showSellerProfile(\'' + l.user_id + '\')">';
   html += '<div class="ld-seller-avatar">' + avatarInner + '</div>';
   html += '<div class="ld-seller-info"><h4>' + escHtml(seller) + (verified ? ' <span class="verified-icon">✓</span>' : '') + '</h4><p>View seller profile →</p></div>';
-  if (!isOwn) html += '<button class="btn-msg" style="margin-left:auto" onclick="event.stopPropagation();openChat(\'' + l.user_id + '\',\'' + escHtml(seller) + '\',' + l.id + ')">💬 Contacter</button>';
+  if (!isOwn) html += '<button class="btn-msg" style="margin-left:auto" onclick="event.stopPropagation();openChat(\'' + l.user_id + '\',\'' + escHtml(seller) + '\',' + l.id + ')">💬 Contact</button>';
   html += '</div>';
   html += '<div class="ld-price-row"><div class="ld-price">' + parseFloat(l.price).toFixed(2) + '€</div></div>';
   html += '<button class="btn-cart-add" style="margin-bottom:12px" onclick="copyListingLink(' + l.id + ')">🔗 Copy listing link</button>';
+  var favd2 = !!MY_FAVORITES[l.id];
+  html += '<button class="btn-cart-add" style="margin-bottom:12px;' + (favd2 ? 'color:#FB7185;border-color:rgba(251,113,133,0.4)' : '') + '" onclick="toggleFavorite(' + l.id + ',this)">' + (favd2 ? '♥ Favorited' : '♡ Add to favorites') + ' (' + (l.favorites_count || 0) + ')</button>';
   if (!isOwn) {
     if (stock !== null && stock <= 0) {
       html += '<div style="font-size:13px;color:var(--red);font-weight:700">Cet article est en rupture de stock.</div>';
@@ -2303,7 +2326,7 @@ async function showSellerProfile(userId) {
     h += '<div class="sp-stat"><div class="sp-stat-n">' + listings.length + '</div><div class="sp-stat-l">Annonces</div></div>';
     h += '<div class="sp-stat"><div class="sp-stat-n">' + (reviews.length ? avg.toFixed(1) : '—') + '</div><div class="sp-stat-l">Note</div></div>';
     h += '</div></div>';
-    if (canMsg) h += '<button class="btn-submit" style="margin-bottom:16px" onclick="hideModal(\'sellerProfileModal\');openChat(\'' + userId + '\',\'' + escHtml(name) + '\',0)">💬 Contacter le vendeur</button>';
+    if (canMsg) h += '<button class="btn-submit" style="margin-bottom:16px" onclick="hideModal(\'sellerProfileModal\');openChat(\'' + userId + '\',\'' + escHtml(name) + '\',0)">💬 Contact le vendeur</button>';
     if (listings.length) {
       h += '<div class="section-title">Annonces actives</div><div class="listings" id="spListings"></div>';
     }
@@ -2529,7 +2552,7 @@ async function submitPayElement() {
   if (!payElements || !payClientSecret) return;
   setBtn('payNowBtn', true, 'Paiement…');
   document.getElementById('pay-errors').textContent = '';
-  try { localStorage.setItem('bm_pending_order', JSON.stringify({ listingIds: (payContext&&payContext.listingIds)||[], quantities: (payContext&&payContext.quantities)||[], kind: (payContext&&payContext.kind)||'order' })); } catch(e){}
+  try { localStorage.setItem('bm_pending_order', JSON.stringify({ listingIds: (payContext&&payContext.listingIds)||[], quantities: (payContext&&payContext.quantities)||[], kind: (payContext&&payContext.kind)||'order', promoteId: (payContext&&payContext.promoteId)||null, promoteDays: (payContext&&payContext.promoteDays)||null })); } catch(e){}
   var result = await stripe.confirmPayment({
     elements: payElements,
     confirmParams: { return_url: location.origin + location.pathname },
@@ -2544,6 +2567,15 @@ async function submitPayElement() {
   var st = result.paymentIntent ? result.paymentIntent.status : '';
   if (st === 'succeeded' || st === 'processing') {
     localStorage.removeItem('bm_pending_order');
+    if (payContext && payContext.kind === 'promote') {
+      hideModal('payModal');
+      var prr = await db.rpc('promote_listing_paid', { p_listing_id: payContext.promoteId, p_days: payContext.promoteDays });
+      if (prr.error) showToast('Paid, but promotion failed: ' + rpcMsg(prr.error),'error');
+      else showToast('Listing promoted ⭐ It moves to the top!','success');
+      if (typeof loadMyListings === 'function') loadMyListings();
+      loadListings();
+      return;
+    }
     var ids = (payContext && payContext.listingIds) || [];
     var qts = (payContext && payContext.quantities) || [];
     var created = 0;
@@ -2571,6 +2603,15 @@ async function handlePaymentReturn() {
   var pend = null;
   try { pend = JSON.parse(localStorage.getItem('bm_pending_order') || 'null'); } catch(e){}
   localStorage.removeItem('bm_pending_order');
+  if (pend && pend.kind === 'promote' && pend.promoteId) {
+    var t2 = 0; while (!currentUser && t2 < 25) { await new Promise(function(r){setTimeout(r,150);}); t2++; }
+    if (!currentUser) return;
+    var prr2 = await db.rpc('promote_listing_paid', { p_listing_id: pend.promoteId, p_days: pend.promoteDays });
+    if (!prr2.error) showToast('Listing promoted ⭐ It moves to the top!','success');
+    if (typeof loadMyListings === 'function') loadMyListings();
+    loadListings();
+    return;
+  }
   if (!pend || !pend.listingIds || !pend.listingIds.length) return;
   var tries = 0;
   while (!currentUser && tries < 25) { await new Promise(function(r){setTimeout(r,150);}); tries++; }
@@ -2781,7 +2822,7 @@ async function loadMyListings() {
     html += '<span style="color:var(--blue2);font-weight:700">' + parseFloat(l.price).toFixed(2) + '€</span>';
     html += '<span style="color:var(--muted)">' + escHtml(l.game) + '</span>';
     var promo = (l.promoted_until && new Date(l.promoted_until).getTime() > Date.now()) ? '<span style="font-size:10px;color:#FBBF24;align-self:center">⭐ promu</span>' : '';
-    html += '<span style="display:flex;gap:6px;justify-content:flex-end">' + promo + '<button onclick="openPromote(' + l.id + ')" style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:#FBBF24;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">🚀 Promouvoir</button><button onclick="deleteListing(' + l.id + ')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">Supprimer</button></span></div>';
+    html += '<span style="display:flex;gap:6px;justify-content:flex-end">' + promo + '<button onclick="openPromote(' + l.id + ')" style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:#FBBF24;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">🚀 Promote</button><button onclick="deleteListing(' + l.id + ')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">Delete</button></span></div>';
   });
   body.innerHTML = html;
   var salesRes = await db.from('orders').select('price').eq('seller_id', currentUser.id).eq('status','completed');
@@ -3185,7 +3226,7 @@ async function loadAdminPage() {
   var vsWarn = (vsRes && vsRes.error) ? '<div style="grid-column:1/-1;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#FCA5A5;padding:11px;border-radius:9px;font-size:12px;margin-bottom:6px">⚠️ Visitor stats are inactive. Run <strong>bloomarket_visits.sql</strong> in Supabase (SQL Editor) to enable them.</div>' : '';
   document.getElementById('adminStats').innerHTML = vsWarn + [
     {l:'Users', v:usersRes.count||0}, {l:'Active listings', v:listingsRes.count||0},
-    {l:'Orders', v:ordersRes.count||0}, {l:'Verified sellers', v:sellersRes.count||0}, {l:'Platform revenue', v:totalRevenue.toFixed(2)+'€'}, {l:'Pending withdrawals', v:withdrawsRes.count||0}, {l:'🟢 Active now', v:(v.active||0)}, {l:'Visitors today', v:(v.today||0)}, {l:'Visitors (7 days)', v:(v.week||0)}, {l:'Visitors (30 days)', v:(v.month||0)}
+    {l:'Orders', v:ordersRes.count||0}, {l:'Verified sellers', v:sellersRes.count||0}, {l:'Platform revenue', v:totalRevenue.toFixed(2)+'€'}, {l:'Pending withdrawals', v:withdrawsRes.count||0}, {l:'🟢 Active now', v:(v.active!=null?v.active:(v.actif||0))}, {l:'Visitors today', v:(v.today!=null?v.today:(v["aujourd'hui"]||0))}, {l:'Visitors (7 days)', v:(v.week!=null?v.week:(v.semaine||0))}, {l:'Visitors (30 days)', v:(v.month!=null?v.month:(v.mois||0))}
   ].map(function(s){return '<div class="dc"><div class="dc-l">'+s.l+'</div><div class="dc-v">'+s.v+'</div></div>';}).join('');
   adminTab('users');
 }
@@ -3242,7 +3283,7 @@ async function adminTab(tab, el) {
     if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No listing</div>'; return; }
     var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Item</span><span>Seller</span><span>Price</span><span>Status</span><span>Action</span></div>';
     res.data.forEach(function(l) {
-      html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml(l.title||'—') + '</span><span style="color:var(--muted)">' + escHtml((l.profiles&&l.profiles.username)||'—') + '</span><span style="color:var(--blue2);font-weight:700">' + parseFloat(l.price||0).toFixed(2) + '€</span><span>' + (l.active ? '<span class="badge-ok">Actif</span>' : '<span class="badge-cancel">Inactif</span>') + '</span><span style="display:flex;gap:5px"><button onclick="adminToggleListing(' + l.id + ',' + (!l.active) + ')" class="btn-sm btn-sm-ghost" style="font-size:10px">' + (l.active ? 'Désactiver' : 'Activer') + '</button><button onclick="adminDeleteListing(' + l.id + ')" class="btn-sm btn-sm-red" style="font-size:10px">Supprimer</button></span></div>';
+      html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml(l.title||'—') + '</span><span style="color:var(--muted)">' + escHtml((l.profiles&&l.profiles.username)||'—') + '</span><span style="color:var(--blue2);font-weight:700">' + parseFloat(l.price||0).toFixed(2) + '€</span><span>' + (l.active ? '<span class="badge-ok">Actif</span>' : '<span class="badge-cancel">Inactif</span>') + '</span><span style="display:flex;gap:5px"><button onclick="adminToggleListing(' + l.id + ',' + (!l.active) + ')" class="btn-sm btn-sm-ghost" style="font-size:10px">' + (l.active ? 'Désactiver' : 'Activer') + '</button><button onclick="adminDeleteListing(' + l.id + ')" class="btn-sm btn-sm-red" style="font-size:10px">Delete</button></span></div>';
     });
     html += '</div>';
     content.innerHTML = html;
