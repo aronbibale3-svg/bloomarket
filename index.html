@@ -1394,8 +1394,16 @@ function toggleTheme() {
 
 /* ══ TRACKING VISITEURS ══ */
 var VISITOR_ID = (function(){ try { var v = localStorage.getItem('bm_visitor'); if (!v) { v = 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2,8); localStorage.setItem('bm_visitor', v); } return v; } catch(e){ return 'anon'; } })();
-function trackVisit(){ try { db.rpc('track_visit', { p_visitor: VISITOR_ID }); } catch(e){} }
-document.addEventListener('DOMContentLoaded', function(){ trackVisit(); setInterval(trackVisit, 60000); });
+function trackVisit(){
+  try {
+    db.rpc('track_visit', { p_visitor: VISITOR_ID }).then(function(r){
+      if (r && r.error) console.warn('track_visit error (run bloomarket_visits.sql?):', r.error.message);
+    });
+  } catch(e){}
+}
+trackVisit();
+setInterval(trackVisit, 60000);
+document.addEventListener('DOMContentLoaded', trackVisit);
 
 /* ══ LIGHTBOX (zoom image) ══ */
 function openLightbox(src) {
@@ -1478,12 +1486,14 @@ async function setUser(user) {
   document.getElementById('userName').textContent = name;
   document.getElementById('userAvatarText').textContent = name[0].toUpperCase();
   document.getElementById('dashUsername').textContent = name;
-  if (ADMIN_EMAILS.includes(user.email)) { document.getElementById('adminMenuItem').style.display = 'block'; refreshAdminBadge(); if (!window.__adminBadgeTimer) window.__adminBadgeTimer = setInterval(refreshAdminBadge, 60000); }
+  var isAdmin = ADMIN_EMAILS.includes(user.email);
+  document.getElementById('adminMenuItem').style.display = isAdmin ? 'block' : 'none';
+  if (isAdmin) { refreshAdminBadge(); if (!window.__adminBadgeTimer) window.__adminBadgeTimer = setInterval(refreshAdminBadge, 60000); }
   db.from('profiles').update({last_seen:new Date().toISOString()}).eq('id', user.id).then(function(){});
   revealAuthUI();
   await loadProfile();
   if (userProfile && userProfile.disabled) {
-    if (confirm('Ton compte est désactivé. Le réactiver maintenant ?')) {
+    if (confirm('Your account is deactivated. Reactivate it now?')) {
       await db.from('profiles').update({disabled:false}).eq('id', currentUser.id);
       await db.from('listings').update({active:true}).eq('user_id', currentUser.id);
       userProfile.disabled = false;
@@ -1501,6 +1511,7 @@ function clearUser() {
   if (notifChannel) { db.removeChannel(notifChannel); notifChannel = null; }
   document.getElementById('guestNav').style.display = 'flex';
   document.getElementById('userNav').style.display = 'none';
+  var am = document.getElementById('adminMenuItem'); if (am) am.style.display = 'none';
 }
 
 async function loadProfile() {
@@ -1528,9 +1539,9 @@ async function doLogin() {
   var email = document.getElementById('loginEmail').value.trim();
   var pwd = document.getElementById('loginPassword').value;
   if (!email || !pwd) return showAlert('loginAlert','error','Fill in all fields!');
-  setBtn('loginBtn', true, 'Connexion…');
+  setBtn('loginBtn', true, 'Signing in…');
   var res = await db.auth.signInWithPassword({email, password: pwd});
-  setBtn('loginBtn', false, 'Se connecter');
+  setBtn('loginBtn', false, 'Sign in');
   if (res.error) return showAlert('loginAlert','error','Incorrect email or password.');
   try {
     var aal = await db.auth.mfa.getAuthenticatorAssuranceLevel();
@@ -1554,11 +1565,12 @@ async function doRegister() {
   if (username.length < 3) return showAlert('registerAlert','error','Username too short (min. 3 characters).');
   if (pwd.length < 6) return showAlert('registerAlert','error','Password too short (min. 6 characters).');
   var check = await db.from('profiles').select('id').eq('username', username).maybeSingle();
-  if (check.data) return showAlert('registerAlert','error','Nom d\'utilisateur indisponible.');
-  setBtn('registerBtn', true, 'Création…');
+  if (check.data) return showAlert('registerAlert','error','Username unavailable.');
+  setBtn('registerBtn', true, 'Creating…');
+  try { await db.auth.signOut({ scope: 'local' }); } catch(e){}
   var refCode = localStorage.getItem('bm_ref') || '';
   var res = await db.auth.signUp({email, password: pwd, options:{data:{username, ref_code: refCode}}});
-  setBtn('registerBtn', false, 'Créer mon compte');
+  setBtn('registerBtn', false, 'Create my account');
   if (res.error) return showAlert('registerAlert','error', res.error.message);
   hideModal('registerModal');
   showToast('Account created! Check your email 🎉','success');
@@ -3170,7 +3182,8 @@ async function loadAdminPage() {
   var withdrawsRes = await db.from('withdrawals').select('id',{count:'exact',head:true}).eq('status','pending');
   var sellersRes = await db.from('profiles').select('id',{count:'exact',head:true}).eq('id_verified', true);
   var vsRes = await db.rpc('visit_stats'); var v = (vsRes && vsRes.data) ? vsRes.data : {};
-  document.getElementById('adminStats').innerHTML = [
+  var vsWarn = (vsRes && vsRes.error) ? '<div style="grid-column:1/-1;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#FCA5A5;padding:11px;border-radius:9px;font-size:12px;margin-bottom:6px">⚠️ Visitor stats are inactive. Run <strong>bloomarket_visits.sql</strong> in Supabase (SQL Editor) to enable them.</div>' : '';
+  document.getElementById('adminStats').innerHTML = vsWarn + [
     {l:'Users', v:usersRes.count||0}, {l:'Active listings', v:listingsRes.count||0},
     {l:'Orders', v:ordersRes.count||0}, {l:'Verified sellers', v:sellersRes.count||0}, {l:'Platform revenue', v:totalRevenue.toFixed(2)+'€'}, {l:'Pending withdrawals', v:withdrawsRes.count||0}, {l:'🟢 Active now', v:(v.active||0)}, {l:'Visitors today', v:(v.today||0)}, {l:'Visitors (7 days)', v:(v.week||0)}, {l:'Visitors (30 days)', v:(v.month||0)}
   ].map(function(s){return '<div class="dc"><div class="dc-l">'+s.l+'</div><div class="dc-v">'+s.v+'</div></div>';}).join('');
