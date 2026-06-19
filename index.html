@@ -1379,6 +1379,7 @@ function gameDetailFallback(game, emoji){ return GAME_IMG[game] ? '<img class="l
 function gameCartIc(game, emoji){ return GAME_IMG[game] ? '<img src="'+GAME_IMG[game]+'" alt="'+escHtml(game)+'">' : emoji; }
 var RATING_LABELS = ['','Très mauvais 😤','Mauvais 😕','Correct 😐','Bien 😊','Excellent ! 🎉'];
 var ADMIN_EMAILS = ['aronbibale@gmail.com']; // compte admin du site
+var SITE_URL = 'https://www.bloomarket.fr'; // domaine officiel (liens partageables)
 
 /* ── STATE ── */
 var currentUser = null, userProfile = null;
@@ -2248,7 +2249,7 @@ async function toggleFavorite(id, btn) {
   }
 }
 function copyListingLink(id) {
-  var url = location.origin + location.pathname + '#/listing/' + id;
+  var url = SITE_URL + '/#/listing/' + id;
   function fallback(){ try { prompt('Copie ce lien :', url); } catch(e){} }
   try {
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(function(){ showToast('Link copied ✅','success'); }, fallback);
@@ -3582,7 +3583,7 @@ async function submitSellerVerify() {
 
 async function loadReferral() {
   var code = (userProfile && userProfile.referral_code) || '';
-  var link = location.origin + (code ? ('?ref=' + code) : '');
+  var link = SITE_URL + (code ? ('?ref=' + code) : '');
   var li = document.getElementById('referralLink'); if (li) li.value = link;
   var cnt = await db.from('profiles').select('id',{count:'exact',head:true}).eq('referred_by', currentUser.id);
   var ce = document.getElementById('referralCount'); if (ce) ce.textContent = cnt.count || 0;
