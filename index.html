@@ -1866,15 +1866,19 @@ async function adminSupport(el) {
   if (el) el.classList.add('active');
   var content = document.getElementById('adminContent');
   content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Loading…</div>';
-  var res = await db.from('support_tickets').select('*, profiles(username)').order('created_at',{ascending:false}).limit(100);
-  if (res.error) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Active le SQL support_tickets pour voir les signalements remontés par l IA.</div>'; return; }
+  var res = await db.from('support_tickets').select('*').order('created_at',{ascending:false}).limit(100);
+  if (res.error) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Run the support_tickets SQL to view reports and AI escalations.</div>'; return; }
   if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No report.</div>'; return; }
-  var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span>Utilisateur</span><span>Message</span><span>Statut</span><span>Action</span></div>';
+  var names = {};
+  var ids = [];
+  res.data.forEach(function(t){ if (t.user_id && ids.indexOf(t.user_id) === -1) ids.push(t.user_id); });
+  if (ids.length) { try { var pr = await db.from('profiles').select('id,username').in('id', ids); if (pr.data) pr.data.forEach(function(p){ names[p.id] = p.username; }); } catch(e){} }
+  var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span>User</span><span>Message</span><span>Status</span><span>Action</span></div>';
   res.data.forEach(function(tk){
-    var uname = (tk.profiles && tk.profiles.username) || '—';
+    var uname = names[tk.user_id] || (tk.user_id ? tk.user_id.slice(0,8) : '—');
     var sb = tk.status === 'open' ? '<span class="badge-wait">Open</span>' : '<span class="badge-ok">Resolved</span>';
     var act = tk.status === 'open' ? '<button onclick="adminResolveTicket(' + tk.id + ')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Resolve</button>' : '—';
-    html += '<div class="admin-table-row" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span style="font-weight:600">' + escHtml(uname) + '<br><span style="font-size:10px;color:var(--muted)">' + new Date(tk.created_at).toLocaleString('fr-FR') + '</span></span><span style="color:var(--muted2);font-size:11px">' + (tk.type==='report'?'🚩 ':'🤖 ') + escHtml(tk.message || '') + '</span>' + sb + '<span>' + act + '</span></div>';
+    html += '<div class="admin-table-row" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span style="font-weight:600">' + escHtml(uname) + '<br><span style="font-size:10px;color:var(--muted)">' + new Date(tk.created_at).toLocaleString('en-GB') + '</span></span><span style="color:var(--muted2);font-size:11px">' + (tk.type==='report'?'🚩 ':'🤖 ') + escHtml(tk.message || '') + '</span>' + sb + '<span>' + act + '</span></div>';
   });
   content.innerHTML = html + '</div>';
 }
