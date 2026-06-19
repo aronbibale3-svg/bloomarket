@@ -638,7 +638,7 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-item" onclick="showPage('messages')">💬 Messages</div>
         <div class="ud-item" onclick="openSettings()">⚙️ Settings</div>
         <div class="ud-sep"></div>
-        <div class="ud-item" id="becomeSellerItem" onclick="showModal('sellerVerifyModal')">🛡️ Become a verified seller</div>
+        <div class="ud-item" id="becomeSellerItem" onclick="openSellerVerify()">🛡️ Become a verified seller</div>
         <div class="ud-item" onclick="openShop()">🔷 Bloobux shop</div>
         <div class="ud-item" onclick="openSellModal()">➕ Sell an item</div>
         <div class="ud-item" onclick="showPage('withdrawPage')">💸 Withdraw funds</div>
@@ -1219,7 +1219,7 @@ body.auth-loading #userNav{display:none!important}
       <div class="img-preview-row" id="svIdPreview"></div>
     </div>
     <label class="filter-check" style="margin:6px 0 14px"><input type="checkbox" id="svAge"> Je certifie avoir 18 ans ou plus</label>
-    <button class="btn-submit" id="svBtn" onclick="submitSellerVerify()">Envoyer ma demande</button>
+    <button class="btn-submit" id="svBtn" onclick="submitSellerVerify()">Send my request</button>
   </div>
 </div>
 
@@ -1993,7 +1993,7 @@ async function adminResolveTicket(id) {
 var currentPromoteId = null;
 function heroBecomeSeller() {
   if (!currentUser) { showToast('Create an account first to become a seller','info'); showModal('registerModal'); return; }
-  showModal('sellerVerifyModal');
+  openSellerVerify();
 }
 function openPromote(id) {
   currentPromoteId = id;
@@ -2462,7 +2462,7 @@ async function doSell() {
   if (!userProfile || !userProfile.id_verified) {
     hideModal('sellModal');
     showToast('You must be a verified seller to publish','error');
-    setTimeout(function(){ showModal('sellerVerifyModal'); }, 500);
+    setTimeout(function(){ openSellerVerify(); }, 500);
     return;
   }
   var title = document.getElementById('sellTitle').value.trim();
@@ -2723,7 +2723,29 @@ function updateCartBadge() {
   else badge.style.display = 'none';
 }
 
-function openSellModal() { showModal('sellModal'); renderSellAttrFields(); }
+async function openSellModal() {
+  if (!currentUser) { showModal('loginModal'); return; }
+  await loadProfile();
+  if (userProfile && userProfile.id_verified) { showModal('sellModal'); renderSellAttrFields(); return; }
+  showToast('You must be a verified seller to sell','info');
+  openSellerVerify();
+}
+async function openSellerVerify() {
+  if (!currentUser) { showModal('loginModal'); return; }
+  await loadProfile();
+  if (userProfile && userProfile.id_verified) { showToast('You are already a verified seller ✅','success'); return; }
+  var b = document.getElementById('svBtn');
+  var al = document.getElementById('sellerVerifyAlert');
+  var pend = await db.from('seller_requests').select('id,status').eq('user_id', currentUser.id).order('created_at',{ascending:false}).limit(1);
+  showModal('sellerVerifyModal');
+  if (pend.data && pend.data.length && pend.data[0].status === 'pending') {
+    if (al) al.innerHTML = '<div style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.35);color:#FBBF24;padding:12px;border-radius:9px;font-size:13px">⏳ Your seller request has been sent and is <strong>pending validation</strong>. You can start selling as soon as an admin approves it.</div>';
+    if (b) { b.disabled = true; b.textContent = 'Pending validation…'; b.style.opacity = '0.6'; b.style.cursor = 'not-allowed'; }
+  } else {
+    if (al) al.innerHTML = '';
+    if (b) { b.disabled = false; b.textContent = 'Send my request'; b.style.opacity = ''; b.style.cursor = ''; }
+  }
+}
 function quickSell() { if (!currentUser) { showModal('loginModal'); return; } openSellModal(); }
 
 function renderItemPicker() {
@@ -3563,8 +3585,8 @@ function previewSvId(input) {
 async function submitSellerVerify() {
   if (!currentUser) return showModal('loginModal');
   if (!document.getElementById('svAge').checked) return showAlert('sellerVerifyAlert','error','You must certify you are 18 or older.');
-  if (!svIdFile) return showAlert('sellerVerifyAlert','error','Ajoute une photo de ta pièce d\'identité.');
-  setBtn('svBtn', true, 'Envoi…');
+  if (!svIdFile) return showAlert('sellerVerifyAlert','error','Add a photo of your ID document.');
+  setBtn('svBtn', true, 'Sending…');
   var phone = document.getElementById('svPhone').value.trim();
   var path = null;
   try {
@@ -3575,7 +3597,7 @@ async function submitSellerVerify() {
   } catch(e) { path = null; }
   var ins = await db.from('seller_requests').insert({user_id:currentUser.id, id_card_url:path, phone:phone, age_confirmed:true, status:'pending'});
   if (phone) db.from('profiles').update({phone:phone, age_confirmed:true}).eq('id', currentUser.id).then(function(){});
-  setBtn('svBtn', false, 'Envoyer ma demande');
+  setBtn('svBtn', false, 'Send my request');
   if (ins.error) return showAlert('sellerVerifyAlert','error','Error: ' + ins.error.message);
   hideModal('sellerVerifyModal');
   showToast('Request sent ✅ Reply after review by the admin','success');
