@@ -664,6 +664,7 @@ body.auth-loading #userNav{display:none!important}
         <div><div class="hb-stat-n" id="statSellers">0</div><div class="hb-stat-l">Sellers</div></div>
         <div><div class="hb-stat-n">24/7</div><div class="hb-stat-l">Support</div></div>
       </div>
+      <button id="heroSellerBtn" onclick="heroBecomeSeller()" style="margin-top:16px;background:linear-gradient(135deg,#1E6FFF,#0050CC);border:none;color:#fff;font-weight:800;font-size:13px;padding:11px 20px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 6px 18px rgba(30,111,255,0.35)">🛡️ Become a seller</button>
     </div>
     <div style="font-size:64px;opacity:.7;flex-shrink:0">🛒</div>
   </div>
@@ -907,6 +908,19 @@ body.auth-loading #userNav{display:none!important}
     <div class="fg"><label>Password</label><input type="password" id="registerPassword" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')doRegister()"></div>
     <button class="btn-submit" id="registerBtn" onclick="doRegister()">Create my account</button>
     <p class="sw">Already have an account? <a onclick="switchModal('registerModal','loginModal')">Sign in</a></p>
+  </div>
+</div>
+
+<!-- Confirmation email par code -->
+<div class="overlay" id="confirmEmailModal" onclick="closeOnBg(event,'confirmEmailModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('confirmEmailModal')">✕</button>
+    <div class="modal-h">Verify your email 📧</div>
+    <div class="modal-sub">Enter the 6-digit code we sent to your email.</div>
+    <div id="confirmEmailAlert"></div>
+    <div class="fg"><label>Verification code</label><input type="text" id="confirmCode" placeholder="6-digit code" inputmode="numeric" onkeydown="if(event.key==='Enter')verifyRegisterCode()"></div>
+    <button class="btn-submit" id="confirmEmailBtn" onclick="verifyRegisterCode()">Verify</button>
+    <p class="sw"><a onclick="resendRegisterCode()">Resend code</a></p>
   </div>
 </div>
 
@@ -1518,6 +1532,7 @@ function clearUser() {
   document.getElementById('guestNav').style.display = 'flex';
   document.getElementById('userNav').style.display = 'none';
   var am = document.getElementById('adminMenuItem'); if (am) am.style.display = 'none';
+  var hsb = document.getElementById('heroSellerBtn'); if (hsb) hsb.style.display = 'inline-block';
 }
 
 async function loadProfile() {
@@ -1534,6 +1549,7 @@ async function loadProfile() {
     if (res.data.id_verified) { vs.className = 'ud-verify-status verified'; vs.innerHTML = '✓ Vérifié'; }
     else { vs.className = 'ud-verify-status unverified'; vs.innerHTML = '⚠ Non vérifié'; }
     var bsItem = document.getElementById('becomeSellerItem'); if (bsItem) bsItem.style.display = res.data.id_verified ? 'none' : 'flex';
+    var hsb = document.getElementById('heroSellerBtn'); if (hsb) hsb.style.display = res.data.id_verified ? 'none' : 'inline-block';
     if (res.data.avatar_url) {
       var img = '<img src="' + res.data.avatar_url + '" onerror="this.style.display=\'none\'">';
       document.getElementById('userAvatar').innerHTML = img + '<span id="userAvatarText" style="display:none">' + res.data.username[0].toUpperCase() + '</span>';
@@ -1578,8 +1594,33 @@ async function doRegister() {
   var res = await db.auth.signUp({email, password: pwd, options:{data:{username, ref_code: refCode}}});
   setBtn('registerBtn', false, 'Create my account');
   if (res.error) return showAlert('registerAlert','error', res.error.message);
-  hideModal('registerModal');
-  showToast('Account created! Check your email 🎉','success');
+  if (!res.data || !res.data.session) {
+    pendingRegEmail = email;
+    document.getElementById('registerAlert').innerHTML = '';
+    hideModal('registerModal');
+    showModal('confirmEmailModal');
+    showToast('Code sent to your email 📧','success');
+  } else {
+    hideModal('registerModal');
+    showToast('Account created! 🎉','success');
+  }
+}
+var pendingRegEmail = '';
+async function verifyRegisterCode() {
+  var code = (document.getElementById('confirmCode').value || '').trim();
+  if (code.length < 4) return showAlert('confirmEmailAlert','error','Enter the 6-digit code.');
+  setBtn('confirmEmailBtn', true, 'Verifying…');
+  var res = await db.auth.verifyOtp({ email: pendingRegEmail, token: code, type: 'signup' });
+  setBtn('confirmEmailBtn', false, 'Verify');
+  if (res.error) return showAlert('confirmEmailAlert','error','Incorrect or expired code.');
+  hideModal('confirmEmailModal');
+  showToast('Email verified ✅ Welcome!','success');
+}
+async function resendRegisterCode() {
+  if (!pendingRegEmail) return;
+  var r = await db.auth.resend({ type: 'signup', email: pendingRegEmail });
+  if (r.error) showAlert('confirmEmailAlert','error', r.error.message);
+  else showToast('New code sent 📧','success');
 }
 
 /* ══ Reset mot de passe par code email (sur le site, sans lien) ══ */
@@ -1949,6 +1990,10 @@ async function adminResolveTicket(id) {
 }
 
 var currentPromoteId = null;
+function heroBecomeSeller() {
+  if (!currentUser) { showToast('Create an account first to become a seller','info'); showModal('registerModal'); return; }
+  showModal('sellerVerifyModal');
+}
 function openPromote(id) {
   currentPromoteId = id;
   var tiers = [{d:1,c:5,l:'24 hours'},{d:3,c:10,l:'3 days'},{d:7,c:20,l:'7 days'},{d:30,c:50,l:'30 days'}];
