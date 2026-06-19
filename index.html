@@ -911,16 +911,17 @@ body.auth-loading #userNav{display:none!important}
   </div>
 </div>
 
-<!-- Confirmation email par code -->
-<div class="overlay" id="confirmEmailModal" onclick="closeOnBg(event,'confirmEmailModal')">
+<!-- Confirmation email par lien -->
+<div class="overlay" id="checkEmailModal" onclick="closeOnBg(event,'checkEmailModal')">
   <div class="modal">
-    <button class="modal-close" onclick="hideModal('confirmEmailModal')">✕</button>
-    <div class="modal-h">Verify your email 📧</div>
-    <div class="modal-sub">Enter the 6-digit code we sent to your email.</div>
-    <div id="confirmEmailAlert"></div>
-    <div class="fg"><label>Verification code</label><input type="text" id="confirmCode" placeholder="6-digit code" inputmode="numeric" onkeydown="if(event.key==='Enter')verifyRegisterCode()"></div>
-    <button class="btn-submit" id="confirmEmailBtn" onclick="verifyRegisterCode()">Verify</button>
-    <p class="sw"><a onclick="resendRegisterCode()">Resend code</a></p>
+    <button class="modal-close" onclick="hideModal('checkEmailModal')">✕</button>
+    <div style="text-align:center">
+      <div style="font-size:46px;margin-bottom:4px">📧</div>
+      <div class="modal-h">Check your email</div>
+      <div class="modal-sub">We sent you a confirmation link. Click it to activate your account — you'll be brought back here and logged in automatically.</div>
+      <button class="btn-submit" onclick="hideModal('checkEmailModal')">Got it</button>
+      <p class="sw" style="margin-top:10px;color:var(--muted)">Tip: check your spam folder if you don't see it.</p>
+    </div>
   </div>
 </div>
 
@@ -1466,6 +1467,7 @@ async function init() {
   try { var _ref = new URLSearchParams(location.search).get('ref'); if (_ref) localStorage.setItem('bm_ref', _ref.toUpperCase()); } catch(e){}
   handlePaymentReturn();
   if (/type=recovery/.test(location.hash) || /[?&]type=recovery/.test(location.search)) { setTimeout(function(){ revealAuthUI(); showModal('resetPasswordModal'); }, 600); }
+  if (/type=signup/.test(location.hash) || /[?&]type=signup/.test(location.search)) { setTimeout(function(){ showToast('Email confirmed ✅ Welcome!','success'); try { history.replaceState({}, '', location.origin + location.pathname); } catch(e){} }, 900); }
   updateCartBadge();
   renderSellAttrFields();
   db.auth.onAuthStateChange(function(event, session) { handleAuthChange(event, session); });
@@ -1592,15 +1594,13 @@ async function doRegister() {
   setBtn('registerBtn', true, 'Creating…');
   try { await db.auth.signOut({ scope: 'local' }); } catch(e){}
   var refCode = localStorage.getItem('bm_ref') || '';
-  var res = await db.auth.signUp({email, password: pwd, options:{data:{username, ref_code: refCode}}});
+  var res = await db.auth.signUp({email, password: pwd, options:{ emailRedirectTo: SITE_URL, data:{username, ref_code: refCode}}});
   setBtn('registerBtn', false, 'Create my account');
   if (res.error) return showAlert('registerAlert','error', res.error.message);
   if (!res.data || !res.data.session) {
-    pendingRegEmail = email;
     document.getElementById('registerAlert').innerHTML = '';
     hideModal('registerModal');
-    showModal('confirmEmailModal');
-    showToast('Code sent to your email 📧','success');
+    showModal('checkEmailModal');
   } else {
     hideModal('registerModal');
     showToast('Account created! 🎉','success');
