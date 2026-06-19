@@ -1204,6 +1204,15 @@ body.auth-loading #userNav{display:none!important}
   </div>
 </div>
 
+<!-- Ticket / Signalement -->
+<div class="overlay" id="ticketModal" onclick="closeOnBg(event,'ticketModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('ticketModal')">✕</button>
+    <div class="modal-h">Report / Message 🚩</div>
+    <div id="ticketContent"></div>
+  </div>
+</div>
+
 <!-- Boutique Bloobux -->
 <div class="overlay" id="shopModal" onclick="closeOnBg(event,'shopModal')">
   <div class="modal" style="max-width:460px">
@@ -1873,14 +1882,46 @@ async function adminSupport(el) {
   var ids = [];
   res.data.forEach(function(t){ if (t.user_id && ids.indexOf(t.user_id) === -1) ids.push(t.user_id); });
   if (ids.length) { try { var pr = await db.from('profiles').select('id,username').in('id', ids); if (pr.data) pr.data.forEach(function(p){ names[p.id] = p.username; }); } catch(e){} }
+  window.__adminNames = names; window.__adminTickets = {};
   var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span>User</span><span>Message</span><span>Status</span><span>Action</span></div>';
   res.data.forEach(function(tk){
+    window.__adminTickets[tk.id] = tk;
     var uname = names[tk.user_id] || (tk.user_id ? tk.user_id.slice(0,8) : '—');
     var sb = tk.status === 'open' ? '<span class="badge-wait">Open</span>' : '<span class="badge-ok">Resolved</span>';
-    var act = tk.status === 'open' ? '<button onclick="adminResolveTicket(' + tk.id + ')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Resolve</button>' : '—';
+    var act = '<button onclick="openTicket(' + tk.id + ')" class="btn-sm" style="font-size:10px;background:rgba(30,111,255,0.15);border:1px solid rgba(30,111,255,0.3);color:var(--blue2);padding:3px 8px;border-radius:6px;cursor:pointer;font-family:Inter,sans-serif">👁 View</button>' + (tk.status === 'open' ? ' <button onclick="adminResolveTicket(' + tk.id + ')" class="btn-sm btn-sm-green" style="font-size:10px">✅</button>' : '');
     html += '<div class="admin-table-row" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span style="font-weight:600">' + escHtml(uname) + '<br><span style="font-size:10px;color:var(--muted)">' + new Date(tk.created_at).toLocaleString('en-GB') + '</span></span><span style="color:var(--muted2);font-size:11px">' + (tk.type==='report'?'🚩 ':'🤖 ') + escHtml(tk.message || '') + '</span>' + sb + '<span>' + act + '</span></div>';
   });
   content.innerHTML = html + '</div>';
+}
+async function openTicket(id) {
+  var tk = window.__adminTickets ? window.__adminTickets[id] : null;
+  if (!tk) return;
+  var uname = (window.__adminNames && window.__adminNames[tk.user_id]) || (tk.user_id ? tk.user_id.slice(0,8) : '—');
+  var typeLabel = tk.type === 'report' ? '🚩 User report' : '🤖 AI escalation';
+  var c = document.getElementById('ticketContent');
+  c.innerHTML = '<p class="settings-desc" style="margin-bottom:10px">' + typeLabel + ' · ' + new Date(tk.created_at).toLocaleString('en-GB') + '</p>'
+    + '<div class="fg"><label>User</label><div style="font-weight:600">' + escHtml(uname) + '</div></div>'
+    + '<div class="fg"><label>Email</label><div id="ticketEmail" style="color:var(--blue2);font-size:13px">Loading…</div></div>'
+    + '<div class="fg"><label>Message</label><div style="white-space:pre-wrap;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:11px;font-size:13px;line-height:1.5">' + escHtml(tk.message || '') + '</div></div>'
+    + '<div style="display:flex;gap:8px;margin-top:14px">'
+    + '<button class="btn-submit" style="flex:1;margin:0" onclick="openTicketReply(\'' + tk.user_id + '\',\'' + escHtml(uname).replace(/[\'\\]/g,"") + '\')">💬 Reply in chat</button>'
+    + (tk.status === 'open' ? '<button class="btn-ghost" onclick="adminResolveTicket(' + tk.id + ');hideModal(\'ticketModal\')">✅ Resolve</button>' : '')
+    + '</div>';
+  showModal('ticketModal');
+  try {
+    var r = await db.rpc('get_user_email', { p_user_id: tk.user_id });
+    var em = (r && r.data) ? r.data : null;
+    var box = document.getElementById('ticketEmail');
+    if (box) box.innerHTML = em ? (escHtml(em) + ' <button onclick="copyText(\'' + em + '\')" class="btn-sm" style="font-size:10px;margin-left:6px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:2px 7px;border-radius:6px;cursor:pointer">📋 Copy</button>') : '— (run get_user_email SQL)';
+  } catch(e){ var bx = document.getElementById('ticketEmail'); if (bx) bx.textContent = '— (run get_user_email SQL)'; }
+}
+function openTicketReply(userId, username) {
+  hideModal('ticketModal');
+  openChat(userId, username || 'User', 0);
+}
+function copyText(t) {
+  try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function(){ showToast('Copied ✅','success'); }); else prompt('Copy:', t); }
+  catch(e){ prompt('Copy:', t); }
 }
 async function adminResolveTicket(id) {
   await db.from('support_tickets').update({ status:'resolved' }).eq('id', id);
