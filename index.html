@@ -639,7 +639,7 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-item" onclick="openShop()">🔷 Bloobux shop</div>
         <div class="ud-item" onclick="openSellModal()">➕ Sell an item</div>
         <div class="ud-item" onclick="showPage('withdrawPage')">💸 Withdraw funds</div>
-        <div id="adminMenuItem" style="display:none"><div class="ud-sep"></div><div class="ud-item" onclick="showPage('adminPage')" style="color:#FBBF24">⚙️ Administration</div></div>
+        <div id="adminMenuItem" style="display:none"><div class="ud-sep"></div><div class="ud-item" onclick="showPage('adminPage')" style="color:#FBBF24">⚙️ Administration <span id="adminTicketBadge" style="display:none;background:#EF4444;color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:10px;margin-left:6px"></span></div></div>
         <div class="ud-sep"></div>
         <div class="ud-item" onclick="logout()" style="color:#FCA5A5">🚪 Log out</div>
       </div>
@@ -815,7 +815,7 @@ body.auth-loading #userNav{display:none!important}
     <button class="admin-tab" onclick="adminTab('disputes',this)">⚖️ Disputes</button>
     <button class="admin-tab" onclick="adminTab('withdraws',this)">💸 Withdrawals</button>
     <button class="admin-tab" onclick="adminTab('aconv',this)">💬 Conversations</button>
-    <button class="admin-tab" onclick="adminSupport(this)">🚩 Reports</button>
+    <button class="admin-tab" id="reportsTab" onclick="adminSupport(this)">🚩 Reports</button>
   </div>
   <div id="adminContent"></div>
 </div>
@@ -1468,7 +1468,7 @@ async function setUser(user) {
   document.getElementById('userName').textContent = name;
   document.getElementById('userAvatarText').textContent = name[0].toUpperCase();
   document.getElementById('dashUsername').textContent = name;
-  if (ADMIN_EMAILS.includes(user.email)) document.getElementById('adminMenuItem').style.display = 'block';
+  if (ADMIN_EMAILS.includes(user.email)) { document.getElementById('adminMenuItem').style.display = 'block'; refreshAdminBadge(); if (!window.__adminBadgeTimer) window.__adminBadgeTimer = setInterval(refreshAdminBadge, 60000); }
   db.from('profiles').update({last_seen:new Date().toISOString()}).eq('id', user.id).then(function(){});
   revealAuthUI();
   await loadProfile();
@@ -1850,6 +1850,17 @@ async function aiEscalate() {
 }
 
 /* ══ ADMIN : signalements IA ══ */
+async function refreshAdminBadge() {
+  if (!currentUser || !ADMIN_EMAILS.includes(currentUser.email)) return;
+  try {
+    var r = await db.from('support_tickets').select('id',{count:'exact',head:true}).eq('status','open');
+    var n = r.count || 0;
+    var b = document.getElementById('adminTicketBadge');
+    if (b) { if (n > 0) { b.textContent = n; b.style.display = 'inline-block'; } else b.style.display = 'none'; }
+    var tab = document.getElementById('reportsTab');
+    if (tab) tab.textContent = n > 0 ? ('🚩 Reports (' + n + ')') : '🚩 Reports';
+  } catch(e){}
+}
 async function adminSupport(el) {
   document.querySelectorAll('.admin-tab').forEach(function(t){ t.classList.remove('active'); });
   if (el) el.classList.add('active');
@@ -1870,6 +1881,7 @@ async function adminSupport(el) {
 async function adminResolveTicket(id) {
   await db.from('support_tickets').update({ status:'resolved' }).eq('id', id);
   adminSupport(document.querySelector('.admin-tab.active'));
+  refreshAdminBadge();
 }
 
 var currentPromoteId = null;
@@ -1897,13 +1909,13 @@ async function doPromote(days) {
 async function reportUser() {
   if (!currentUser) { showToast('Log in to report.','error'); return; }
   if (!currentChatOther) return;
-  var reason = prompt('Pourquoi signales-tu cet utilisateur ? (arnaque, spam, insultes, contenu interdit…)');
+  var reason = prompt('Why are you reporting this user? (scam, spam, insults, forbidden content…)');
   if (!reason) return;
-  var other = (document.getElementById('chatTitle') || {}).textContent || 'utilisateur';
+  var other = (document.getElementById('chatTitle') || {}).textContent || 'user';
   try {
-    var r = await db.from('support_tickets').insert({ user_id: currentUser.id, type:'report', message: '🚩 Signalement de ' + other + ' (' + currentChatOther + ') : ' + reason.slice(0,400) });
+    var r = await db.from('support_tickets').insert({ user_id: currentUser.id, type:'report', status:'open', message: '🚩 Report of ' + other + ' (' + currentChatOther + '): ' + reason.slice(0,400) });
     if (r.error) throw r.error;
-    showToast('Report sent to the team. Thank you 🙏','success');
+    showToast('Report sent to the team. Thank you 🙏','success'); refreshAdminBadge();
   } catch(e){ showToast('Enable the support_tickets SQL for reports.','error'); }
 }
 
