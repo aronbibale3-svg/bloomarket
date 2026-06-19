@@ -589,26 +589,26 @@ body.auth-loading #userNav{display:none!important}
   </div>
   <div class="search-main">
     <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Rechercher un item Roblox..." oninput="handleSearch()">
+    <input type="text" id="searchInput" placeholder="Search a Roblox item..." oninput="handleSearch()">
   </div>
   <div class="nav-r">
     <div id="authLoader" class="auth-loader"><span class="auth-spin"></span></div>
-    <button class="cart-btn" id="themeToggle" onclick="toggleTheme()" title="Thème clair / sombre" style="font-size:15px">🌙</button>
+    <button class="cart-btn" id="themeToggle" onclick="toggleTheme()" title="Light / dark theme" style="font-size:15px">🌙</button>
     <div id="guestNav" style="display:flex;gap:7px">
-      <button class="btn-ghost" onclick="showModal('loginModal')">Connexion</button>
-      <button class="btn-blue" onclick="showModal('registerModal')">Inscription</button>
+      <button class="btn-ghost" onclick="showModal('loginModal')">Login</button>
+      <button class="btn-blue" onclick="showModal('registerModal')">Sign up</button>
     </div>
     <div id="userNav" style="display:none;align-items:center;gap:7px">
       <div class="cart-btn" onclick="showPage('messages')" title="Messages" style="position:relative">💬<div class="cart-badge" id="msgBadge" style="display:none">0</div></div>
-      <div class="sell-btn" onclick="quickSell()" title="Vendre un item">+</div>
-      <div class="cart-btn" onclick="openCartModal()" title="Mon panier">
+      <div class="sell-btn" onclick="quickSell()" title="Sell an item">+</div>
+      <div class="cart-btn" onclick="openCartModal()" title="My cart">
         🛒<div class="cart-badge" id="cartBadge">0</div>
       </div>
       <div class="notif-btn" style="position:relative" onclick="toggleNotifPanel()">
         🔔<div class="notif-badge" id="notifBadge">0</div>
         <div class="notif-panel" id="notifPanel">
           <div class="notif-panel-header">Notifications <a onclick="markAllNotifsRead(event)">Tout lire</a></div>
-          <div id="notifList"><div class="notif-empty">Aucune notification</div></div>
+          <div id="notifList"><div class="notif-empty">No notification</div></div>
         </div>
       </div>
       <div class="account-icon" onclick="toggleAccountDropdown()">
@@ -617,23 +617,23 @@ body.auth-loading #userNav{display:none!important}
         <span class="account-arrow">▼</span>
       </div>
       <div class="account-dropdown" id="accountDropdown">
-        <div class="ud-balance">💰 Solde : <span id="dropBalance">0.00</span>€</div>
-        <div class="ud-balance" style="color:var(--blue2)" title="Points de fidélité (non convertibles)">🔷 <span id="dropBloobux">0</span> Bloobux</div>
+        <div class="ud-balance">💰 Balance: <span id="dropBalance">0.00</span>€</div>
+        <div class="ud-balance" style="color:var(--blue2)" title="Loyalty points (non-convertible)">🔷 <span id="dropBloobux">0</span> Bloobux</div>
         <div class="ud-verify-status unverified" id="udVerifyStatus">⚠ Non vérifié</div>
-        <div class="ud-item" onclick="showPage('profile')">👤 Mon profil</div>
-        <div class="ud-item" onclick="toggleTheme()">🌙 Thème clair / sombre</div>
+        <div class="ud-item" onclick="showPage('profile')">👤 My profile</div>
+        <div class="ud-item" onclick="toggleTheme()">🌙 Light / dark theme</div>
         <div class="ud-item" onclick="showPage('dashboard')">📊 Dashboard</div>
-        <div class="ud-item" onclick="showPage('orders')">📦 Mes commandes</div>
+        <div class="ud-item" onclick="showPage('orders')">📦 My orders</div>
         <div class="ud-item" onclick="showPage('messages')">💬 Messages</div>
-        <div class="ud-item" onclick="openSettings()">⚙️ Paramètres</div>
+        <div class="ud-item" onclick="openSettings()">⚙️ Settings</div>
         <div class="ud-sep"></div>
-        <div class="ud-item" id="becomeSellerItem" onclick="showModal('sellerVerifyModal')">🛡️ Devenir vendeur vérifié</div>
-        <div class="ud-item" onclick="openShop()">🔷 Boutique Bloobux</div>
-        <div class="ud-item" onclick="openSellModal()">➕ Vendre un item</div>
-        <div class="ud-item" onclick="showPage('withdrawPage')">💸 Retirer des fonds</div>
+        <div class="ud-item" id="becomeSellerItem" onclick="showModal('sellerVerifyModal')">🛡️ Become a verified seller</div>
+        <div class="ud-item" onclick="openShop()">🔷 Bloobux shop</div>
+        <div class="ud-item" onclick="openSellModal()">➕ Sell an item</div>
+        <div class="ud-item" onclick="showPage('withdrawPage')">💸 Withdraw funds</div>
         <div id="adminMenuItem" style="display:none"><div class="ud-sep"></div><div class="ud-item" onclick="showPage('adminPage')" style="color:#FBBF24">⚙️ Administration</div></div>
         <div class="ud-sep"></div>
-        <div class="ud-item" onclick="logout()" style="color:#FCA5A5">🚪 Déconnexion</div>
+        <div class="ud-item" onclick="logout()" style="color:#FCA5A5">🚪 Log out</div>
       </div>
     </div>
   </div>
@@ -646,11 +646,11 @@ body.auth-loading #userNav{display:none!important}
 <div id="homePage" class="page show">
   <div class="hero-banner">
     <div>
-      <div class="hb-title">La marketplace Roblox de référence 🎮</div>
-      <div class="hb-sub">Achète et vends tes items en toute sécurité · Paiement Stripe · Messagerie intégrée</div>
+      <div class="hb-title">The reference Roblox marketplace 🎮</div>
+      <div class="hb-sub">Buy and sell your items safely · Stripe payment · Built-in messaging</div>
       <div class="hb-stats">
-        <div><div class="hb-stat-n" id="statListings">0</div><div class="hb-stat-l">Annonces</div></div>
-        <div><div class="hb-stat-n" id="statSellers">0</div><div class="hb-stat-l">Vendeurs</div></div>
+        <div><div class="hb-stat-n" id="statListings">0</div><div class="hb-stat-l">Listings</div></div>
+        <div><div class="hb-stat-n" id="statSellers">0</div><div class="hb-stat-l">Sellers</div></div>
         <div><div class="hb-stat-n">24/7</div><div class="hb-stat-l">Support</div></div>
       </div>
     </div>
@@ -658,7 +658,7 @@ body.auth-loading #userNav{display:none!important}
   </div>
   <div class="game-marquee" id="gameMarquee"></div>
   <div class="cat-tabs">
-    <div class="cat-tab active" onclick="filterGame('all',this)"><span class="cat-all-ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1.6"/><rect x="9" y="1" width="6" height="6" rx="1.6"/><rect x="1" y="9" width="6" height="6" rx="1.6"/><rect x="9" y="9" width="6" height="6" rx="1.6"/></svg></span> Tous</div>
+    <div class="cat-tab active" onclick="filterGame('all',this)"><span class="cat-all-ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1.6"/><rect x="9" y="1" width="6" height="6" rx="1.6"/><rect x="1" y="9" width="6" height="6" rx="1.6"/><rect x="9" y="9" width="6" height="6" rx="1.6"/></svg></span> All</div>
     <div class="cat-tab" onclick="filterGame('Steal A Brainrot',this)"><img class="cat-icon" src="data:image/webp;base64,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" alt="Steal A Brainrot"> Steal A Brainrot</div>
     <div class="cat-tab" onclick="filterGame('Blox Fruits',this)"><img class="cat-icon" src="data:image/webp;base64,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" alt="Blox Fruits"> Blox Fruits</div>
     <div class="cat-tab" onclick="filterGame('Murder Mystery 2',this)"><img class="cat-icon" src="data:image/webp;base64,UklGRqgFAABXRUJQVlA4IJwFAACwHgCdASqAAIAAPj0ejUSiIaGSiZzkIAPEoBBgGm6W/9V/IDXyuxfYB7qlT/o33q/b7Xwean4r+k/4/+pfuN/eO0B9x3uAfpH/ff6l+znaL8wH8l/sH/M/sHY49AD+lf3DrCvQA/WD0x/24+Db9nf24+A79dfv/pyXFzZr4wWWu09vSxLTR37QJpQCp+Cns5VUnR3s+ocv7CsS/G+adQMMAJIMUWcOSD4lFSOJeTUEYP/oAmDGBuy12+2J1iAuXnNvOxUz2fdvJPmmLoD/Fw1O57EYH8siyYN+0l4EZipffLVIveaMOk+41Ak72ylWzW9brSho53fjR5zhw3tjQAD+/u6qNvmIm3j0Y0am8JO83N1uC1uc1IqvpnOGao20qlj4tzl+EAmDX7KnOIMcfBa3/rZCEKGDnHef1ua17+MSi/1XnQ26fAQDecZRharPcxplVkcBA02gPJIvi+t1bq1++vBOS0YiT+aOIsi9RpqeW1C6SlUvhFwoufBeAHbyf1zREvFmC4OT5pYR0iaM57/fUZoezv8YfVr79qVAWNclqgzG29QADSyHXh+xXi4v5rqC463QurzNxquxj3/rfhdw4rrYVrHiQjZpKil+LQJgyU9zvHXjQgLbrTOQFU5qrgG8/t5QbwyuuiLPRq3vv34izxOtCGgis1GAObDUMVVt/rktZzF+XuudQf13z+Mu8MZGKGvRUOFpprGOvmordbN7fpne+3EQhz6u2/CxofYa1d3/kCdIZi80WuEGpD/rStv8ew6p8CWfL++kpVk37lhcG1e6iADcwbzB/9g95VshC+t7e4A4Lssczi/7POXK2JL77p9ODeCjQEwfkPCpiL0Oa6yxCneLbYsY6qtXkenj0YOBPBn5hL+sJ63XT//t2bPa1H9kH/XOpgIVd9QT5Xp/boAB7OHUNOEjHC/v+Hz/ZLXjKJatUI9sYUvoZHkW+moOunRAc79lqJ9bATt7tIO1rBiL3y0ydmD1ZS6A/Yb0rMPNO9rG3+WQ1iFZ490wfs48VWlmk5Gg8hC1QU2UHED+FL36XK0uff0AlAgGlxSGRZYQQK5cYYqhVjxNk7WJH+0IswTfgyT3kEiLvAooxaS0GlAgfyZJv8joX9ZAAi7wLvPJwsNT72BzY3o1xnJzPF4qJ4yqDBA/chsyUTctH4EpGfPpmqIA91wq4yEwT3fvWJBntn+EwosTU7ytkIQdakvwAvLGHji8uIidIpSnGfIg3e/WeJdD8Di1lyfSO/tBliNs1HNjcQ85RmzDDA9lK/IPKvMMLiTSrAq3fdOwFLXrumpKJW73/Gr8JOWskiLIEhLS0dSvyQa9aJiaonnMDjnfEJys2WDqzlCaljkscVhE6NtiJZw99YKWcqGZZPp6f3iOlGcDL75fj3/5+kCuKYKh4tOqcGQcyAHw/xeTrUezaq5wRnWra3ALKM5u89pH6Z+5nvE3CgKN87Fv9vcwtHgAKEqy0FoTVc4Vl62zs0dbZti7fTN/bd4XQJD0DyjEV8sZpakyW4EgcEg8r/viPvWj6iVZOuEz2h8zYBw7+GjAS0MVwtPX7JE/nMZDohLObSM2u2SctvS9DGPVDXWWDGqIhcoFSVIiaK9aMPejVEnHcD1QbxHzj0l95lb+AUTBKNW3wLL8/f4mTfHQkiVvV5LAsvq0ws48YO+uQ0ZvQRXTmtCd76UDbHuwmHJgGaDGFd8jUDqm7j1kv/OttQOUiCos6h2B/9XLW5/7pRjfmoM5i5a6S7AUT+IGZyBcBTEynDKPdveST9C+ZFJD+8IH4j1Y06shyOL0UrJfGBQZNe5FvP+wYOVY2R7QOTgOtStIogJ1mWH8UdRX+WRaXI1UJ6oH/TW9IBQRw5XI0k1OgcybSOX2kfAU7PQ1nQxQZ/v1zsJ0WgSYHlNtuQAAAA==" alt="Murder Mystery 2"> Murder Mystery 2</div>
@@ -672,22 +672,22 @@ body.auth-loading #userNav{display:none!important}
     <div class="cat-tab" onclick="filterGame('Da Hood',this)"><img class="cat-icon" src="data:image/webp;base64,UklGRkwRAABXRUJQVlA4IEARAACQRQCdASqAAIAAPl0kjkUjoiEZelc4OAXEtgBOmXG+/+S/ID8qvksq/97/rH6d9kHQn1h5TXS3/J9GHqe/Pn/W9wD9Vf9F/ZfWq9hH9V/5Pqs/ov+8/YX3nf7x/uf7H73f7f/ef1s/0fyKf2D/M9ZH6CH7l+nF7LH7n/tr7SH//01yTjpr4X/jn1n+Z/NPmmxLPl/5J/h8Uvxz1DvyX+bf5/axvqPQg9m/qv/J45vsvrnXj/sC/pv0XdFP6B/pf/b7h38x/uX/XCKErIzetj/e6h3T1uh55rE33yKRmDFjkRcxVahJnDezPIP27pWTEvfo/XpLBq/dgnoY1K6ztmOIII9+DmMqE03IfpYAdFkqoTxle8jiNk/5r/KPXALADAn0EyiBkmsnHMsugpZCX73KjSlYgEXuW2RAzwlaCFFBoUjAzTNTX3tcUv8GEag0yKqlUCQBWJcCmmvERvHFt1hfuY12K+e9UH55z4L2/yD8LGT2XY35DQecQXT5xf0QK8cZ1HF4qad3lVS/dIFjJjdc7kaWP/8MWxXqNuEgqQSZORfLxPVso51M4+vaz/Yk3ijKdF8xh/eyRT5YIiB1q0l1G/EwiRCK94e0elwQt4icOvKTEndZVFo2CxnstHlgVDmAkB0iO2O97YQSOEhMeLnwesVfPBE2feu/QThH89pxqgY3TxnQcvHi41hfYeqJYnQk2CS/YuMieDqw/DbS4rSidDajcVolxrqlMxJa3Bp6J0U/SnZAAP6m1+XI4s1KpxxESnbMm/oE6b+Ejr/1lfq6nIOe9eXDHH4e//PKwpg0s58/XVjkSDCLWyo8bSOBIiswB+dYq65+eLqGw+KIz/z5t5PrHdXRipDsCla9ouUIr//tO5PEtCIlnhogd1AB4Z3/yra1QHUgSlU/ppLceb4jkl2VOCwz+mKUOX7G0OUPSMLBTOf2CumWylVzmIr8Pqrj0VTupFdO/6zYei1aWctgUDlxtYW7xt7RmFiOP1M2Ev+Jlkrqxoq+Jyqg2yw1X3K8G2MI8G7d7RNNIbpymafyhAmSpsaHY9c2ZBte0FPGGkuCab2XTCcSxO/Hm8vznToRpZjU/hbEayzUrTz7Zocw2yIqDnUSFFs5539Xi+9fMGg8N6z7lXKdAWHq7+A6qwEJOxj1w3mtHmT1NvaizSKkG/bgwcvn++RE+z4DZxRTcJ4aMLTa4IE7TfaJDG3wYtmc4dNOXz4coYk6ib3ziUDmyZA/+wRzQc4y6Z8uAzIza4RfOl0p7+kdnLRM3nC+UqbjvxySrVFw7yGgCoUj7YuRVyd8qichOhYwlLYlgciOJ10DjZPDvPCgdfCsqazQY3baa6pJvlZ7KS+ys1sYYlmEyvN5a2U25KWykfjWintF4wM5I48irt/HhWWDnlm4AxZkrNAw3nyxxykFIl2YkcZuzNwvqy8r/BVTjrsgljGLC/edYeKGGMDjFAjJoVXOa7Ol8NFKQW3mPZ7+kOWzzMdGwI3Jd+Im59XIne3C+gSZ4Ns1gD6m1iwenT5nDfsAdXtn67NdzdkstDftUi7uBrffX7zzocGHPyZCWCoxtSbjw9pbOnJIZavmSTKqKMNePtGmW1K+8aRfnwRJ6x68Y9ZoX3b43Ppcq4ut1y0JrwyFHmvYy4ZLgNVs0Tcu3gUi8zKfSW37l+Y+H3WllK93Wy++9KtIbZ7jv7x4xDKsYRCw9s7/FTnQGhlzzT8XhFjbG7YniEDlx2ogzAkzL2B9p3OL+0nh9llVe0w4EA3LG2RurA26MdSRQOe6JnbZe8yNK4gkCmY+gmPToNfhrKfDUSH4iSo/tcW8x7rsSwUB+jw+/IqzRVaei6owxRKEP2Ljz0+DwAA275JLvGN2CeuyYEdATdTt4YuxdH6qw1qai1wHBM6dex3z5CQMMJTOTvOhy5ViDJ380DfL9sxz2anyQacnYvngFLI2/DKjKpJQxReUW7+DDv8aq9gy2cQFLhBoJ+qdAFgxolDi9HV3729v/9cFtf4j3429b492Kl+0/y44od/OKjVnoMC+QkX4K3Nexdz5xO7/OcLGcWQwAqBCmhr3qZz8oCqtFvON/vhEbR6hduJ/6wRfqEFxrksgnSiJwXbDfiztX3sVi3aQXxa2FZydNifvqO+aYi/OhQv5elXoYs3SYIq+iCHowJTA1ukEDpReCJA4PkHA6N2NaFpWQJSFZs3AgkxLlOWP70THGktL2Z/0Gf4X+/aj16eMuhGn4c/b3e7jfA2VtNPjAvw/t3UMrmi/wQC2/yell2F/+5ZFBrCfJXUBb6AdlRxCGpxvg/rWQpLPi/ymt96xSsUEUARrpwUU4DEqDJVkANnFq8XRcz6fGWaqF00ikamaFoRuHQohpfTVhXZkPsr1z+p11n6DBPvJ73nk4vsz7QBdWZ/IB5VffHgLxTce/HfE4F+ZEMFzm309u5RvExIhbbjwIJ9+UeC8tljk0H3a6eqOeuZRhK9+UIIJfBL9T0ABEADZRs2lasQloE8CEOxBfTgpflWN7j+ajIV6ZA5urZAA5CYAhBh7C+u03zQQlOWPys5mmnJoxwv7uVpbaN/w7sxkLgRFXOG8XlIST86rtvLiZ1VeBYfO8m+6P+QaOySrsjoej/JkCG9R3cKpCz5nbBPWvYq2uiKMsmUj1GK3biXctgSuujgoCI9DUcgcqElbnUkD8WXEWH8tZf0CjZohDiw6WE4+r7mbUNuCsDxQi48oUTpoc7GNBcCOwhUDDNg44WX5Nf3rz6TP+Pp+N7e/JVF2hD/MLzNB7yHwb2IrffQBZz93IAqDoPTBUzHGUQQeCNlH1784dwSv0HnhlvV5TUqlJWhTp8U9xnuF6Av7XWB7erukuo0QkulK258mgnn6q0TTHsU2bxmDRb1c7kYnMZ/2bCmOMi9tKh9cd2tCT9YyPtjyed3SCejOr45eP6i+ELsryZc8NFIGsVH3tnHQW89T5jIhlhgjHz9r0kHxqUtcnzu8Y+4Q87F3mXQ7MaYSQl8X0ZHLqssS4qj28LelqQne8/VRlNiN53/UcyHlKvaxGgD+kZ376ylxi8ptvkmw1AINfbn86xyF6w9+CLgMAtQn34BFaP5+Otu735o+Y1cr1QqWItLXFAI8oV20ZFr0YL+8S7YFWUGH8OhGmAYoJ0cE6abncdkTFrv8xpK4/uDDhoNHzsolIlwvVapOeQHD+PLo6P/O1OD553GudqyPzotBz+HSgWjmP/KNIOdm5rB9lIxnbddlgqSmKl8+GsI/BaGA2t/Uau7m2QX7FA+F5eI8h7dM9FGpL8hrOc/ahh0+YHCzVjPzNM4qp7DwBO9a04Jm7cFEPuPMP+PvEr9jO6OPD0dUkbK8v9L4v+6JRQe2aa/KI+zVpx+pBiq4k21HeKZm/a2FeQXwsg/0hgXcDWVi9MqlIXeKR5ADTZEdnPb46m34Nitw4r0M+s3jCec7nrhuMwm2kSQxfhMQSCL8W7ZMlyfahXga4h9APR5lo00tzWThLcGhd50BHYDYmfjNQ9FPPw6CTAXdtaIUA19WU+BB8b2yQDOax9+XzUq/3EY3l64hNvy8boCc2hD3d2kdp46dOf1RpCUAyLlKdJqt018HoZfqnEB2U+0/GJX4aO/+AmPIPbPxzHclrkJveoNSXwt3HH1P5R5k+PH+DKx4WxSlqNk2bl2ZAuH6oxjKMl30tCsRZo1HutrMFdScIsuoANjvFz0B1jZdC6ICwzkkvcx2ZnOC3o5/qh5oLPbBlZFO7he7WCOZbv6HJ+uKkG1Wjb70LudENpyu6a/+IlXPQzovyMuGLs3+nGR1GQBqCRjOZELGJR/RcXtfYbSpEf3iQ/6hUWhmQQ0MylSJBEirUcZixpCBdNJwNdXVnZJG9s3hpOgw/QP6ig5zlN0vdO6RgDyxTU9DacLzpygEvrZDQ14DCh/VLjnZyTtN3eshvTYl7+nBiXa0rCbLm7y+ZsXxdgzuHiYoQTTgo0ChpwURWrY4gsEOkyo2/LxCt5lxSrGQfOTNuXORpnJrm/un44Q+Gy52FPgO7guJA/BIS/PWH9urP5gbruGD8zHma2noNQv7pXO/6AtU39cZc9+M3OCIpA9tjoTh3hUPJwjIRHK/1l+Hzh3wHiSpDosRvh2PWy/StByTUufmV32V6iB8mUr+oS4Z3czr2dze4ed7b6jYfP8PzPKPfn2d2clu1pZnj0lTRGxCFqk3RQBO+9epbTXgWMx/cuBc6CJmEBX6uN2DeqvshyQqY6DmLwy3T/O31wHMzbX24r2tXxG6YX2XvKhOjmAS9hLvgbrRR/Xocjh1RDGe/pYt2HEeX/p6yHKaMW/1heoC1cw5BVBKtpKIsnft9jAFZYo94vMHnra3Djr3vNfzHbR2rUyD8Xjp7zN2JnTiUtdzyd791VbFoYnBc2DuSTaUs8pfQ8FQxzPrMIQepyz+5hf80eXWF5s1sN48cT/LO9oudANro+ekq3GI4htmozUULccU2lUVmtauAHHq56xsXoBkcq1lE2jFAAVl3eI2fOaYmxBLl+EKCD5MjXDtQn/mMv+Fymo4ubrr9BweTyFWueHoL8hcOlKcMDRI/X+k+WtwLrcygRO/ZZP3PGlnf7gM9FxsJWlLyrbZd48oGvfk+odUDEs73I3ioet+vzHCD8yLNrRL3nyZBN/vmtPA//vl7uVLVZmXjabBAk1RZWLBjOphktH3WWp5PbkEoyYdmmb53jFb9kRshmD951glUzaiqlgimOHkQGhfenvCh6vUGs7acnLJCvOoZ7KRzfhQVcty+8T9UeG1TtwY3Oqypl9vVNLkKQzQgszJlyt8V42RkSaU2GGO6ZWYTnRlHi05nGViiAIVXPszbBu1yZfJb6O9I2B06v2C102CQ/WxFrNfma6e0YcjzMPkmMoF8hEzqq+a1tZR61TvwuNYujrPfFf8pa+zQLtldrBL+ytkiBZdK7VBc9WsEqffVaE15Le2CYwVCVZcViVb60y72hICMqWC6aLOseS1EO/+4//mbDPp+GW6FFYwoYLHNyKYXUk6XNH/sfxOH3/Aq77rko/EwUaZY6cBTIxkfa3xi0DmJI+DywwOVBf+Ry9AnRCYuPlwSwkJ3TAqwXZC3nbbQUEuBJrABzbHCZXk6UDuCaAmOCfRYme8nIilwv7BMsbbaSpmNw1rXyxYhdhUtvJyWTi244rVnjdabyizxlRLQzUQwA4N2TgGGXV6dBzwZvngmwOAp8grzVaQRNY3badffiXE/jVJxrPvhMWp6U3KXStF8KGMn2wQlLGeS90t5FQYMFL4AnjL73gmg6aS3uMsR7PJzCGK3mHBYLL12SuVqiMKUgpi/rsJpmrbZlKLkxN2ijWbjfzaURt5Vi6Qoe4Q5JSCI1/MEllrA6/LaPnzpRTtDHJ+63PKqExI0Bv9JSsRhvU8Gk6/y2UVB5jXy7SjE3tRINb1A11zHFmZtiehBsUV8MfZVxbRcf8fHG+hKtabdmRlF8UnH7HIdXbN/ce+7O6bLeILkFu8ycZ5AGtTKh3dSMaJtgru1fI1Nf2PhdufUyDgmc1eyw6tYJ3pOJ3HHwB1evI168F1tFOTFwx1ypba3BEwB6iEJu6zNPpTSbjaPFQbCCEv7ka4buVk1CH+bL/zSqBcfiUjEOSuZ5pd9fHBocvPa6CHkqE3YGFfbUau2LkRpt26vIcatFORRw/S+h5H8uylADSP2Fx1jCR+M52WxFbyMqYNq7GYOg2eaOMkE79ChowLWlmMw+QreAoA7pRcaRGfGZfR0drSqMBrZAYkIvo8qK1iCzXN0yuT9X1x8I+DHDWV1vcJDANM7vTtLcrddEl6nYsa1VgYZal/L5sf2+FOSoMuFPmEQv0k/PPxYNpeZiMlNyuLGU7IdWxnInkVoAPAAAA=" alt="Da Hood"> Da Hood</div>
     <div class="cat-tab" onclick="filterGame('Royale High',this)"><img class="cat-icon" src="data:image/webp;base64,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" alt="Royale High"> Royale High</div>
   </div>
-  <div class="cat-search"><span class="cat-search-ic">🔎</span><input type="text" id="catSearchInput" placeholder="Rechercher dans cette catégorie..." oninput="handleCatSearch()"></div>
+  <div class="cat-search"><span class="cat-search-ic">🔎</span><input type="text" id="catSearchInput" placeholder="Search in this category..." oninput="handleCatSearch()"></div>
   <div class="filters-bar">
     <select class="filter-select" onchange="applySort(this.value)">
-      <option value="created_at">Plus récents</option>
-      <option value="price_asc">Prix croissant</option>
-      <option value="price_desc">Prix décroissant</option>
+      <option value="created_at">Most recent</option>
+      <option value="price_asc">Price: low to high</option>
+      <option value="price_desc">Price: high to low</option>
       <option value="oldest">Plus anciens</option>
     </select>
     <input class="filter-input" type="number" id="filterMinPrice" placeholder="Min €" onchange="loadListings()">
     <input class="filter-input" type="number" id="filterMaxPrice" placeholder="Max €" onchange="loadListings()">
-    <label class="filter-check"><input type="checkbox" id="filterVerified" onchange="loadListings()"> ✓ Vendeurs vérifiés</label>
-    <span class="results-count" id="resultsCount">Chargement…</span>
+    <label class="filter-check"><input type="checkbox" id="filterVerified" onchange="loadListings()"> ✓ Verified sellers</label>
+    <span class="results-count" id="resultsCount">Loading…</span>
   </div>
   <div id="listingsLoader" class="loader"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div>
   <div class="listings" id="listingsGrid"></div>
-  <div id="emptyState" class="empty-state" style="display:none"><div class="ico">🔍</div><h3>Aucune annonce trouvée</h3><p>Sois le premier à vendre !</p></div>
+  <div id="emptyState" class="empty-state" style="display:none"><div class="ico">🔍</div><h3>No listing trouvée</h3><p>Sois le premier à vendre !</p></div>
 </div>
 
 <!-- ── PROFILE ── -->
@@ -703,64 +703,64 @@ body.auth-loading #userNav{display:none!important}
     <div style="flex:1;min-width:200px">
       <div style="font-size:20px;font-weight:800;margin-bottom:4px" id="profileDisplayName">-</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px" id="profileEmail">-</div>
-      <div id="profileVerifiedBadge" style="display:none;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#22C55E;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-flex;align-items:center;gap:4px;margin-bottom:12px">✓ Vendeur vérifié</div>
+      <div id="profileVerifiedBadge" style="display:none;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#22C55E;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-flex;align-items:center;gap:4px;margin-bottom:12px">✓ Verified seller</div>
       <div class="profile-stats-row">
-        <div class="profile-stat"><div class="profile-stat-n" id="profileStatSales">0</div><div class="profile-stat-l">Ventes</div></div>
-        <div class="profile-stat"><div class="profile-stat-n" id="profileStatBuys">0</div><div class="profile-stat-l">Achats</div></div>
-        <div class="profile-stat"><div class="profile-stat-n" id="profileStatRating">—</div><div class="profile-stat-l">Note</div></div>
-        <div class="profile-stat"><div class="profile-stat-n" id="profileStatDate">—</div><div class="profile-stat-l">Depuis</div></div>
+        <div class="profile-stat"><div class="profile-stat-n" id="profileStatSales">0</div><div class="profile-stat-l">Sales</div></div>
+        <div class="profile-stat"><div class="profile-stat-n" id="profileStatBuys">0</div><div class="profile-stat-l">Purchases</div></div>
+        <div class="profile-stat"><div class="profile-stat-n" id="profileStatRating">—</div><div class="profile-stat-l">Rating</div></div>
+        <div class="profile-stat"><div class="profile-stat-n" id="profileStatDate">—</div><div class="profile-stat-l">Since</div></div>
         <div class="profile-stat"><div class="profile-stat-n" id="profileStatBloobux" style="color:var(--blue2)">0</div><div class="profile-stat-l">Bloobux</div></div>
       </div>
     </div>
     <button class="btn-blue" onclick="showModal('editProfileModal')">✏️ Modifier profil</button>
-    <button class="btn-ghost" onclick="openSettings()" style="margin-left:8px">⚙️ Paramètres</button>
+    <button class="btn-ghost" onclick="openSettings()" style="margin-left:8px">⚙️ Settings</button>
   </div>
   <div class="section-title">Parrainage 🎁</div>
   <div class="referral-box" id="referralBox" style="margin-bottom:22px">
     <p style="font-size:13px;color:var(--muted2);margin-bottom:10px">Partage ton lien : <strong>+5 Bloobux</strong> par filleul, <strong>+3</strong> pour lui.</p>
-    <div class="referral-row"><input id="referralLink" readonly value=""><button class="btn-blue" onclick="copyReferral()">Copier</button></div>
+    <div class="referral-row"><input id="referralLink" readonly value=""><button class="btn-blue" onclick="copyReferral()">Copy</button></div>
     <p style="font-size:12px;color:var(--muted);margin-top:8px">Filleuls : <strong id="referralCount">0</strong></p>
   </div>
   <div class="section-title">Avis reçus (<span id="profileReviewCount">0</span>)</div>
   <div id="profileReviews" style="margin-bottom:22px"></div>
-  <div class="section-title">Mes annonces actives</div>
+  <div class="section-title">My active listings</div>
   <div id="profileListings" class="listings"></div>
 </div>
 
 <!-- ── DASHBOARD ── -->
 <div id="dashPage" class="page">
   <div class="dash-header">
-    <div><div class="dash-title">Tableau de bord</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Bienvenue, <span id="dashUsername">-</span></div></div>
+    <div><div class="dash-title">Dashboard</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Welcome, <span id="dashUsername">-</span></div></div>
     <button class="btn-blue" onclick="openSellModal()">➕ Nouvelle annonce</button>
   </div>
   <div class="wallet-box">
-    <div><div class="wallet-label">Solde disponible</div><div class="wallet-amount" id="dashBalance">0.00€</div><div class="wallet-sub">Disponible pour acheter ou retirer</div></div>
+    <div><div class="wallet-label">Available balance</div><div class="wallet-amount" id="dashBalance">0.00€</div><div class="wallet-sub">Available to buy or withdraw</div></div>
     <div class="wallet-actions">
-      <button class="btn-blue" onclick="showModal('addFundsModal')">💳 Recharger</button>
+      <button class="btn-blue" onclick="showModal('addFundsModal')">💳 Top up</button>
       <button class="btn-ghost" onclick="showPage('withdrawPage')">💸 Retirer</button>
     </div>
   </div>
   <div class="dash-cards">
-    <div class="dc"><div class="dc-l">Annonces actives</div><div class="dc-v" id="dMyListings">0</div></div>
-    <div class="dc"><div class="dc-l">Ventes complètes</div><div class="dc-v" id="dSales">0</div></div>
-    <div class="dc"><div class="dc-l">Revenus totaux</div><div class="dc-v" id="dRevenue">0€</div></div>
-    <div class="dc"><div class="dc-l">Note moyenne</div><div class="dc-v" id="dRating">—</div><div class="dc-c">sur 5 ⭐</div></div>
+    <div class="dc"><div class="dc-l">Active listings</div><div class="dc-v" id="dMyListings">0</div></div>
+    <div class="dc"><div class="dc-l">Completed sales</div><div class="dc-v" id="dSales">0</div></div>
+    <div class="dc"><div class="dc-l">Total earnings</div><div class="dc-v" id="dRevenue">0€</div></div>
+    <div class="dc"><div class="dc-l">Average rating</div><div class="dc-v" id="dRating">—</div><div class="dc-c">out of 5 ⭐</div></div>
   </div>
-  <div class="section-title">Mes annonces</div>
+  <div class="section-title">My listings</div>
   <div class="dtable">
-    <div class="dth"><span>Item</span><span>Prix</span><span>Jeu</span><span>Action</span></div>
-    <div id="myListingsBody"><div style="padding:28px;text-align:center;color:var(--muted);font-size:13px">Aucune annonce</div></div>
+    <div class="dth"><span>Item</span><span>Price</span><span>Game</span><span>Action</span></div>
+    <div id="myListingsBody"><div style="padding:28px;text-align:center;color:var(--muted);font-size:13px">No listing</div></div>
   </div>
-  <div class="section-title">Historique des transactions</div>
-  <div id="transactionHistory"><div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Chargement…</div></div>
+  <div class="section-title">Transaction history</div>
+  <div id="transactionHistory"><div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Loading…</div></div>
 </div>
 
 <!-- ── ORDERS ── -->
 <div id="ordersPage" class="page">
-  <div class="dash-header"><div class="dash-title">Mes commandes 📦</div></div>
+  <div class="dash-header"><div class="dash-title">My orders 📦</div></div>
   <div style="display:flex;gap:7px;margin-bottom:16px">
-    <button class="cat-tab active" id="tabBuying" onclick="switchOrderTab('buying')">🛒 Mes achats</button>
-    <button class="cat-tab" id="tabSelling" onclick="switchOrderTab('selling')">📤 Mes ventes</button>
+    <button class="cat-tab active" id="tabBuying" onclick="switchOrderTab('buying')">🛒 My purchases</button>
+    <button class="cat-tab" id="tabSelling" onclick="switchOrderTab('selling')">📤 My sales</button>
   </div>
   <div id="ordersContent"><div class="loader"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div></div>
 </div>
@@ -768,30 +768,30 @@ body.auth-loading #userNav{display:none!important}
 <!-- ── MESSAGES ── -->
 <div id="messagesPage" class="page">
   <div class="dash-header"><div class="dash-title">Messages 💬</div></div>
-  <div id="convList"><div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Aucune conversation</div></div>
+  <div id="convList"><div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">No conversation</div></div>
 </div>
 
 <!-- ── WITHDRAW ── -->
 <div id="withdrawPage" class="page">
-  <div class="dash-header"><div class="dash-title">Retirer des fonds 💸</div></div>
+  <div class="dash-header"><div class="dash-title">Withdraw funds 💸</div></div>
   <div class="wallet-box" style="margin-bottom:22px">
-    <div><div class="wallet-label">Solde disponible</div><div class="wallet-amount" id="withdrawBalance">0.00€</div><div class="wallet-sub">Minimum de retrait : 1€</div></div>
+    <div><div class="wallet-label">Available balance</div><div class="wallet-amount" id="withdrawBalance">0.00€</div><div class="wallet-sub">Minimum withdrawal: €1</div></div>
   </div>
   <div style="max-width:480px">
-    <div class="fg"><label>Méthode de retrait</label>
+    <div class="fg"><label>Withdrawal method</label>
       <select id="withdrawMethod">
         <option value="paypal">PayPal</option>
-        <option value="bank">Virement bancaire</option>
+        <option value="bank">Bank transfer</option>
       </select>
     </div>
-    <div class="fg"><label>Adresse / IBAN</label><input type="text" id="withdrawAddress" placeholder="Ex: votre@email.com ou IBAN"></div>
-    <div class="fg"><label>Montant (€)</label><input type="number" id="withdrawAmount" placeholder="Ex: 5" min="1" step="0.01"></div>
+    <div class="fg"><label>Address / IBAN</label><input type="text" id="withdrawAddress" placeholder="Ex: your@email.com or IBAN"></div>
+    <div class="fg"><label>Amount (€)</label><input type="number" id="withdrawAmount" placeholder="Ex: 5" min="1" step="0.01"></div>
     <div id="withdrawAlert"></div>
-    <button class="btn-submit" onclick="requestWithdraw()">Demander le retrait</button>
+    <button class="btn-submit" onclick="requestWithdraw()">Request withdrawal</button>
   </div>
   <div style="margin-top:28px">
-    <div class="section-title">Historique des retraits</div>
-    <div id="withdrawHistory" class="withdraw-history"><div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Aucun retrait</div></div>
+    <div class="section-title">Withdrawal history</div>
+    <div id="withdrawHistory" class="withdraw-history"><div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">No withdrawal</div></div>
   </div>
 </div>
 
@@ -800,14 +800,14 @@ body.auth-loading #userNav{display:none!important}
   <div class="dash-header"><div class="dash-title">⚙️ Administration</div></div>
   <div class="admin-stat-grid" id="adminStats"></div>
   <div class="admin-nav">
-    <button class="admin-tab active" onclick="adminTab('users',this)">👥 Utilisateurs</button>
-    <button class="admin-tab" onclick="adminTab('sellers',this)">🛡️ Vendeurs</button>
-    <button class="admin-tab" onclick="adminTab('listings',this)">📋 Annonces</button>
-    <button class="admin-tab" onclick="adminTab('orders',this)">📦 Commandes</button>
-    <button class="admin-tab" onclick="adminTab('disputes',this)">⚖️ Litiges</button>
-    <button class="admin-tab" onclick="adminTab('withdraws',this)">💸 Retraits</button>
+    <button class="admin-tab active" onclick="adminTab('users',this)">👥 Users</button>
+    <button class="admin-tab" onclick="adminTab('sellers',this)">🛡️ Sellers</button>
+    <button class="admin-tab" onclick="adminTab('listings',this)">📋 Listings</button>
+    <button class="admin-tab" onclick="adminTab('orders',this)">📦 Orders</button>
+    <button class="admin-tab" onclick="adminTab('disputes',this)">⚖️ Disputes</button>
+    <button class="admin-tab" onclick="adminTab('withdraws',this)">💸 Withdrawals</button>
     <button class="admin-tab" onclick="adminTab('aconv',this)">💬 Conversations</button>
-    <button class="admin-tab" onclick="adminSupport(this)">🚩 Signalements</button>
+    <button class="admin-tab" onclick="adminSupport(this)">🚩 Reports</button>
   </div>
   <div id="adminContent"></div>
 </div>
@@ -872,14 +872,14 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="loginModal" onclick="closeOnBg(event,'loginModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('loginModal')">✕</button>
-    <div class="modal-h">Content de te revoir 👋</div>
-    <div class="modal-sub">Connecte-toi à ton compte</div>
+    <div class="modal-h">Welcome back 👋</div>
+    <div class="modal-sub">Sign in to your account</div>
     <div id="loginAlert"></div>
     <div class="fg"><label>Email</label><input type="email" id="loginEmail" placeholder="ton@email.com"></div>
-    <div class="fg"><label>Mot de passe</label><input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div style="text-align:right;margin-top:-6px;margin-bottom:13px"><a style="font-size:12px;color:var(--blue2);cursor:pointer" onclick="resetForgotFlow();switchModal('loginModal','forgotModal')">Mot de passe oublié ?</a></div>
-    <button class="btn-submit" id="loginBtn" onclick="doLogin()">Se connecter</button>
-    <p class="sw">Pas de compte ? <a onclick="switchModal('loginModal','registerModal')">S'inscrire</a></p>
+    <div class="fg"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div style="text-align:right;margin-top:-6px;margin-bottom:13px"><a style="font-size:12px;color:var(--blue2);cursor:pointer" onclick="resetForgotFlow();switchModal('loginModal','forgotModal')">Forgot password?</a></div>
+    <button class="btn-submit" id="loginBtn" onclick="doLogin()">Sign in</button>
+    <p class="sw">No account? <a onclick="switchModal('loginModal','registerModal')">Sign up</a></p>
   </div>
 </div>
 
@@ -887,14 +887,14 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="registerModal" onclick="closeOnBg(event,'registerModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('registerModal')">✕</button>
-    <div class="modal-h">Rejoins BlooMarket 🚀</div>
-    <div class="modal-sub">Crée ton compte gratuitement</div>
+    <div class="modal-h">Join BlooMarket 🚀</div>
+    <div class="modal-sub">Create your free account</div>
     <div id="registerAlert"></div>
-    <div class="fg"><label>Pseudo</label><input type="text" id="registerUsername" placeholder="TonPseudo"></div>
+    <div class="fg"><label>Username</label><input type="text" id="registerUsername" placeholder="YourUsername"></div>
     <div class="fg"><label>Email</label><input type="email" id="registerEmail" placeholder="ton@email.com"></div>
-    <div class="fg"><label>Mot de passe</label><input type="password" id="registerPassword" placeholder="Minimum 6 caractères" onkeydown="if(event.key==='Enter')doRegister()"></div>
-    <button class="btn-submit" id="registerBtn" onclick="doRegister()">Créer mon compte</button>
-    <p class="sw">Déjà un compte ? <a onclick="switchModal('registerModal','loginModal')">Se connecter</a></p>
+    <div class="fg"><label>Password</label><input type="password" id="registerPassword" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')doRegister()"></div>
+    <button class="btn-submit" id="registerBtn" onclick="doRegister()">Create my account</button>
+    <p class="sw">Already have an account? <a onclick="switchModal('registerModal','loginModal')">Sign in</a></p>
   </div>
 </div>
 
@@ -902,23 +902,23 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="forgotModal" onclick="closeOnBg(event,'forgotModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('forgotModal')">✕</button>
-    <div class="modal-h">Mot de passe oublié 🔑</div>
+    <div class="modal-h">Forgot password 🔑</div>
     <div class="modal-sub">Réinitialise-le ici avec un code reçu par email.</div>
     <div id="forgotAlert"></div>
     <div id="fpStep1">
-      <div class="fg"><label>Email du compte</label><input type="email" id="fpEmail" placeholder="ton@email.com"></div>
-      <button class="btn-submit" id="fpSendBtn" onclick="sendResetCode()">Envoyer le code</button>
+      <div class="fg"><label>Account email</label><input type="email" id="fpEmail" placeholder="your@email.com"></div>
+      <button class="btn-submit" id="fpSendBtn" onclick="sendResetCode()">Send code</button>
     </div>
     <div id="fpStep2" style="display:none">
-      <div class="fg"><label>Code reçu par email</label><input type="text" id="fpCode" placeholder="Code à 6 chiffres" inputmode="numeric"></div>
-      <button class="btn-submit" id="fpVerifyBtn" onclick="verifyResetCode()">Vérifier le code</button>
-      <p class="sw"><a onclick="sendResetCode()">Renvoyer un code</a></p>
+      <div class="fg"><label>Code received by email</label><input type="text" id="fpCode" placeholder="6-digit code" inputmode="numeric"></div>
+      <button class="btn-submit" id="fpVerifyBtn" onclick="verifyResetCode()">Verify code</button>
+      <p class="sw"><a onclick="sendResetCode()">Resend code</a></p>
     </div>
     <div id="fpStep3" style="display:none">
-      <div class="fg"><label>Nouveau mot de passe</label><input type="password" id="fpNewPw" placeholder="Minimum 6 caractères" onkeydown="if(event.key==='Enter')saveResetPassword()"></div>
+      <div class="fg"><label>New password</label><input type="password" id="fpNewPw" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')saveResetPassword()"></div>
       <button class="btn-submit" id="fpSaveBtn" onclick="saveResetPassword()">Changer le mot de passe</button>
     </div>
-    <p class="sw"><a onclick="resetForgotFlow();switchModal('forgotModal','loginModal')">← Retour à la connexion</a></p>
+    <p class="sw"><a onclick="resetForgotFlow();switchModal('forgotModal','loginModal')">← Back to login</a></p>
   </div>
 </div>
 
@@ -926,18 +926,18 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="sellModal" onclick="closeOnBg(event,'sellModal')">
   <div class="modal" style="max-width:520px">
     <button class="modal-close" onclick="hideModal('sellModal')">✕</button>
-    <div class="modal-h" style="text-align:left;margin-bottom:4px">Mettre en vente ➕</div>
-    <div class="modal-sub" style="text-align:left;margin-bottom:18px">Remplis les infos de ton annonce</div>
+    <div class="modal-h" style="text-align:left;margin-bottom:4px">Create a listing ➕</div>
+    <div class="modal-sub" style="text-align:left;margin-bottom:18px">Fill in your listing details</div>
     <div id="sellAlert"></div>
-    <div class="fg"><label>Item (à choisir dans la liste)</label>
+    <div class="fg"><label>Item (choose from the list)</label>
       <div class="item-picker">
-        <input type="text" id="sellItemSearch" placeholder="Rechercher ton item…" autocomplete="off" oninput="filterItemList()" onfocus="filterItemList()" onblur="setTimeout(function(){var l=document.getElementById('sellItemList');if(l)l.style.display='none';},180)">
+        <input type="text" id="sellItemSearch" placeholder="Search your item…" autocomplete="off" oninput="filterItemList()" onfocus="filterItemList()" onblur="setTimeout(function(){var l=document.getElementById('sellItemList');if(l)l.style.display='none';},180)">
         <input type="hidden" id="sellTitle">
         <div class="item-dropdown" id="sellItemList" style="display:none"></div>
       </div>
     </div>
     <div class="sell-form-grid">
-      <div class="fg"><label>Jeu</label>
+      <div class="fg"><label>Game</label>
         <select id="sellGame" onchange="renderSellAttrFields()">
           <option value="Steal A Brainrot">🧠 Steal A Brainrot</option>
           <option value="Blox Fruits">🍎 Blox Fruits</option>
@@ -953,22 +953,22 @@ body.auth-loading #userNav{display:none!important}
           <option value="Royale High">👑 Royale High</option>
         </select>
       </div>
-      <div class="fg"><label>Prix (€)</label><input type="number" id="sellPrice" placeholder="0.00" min="0.01" step="0.01"></div>
+      <div class="fg"><label>Price (€)</label><input type="number" id="sellPrice" placeholder="0.00" min="0.01" step="0.01"></div>
     </div>
     <div id="sellAttrFields"></div>
-    <div class="fg"><label>Stock (quantité disponible)</label><input type="number" id="sellStock" placeholder="1" min="1" step="1" value="1"></div>
-    <div class="fg"><label>Description</label><textarea id="sellDesc" placeholder="Décris ton item en détail…"></textarea></div>
+    <div class="fg"><label>Stock (available quantity)</label><input type="number" id="sellStock" placeholder="1" min="1" step="1" value="1"></div>
+    <div class="fg"><label>Description</label><textarea id="sellDesc" placeholder="Describe your item in detail…"></textarea></div>
     <div class="fg">
       <label>Photos (3 minimum — 5 max)</label>
       <div class="img-upload-zone" onclick="document.getElementById('sellImages').click()">
         <div class="ico">📷</div>
-        <p>Clique pour ajouter des photos (au moins 3)</p>
-        <p style="font-size:11px;margin-top:4px;color:var(--muted)">JPG, PNG — max 5 Mo chacune</p>
+        <p>Click to add photos (at least 3)</p>
+        <p style="font-size:11px;margin-top:4px;color:var(--muted)">JPG, PNG — max 5 MB each</p>
       </div>
       <input type="file" id="sellImages" accept="image/*" multiple style="display:none" onchange="previewSellImages(this)">
       <div class="img-preview-row" id="sellImagePreview"></div>
     </div>
-    <button class="btn-submit" id="sellBtn" onclick="doSell()">Publier l'annonce</button>
+    <button class="btn-submit" id="sellBtn" onclick="doSell()">Publish listing</button>
   </div>
 </div>
 
@@ -976,12 +976,12 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="editProfileModal" onclick="closeOnBg(event,'editProfileModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('editProfileModal')">✕</button>
-    <div class="modal-h">Modifier mon profil ✏️</div>
+    <div class="modal-h">Edit my profile ✏️</div>
     <div id="editProfileAlert"></div>
-    <div class="fg"><label>Pseudo</label><input type="text" id="editUsername" placeholder="Ton pseudo"></div>
-    <div class="fg"><label>Bio</label><textarea id="editBio" placeholder="Parle un peu de toi (max 200 caractères)…" maxlength="200"></textarea></div>
-    <div class="fg"><label>Pays</label><input type="text" id="editCountry" placeholder="Ex: France"></div>
-    <div class="fg"><label>Date de naissance</label><input type="date" id="editBirthdate"></div>
+    <div class="fg"><label>Username</label><input type="text" id="editUsername" placeholder="Your username"></div>
+    <div class="fg"><label>Bio</label><textarea id="editBio" placeholder="Tell us about yourself (max 200 characters)…" maxlength="200"></textarea></div>
+    <div class="fg"><label>Country</label><input type="text" id="editCountry" placeholder="Ex: France"></div>
+    <div class="fg"><label>Date of birth</label><input type="date" id="editBirthdate"></div>
     <button class="btn-submit" onclick="saveProfile()">Enregistrer</button>
   </div>
 </div>
@@ -990,10 +990,10 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="resetPasswordModal" onclick="closeOnBg(event,'resetPasswordModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('resetPasswordModal')">✕</button>
-    <div class="modal-h">Nouveau mot de passe 🔐</div>
+    <div class="modal-h">New password 🔐</div>
     <div class="modal-sub">Choisis un nouveau mot de passe pour ton compte.</div>
     <div id="resetPwAlert"></div>
-    <div class="fg"><label>Nouveau mot de passe</label><input type="password" id="resetPwInput" placeholder="Minimum 6 caractères" onkeydown="if(event.key==='Enter')doResetPassword()"></div>
+    <div class="fg"><label>New password</label><input type="password" id="resetPwInput" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')doResetPassword()"></div>
     <button class="btn-submit" id="resetPwBtn" onclick="doResetPassword()">Mettre à jour</button>
   </div>
 </div>
@@ -1002,46 +1002,46 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="settingsModal" onclick="closeOnBg(event,'settingsModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('settingsModal')">✕</button>
-    <div class="modal-h">Paramètres du compte ⚙️</div>
+    <div class="modal-h">Account settings ⚙️</div>
     <div id="settingsAlert"></div>
     <div class="settings-section">
-      <div class="settings-label">🔐 Changer le mot de passe</div>
-      <div class="fg"><input type="password" id="newPwInput" placeholder="Nouveau mot de passe (min. 6)"></div>
-      <button class="btn-blue" style="width:100%" onclick="doChangePassword()">Mettre à jour le mot de passe</button>
+      <div class="settings-label">🔐 Change password</div>
+      <div class="fg"><input type="password" id="newPwInput" placeholder="New password (min. 6)"></div>
+      <button class="btn-blue" style="width:100%" onclick="doChangePassword()">Update password</button>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
-      <div class="settings-label">🔐 Double authentification (2FA)</div>
-      <p class="settings-desc">Ajoute un code temporaire (Google Authenticator, Authy…) en plus du mot de passe.</p>
+      <div class="settings-label">🔐 Two-factor authentication (2FA)</div>
+      <p class="settings-desc">Add a temporary code (Google Authenticator, Authy…) on top of your password.</p>
       <div id="mfaAlert"></div>
-      <div id="mfaStatus" class="settings-desc">Chargement…</div>
+      <div id="mfaStatus" class="settings-desc">Loading…</div>
       <div id="mfaEnrollBox" style="display:none">
         <div style="text-align:center;margin:10px 0"><img id="mfaQr" alt="QR 2FA" style="width:168px;height:168px;background:#fff;border-radius:10px;padding:6px"></div>
-        <p class="settings-desc">Scanne le QR, ou entre la clé : <code id="mfaSecret" style="color:var(--blue2);font-size:11px;word-break:break-all"></code></p>
-        <div class="fg"><input type="text" id="mfaCode" placeholder="Code à 6 chiffres" inputmode="numeric"></div>
-        <button class="btn-blue" style="width:100%" onclick="mfaVerifyEnroll()">Confirmer et activer</button>
+        <p class="settings-desc">Scan the QR, or enter the key: <code id="mfaSecret" style="color:var(--blue2);font-size:11px;word-break:break-all"></code></p>
+        <div class="fg"><input type="text" id="mfaCode" placeholder="6-digit code" inputmode="numeric"></div>
+        <button class="btn-blue" style="width:100%" onclick="mfaVerifyEnroll()">Confirm and enable</button>
       </div>
       <button class="btn-blue" id="mfaToggleBtn" style="width:100%" onclick="mfaStart()">Activer la 2FA</button>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
-      <div class="settings-label">💻 Sessions &amp; appareils</div>
-      <p class="settings-desc">Tes 5 dernières connexions.</p>
+      <div class="settings-label">💻 Sessions &amp; devices</div>
+      <p class="settings-desc">Your last 5 logins.</p>
       <div id="loginHistoryBox" class="settings-desc">—</div>
-      <button class="btn-ghost" style="width:100%;margin-top:10px" onclick="logoutAllSessions()">Déconnecter toutes les sessions</button>
+      <button class="btn-ghost" style="width:100%;margin-top:10px" onclick="logoutAllSessions()">Log out all sessions</button>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
-      <div class="settings-label">⏸️ Désactiver le compte</div>
-      <p class="settings-desc">Ton profil et tes annonces seront masqués. Tu pourras réactiver à ta prochaine connexion.</p>
-      <button class="btn-ghost" style="width:100%" onclick="deactivateAccount()">Désactiver mon compte</button>
+      <div class="settings-label">⏸️ Deactivate account</div>
+      <p class="settings-desc">Your profile and listings will be hidden. You can reactivate at your next login.</p>
+      <button class="btn-ghost" style="width:100%" onclick="deactivateAccount()">Deactivate my account</button>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
-      <div class="settings-label" style="color:#FCA5A5">🗑️ Supprimer le compte</div>
-      <p class="settings-desc">Action <strong>définitive</strong> : compte, annonces et données supprimés. Tape <strong>SUPPRIMER</strong> pour confirmer.</p>
-      <div class="fg"><input type="text" id="deleteConfirmInput" placeholder="Tape SUPPRIMER" autocomplete="off"></div>
-      <button class="btn-danger" style="width:100%" onclick="deleteAccount()">Supprimer définitivement</button>
+      <div class="settings-label" style="color:#FCA5A5">🗑️ Delete account</div>
+      <p class="settings-desc">This action is <strong>permanent</strong>: account, listings and data deleted. Type <strong>DELETE</strong> to confirm.</p>
+      <div class="fg"><input type="text" id="deleteConfirmInput" placeholder="Type DELETE" autocomplete="off"></div>
+      <button class="btn-danger" style="width:100%" onclick="deleteAccount()">Delete permanently</button>
     </div>
   </div>
 </div>
@@ -1050,11 +1050,11 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="mfaLoginModal" onclick="closeOnBg(event,'mfaLoginModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('mfaLoginModal')">✕</button>
-    <div class="modal-h">Vérification en 2 étapes 🔐</div>
-    <div class="modal-sub">Entre le code de ton application d authentification.</div>
+    <div class="modal-h">Two-step verification 🔐</div>
+    <div class="modal-sub">Enter the code from your authenticator app.</div>
     <div id="mfaLoginAlert"></div>
-    <div class="fg"><label>Code à 6 chiffres</label><input type="text" id="mfaLoginCode" placeholder="123456" inputmode="numeric" onkeydown="if(event.key==='Enter')submitMfaLogin()"></div>
-    <button class="btn-submit" id="mfaLoginBtn" onclick="submitMfaLogin()">Valider</button>
+    <div class="fg"><label>6-digit code</label><input type="text" id="mfaLoginCode" placeholder="123456" inputmode="numeric" onkeydown="if(event.key==='Enter')submitMfaLogin()"></div>
+    <button class="btn-submit" id="mfaLoginBtn" onclick="submitMfaLogin()">Verify</button>
   </div>
 </div>
 
@@ -1062,10 +1062,10 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="promoteModal" onclick="closeOnBg(event,'promoteModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('promoteModal')">✕</button>
-    <div class="modal-h">Promouvoir l annonce 🚀</div>
-    <div class="modal-sub">Ton annonce passe en tête des résultats avec un badge ⭐ Sponsorisé.</div>
+    <div class="modal-h">Promote listing 🚀</div>
+    <div class="modal-sub">Your listing goes to the top of results with a ⭐ Sponsored badge.</div>
     <div id="promoteAlert"></div>
-    <p class="settings-desc">Payé depuis ton solde : <strong id="promoteBalance" style="color:var(--blue2)">0€</strong></p>
+    <p class="settings-desc">Paid from your balance: <strong id="promoteBalance" style="color:var(--blue2)">0€</strong></p>
     <div id="promoteTiers"></div>
   </div>
 </div>
@@ -1080,15 +1080,15 @@ body.auth-loading #userNav{display:none!important}
   <div class="modal chat-modal">
     <div class="chat-header">
       <div class="conv-avatar" id="chatAvatar">?</div>
-      <div><div class="chat-title" id="chatTitle">Chat</div><div class="chat-sub">En ligne</div></div>
+      <div><div class="chat-title" id="chatTitle">Chat</div><div class="chat-sub">Online</div></div>
       <button onclick="reportUser()" title="Signaler cet utilisateur" style="background:none;border:none;color:#FCA5A5;font-size:15px;cursor:pointer;margin-left:auto">🚩</button>
       <button class="modal-close" style="position:static;margin-left:8px" onclick="hideModal('chatModal')">✕</button>
     </div>
     <div class="chat-order-bar" id="chatOrderBar" style="display:none"></div>
     <div class="chat-messages" id="chatMessages"><div class="chat-empty">Début de la conversation 👋</div></div>
     <div class="chat-input-row">
-      <input class="chat-input" id="chatInput" placeholder="Ton message…" onkeydown="if(event.key==='Enter')sendMessage()">
-      <button class="chat-send" onclick="sendMessage()">Envoyer</button>
+      <input class="chat-input" id="chatInput" placeholder="Your message…" onkeydown="if(event.key==='Enter')sendMessage()">
+      <button class="chat-send" onclick="sendMessage()">Send</button>
     </div>
   </div>
 </div>
@@ -1097,8 +1097,8 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="addFundsModal" onclick="closeOnBg(event,'addFundsModal')">
   <div class="modal" style="max-width:420px">
     <button class="modal-close" onclick="hideModal('addFundsModal')">✕</button>
-    <div class="modal-h">Recharger mon solde 💳</div>
-    <div class="modal-sub">Paiement sécurisé par Stripe</div>
+    <div class="modal-h">Top up my balance 💳</div>
+    <div class="modal-sub">Secure payment by Stripe</div>
     <div id="fundsAlert"></div>
     <div class="funds-amounts">
       <button onclick="setFundsAmount(5)">5€</button>
@@ -1108,10 +1108,10 @@ body.auth-loading #userNav{display:none!important}
       <button onclick="setFundsAmount(100)">100€</button>
       <button onclick="setFundsAmount(200)">200€</button>
     </div>
-    <div class="fg"><label>Montant (€)</label><input type="number" id="fundsAmount" placeholder="Montant personnalisé" min="1" step="1"></div>
-    <div class="fg"><label>Carte bancaire</label><div id="card-element"></div><div id="card-errors" style="color:#FCA5A5;font-size:11px;margin-top:6px"></div></div>
-    <button class="btn-submit" id="payBtn" onclick="handleStripePayment()">💳 Payer maintenant</button>
-    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:10px">🔒 Paiement 100% sécurisé · SSL · Stripe</p>
+    <div class="fg"><label>Amount (€)</label><input type="number" id="fundsAmount" placeholder="Custom amount" min="1" step="1"></div>
+    <div class="fg"><label>Card</label><div id="card-element"></div><div id="card-errors" style="color:#FCA5A5;font-size:11px;margin-top:6px"></div></div>
+    <button class="btn-submit" id="payBtn" onclick="handleStripePayment()">💳 Pay now</button>
+    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:10px">🔒 100% secure payment · SSL · Stripe</p>
   </div>
 </div>
 
@@ -1119,12 +1119,12 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="cartModal" onclick="closeOnBg(event,'cartModal')">
   <div class="modal" style="max-width:460px">
     <button class="modal-close" onclick="hideModal('cartModal')">✕</button>
-    <div class="modal-h" style="text-align:left;margin-bottom:18px">Mon panier 🛒</div>
+    <div class="modal-h" style="text-align:left;margin-bottom:18px">My cart 🛒</div>
     <div id="cartItems"></div>
-    <div id="cartEmpty" class="empty-state" style="display:none;padding:30px 0"><div class="ico">🛒</div><h3>Panier vide</h3><p>Explore la marketplace !</p></div>
+    <div id="cartEmpty" class="empty-state" style="display:none;padding:30px 0"><div class="ico">🛒</div><h3>Empty cart</h3><p>Explore the marketplace!</p></div>
     <div id="cartFooter" style="display:none">
       <div class="cart-total-row"><div class="cart-total-label">Total</div><div class="cart-total-price" id="cartTotal">0.00€</div></div>
-      <button class="btn-submit" onclick="checkoutCart()">Payer le panier</button>
+      <button class="btn-submit" onclick="checkoutCart()">Pay for cart</button>
     </div>
   </div>
 </div>
@@ -1133,17 +1133,17 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="payModal" onclick="closeOnBg(event,'payModal')">
   <div class="modal" style="max-width:440px">
     <button class="modal-close" onclick="hideModal('payModal')">✕</button>
-    <div class="modal-h">Paiement sécurisé 🔒</div>
+    <div class="modal-h">Secure payment 🔒</div>
     <div class="modal-sub">Carte · Apple Pay · Google Pay</div>
     <div class="pay-summary-box">
-      <div class="ps-row"><span id="payItemTitle">Article</span><span id="paySubtotal">0.00€</span></div>
-      <div class="ps-row ps-muted"><span>Points fidélité gagnés</span><span id="payBloobux" style="color:var(--blue2)">+0 🔷</span></div>
+      <div class="ps-row"><span id="payItemTitle">Item</span><span id="paySubtotal">0.00€</span></div>
+      <div class="ps-row ps-muted"><span>Loyalty points earned</span><span id="payBloobux" style="color:var(--blue2)">+0 🔷</span></div>
       <div class="ps-row ps-total"><span>Total</span><strong id="payItemPrice">0.00€</strong></div>
     </div>
     <div id="pay-element" style="margin:14px 0"></div>
     <div id="pay-errors" style="color:#FCA5A5;font-size:12px;margin-bottom:10px"></div>
-    <button class="btn-submit" id="payNowBtn" onclick="submitPayElement()">Payer</button>
-    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:10px">🔒 100% sécurisé · Stripe · aucun solde à recharger</p>
+    <button class="btn-submit" id="payNowBtn" onclick="submitPayElement()">Pay</button>
+    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:10px">🔒 100% secure · Stripe · no balance top-up needed</p>
   </div>
 </div>
 
@@ -1151,8 +1151,8 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="reviewModal" onclick="closeOnBg(event,'reviewModal')">
   <div class="modal" style="max-width:380px">
     <button class="modal-close" onclick="hideModal('reviewModal')">✕</button>
-    <div class="modal-h">Laisser un avis ⭐</div>
-    <div class="modal-sub">Comment s'est passée la transaction ?</div>
+    <div class="modal-h">Leave a review ⭐</div>
+    <div class="modal-sub">How did the transaction go?</div>
     <div id="reviewAlert"></div>
     <div class="review-stars" id="reviewStars">
       <span class="review-star" onclick="setReviewRating(1)">⭐</span>
@@ -1161,9 +1161,9 @@ body.auth-loading #userNav{display:none!important}
       <span class="review-star" onclick="setReviewRating(4)">⭐</span>
       <span class="review-star" onclick="setReviewRating(5)">⭐</span>
     </div>
-    <div style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:14px" id="reviewRatingLabel">Sélectionne une note</div>
-    <div class="fg"><label>Commentaire (optionnel)</label><textarea id="reviewComment" placeholder="Dis-nous comment ça s'est passé…"></textarea></div>
-    <button class="btn-submit" id="reviewBtn" onclick="submitReview()">Publier l'avis</button>
+    <div style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:14px" id="reviewRatingLabel">Select a rating</div>
+    <div class="fg"><label>Comment (optional)</label><textarea id="reviewComment" placeholder="Tell us how it went…"></textarea></div>
+    <button class="btn-submit" id="reviewBtn" onclick="submitReview()">Post review</button>
     <input type="hidden" id="reviewOrderId"><input type="hidden" id="reviewSellerId">
   </div>
 </div>
@@ -1172,17 +1172,17 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="sellerVerifyModal" onclick="closeOnBg(event,'sellerVerifyModal')">
   <div class="modal" style="max-width:460px">
     <button class="modal-close" onclick="hideModal('sellerVerifyModal')">✕</button>
-    <div class="modal-h">Devenir vendeur vérifié 🛡️</div>
+    <div class="modal-h">Become a verified seller 🛡️</div>
     <div class="modal-sub">Vérification manuelle par notre équipe (KYC)</div>
     <div id="sellerVerifyAlert"></div>
     <div class="sv-steps">
       <div class="sv-step"><span class="sv-ic">📧</span> Email vérifié (via ton inscription)</div>
-      <div class="sv-step"><span class="sv-ic">🪪</span> Pièce d'identité lisible (recto)</div>
+      <div class="sv-step"><span class="sv-ic">🪪</span> Readable ID document (front)</div>
       <div class="sv-step"><span class="sv-ic">🔞</span> 18 ans minimum</div>
     </div>
     <div class="fg"><label>Téléphone (recommandé)</label><input type="tel" id="svPhone" placeholder="+33 6 12 34 56 78"></div>
     <div class="fg">
-      <label>Pièce d'identité</label>
+      <label>ID document</label>
       <div class="img-upload-zone" onclick="document.getElementById('svIdFile').click()">
         <div class="ico">🪪</div>
         <p>Clique pour ajouter ta pièce d'identité</p>
@@ -1200,7 +1200,7 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="shopModal" onclick="closeOnBg(event,'shopModal')">
   <div class="modal" style="max-width:460px">
     <button class="modal-close" onclick="hideModal('shopModal')">✕</button>
-    <div class="modal-h">Boutique Bloobux 🔷</div>
+    <div class="modal-h">Bloobux shop 🔷</div>
     <div class="modal-sub">Tu as <strong id="shopBalance">0</strong> Bloobux · non convertibles en argent</div>
     <div id="shopAlert"></div>
     <div id="shopList"></div>
@@ -1263,7 +1263,7 @@ var ITEM_CATALOG = {
 var GAME_ATTRS = {
   'Steal A Brainrot':[
     {key:'rarity',label:'Rareté',type:'select',options:['Common','Rare','Epic','Legendary','Mythic','Brainrot God','Secret','OG']},
-    {key:'mutation',label:'Mutation',type:'select',options:['Aucune','Gold','Diamond','Rainbow','Lava','Bloodrot','Celestial']},
+    {key:'mutation',label:'Mutation',type:'select',options:['None','Gold','Diamond','Rainbow','Lava','Bloodrot','Celestial']},
     {key:'income',label:'Revenu',type:'number'},
     {key:'income_unit',label:'Unité',type:'select',options:['/s','K/s','M/s','B/s']}
   ],
@@ -1275,11 +1275,11 @@ var GAME_ATTRS = {
   'Murder Mystery 2':[
     {key:'rarity',label:'Rareté',type:'select',options:['Common','Uncommon','Rare','Legendary','Godly','Ancient','Unique']},
     {key:'type',label:'Type',type:'select',options:['Knife','Gun']},
-    {key:'theme',label:'Thème',type:'select',options:['Aucun','Classique','Event','Christmas','Halloween','Birthday']}
+    {key:'theme',label:'Thème',type:'select',options:['None','Classique','Event','Christmas','Halloween','Birthday']}
   ],
   'Grow A Garden':[
     {key:'rarity',label:'Rareté',type:'select',options:['Common','Uncommon','Rare','Legendary','Mythical','Divine','Prismatic']},
-    {key:'mutation',label:'Mutation',type:'select',options:['Aucune','Gold','Rainbow','Wet','Chilled','Frozen','Shocked']},
+    {key:'mutation',label:'Mutation',type:'select',options:['None','Gold','Rainbow','Wet','Chilled','Frozen','Shocked']},
     {key:'weight',label:'Poids (kg)',type:'number'}
   ],
   'Adopt Me':[
@@ -1290,7 +1290,7 @@ var GAME_ATTRS = {
   ],
   'Grow A Garden 2':[
     {key:'rarity',label:'Rareté',type:'select',options:['Common','Uncommon','Rare','Legendary','Mythical','Divine','Prismatic']},
-    {key:'mutation',label:'Mutation',type:'select',options:['Aucune','Gold','Rainbow','Wet','Chilled','Frozen','Shocked','Disco']},
+    {key:'mutation',label:'Mutation',type:'select',options:['None','Gold','Rainbow','Wet','Chilled','Frozen','Shocked','Disco']},
     {key:'weight',label:'Poids (kg)',type:'number'}
   ],
   'Jailbreak':[
@@ -1309,7 +1309,7 @@ var GAME_ATTRS = {
   'Grand Piece Online':[
     {key:'rarity',label:'Rareté',type:'select',options:['Common','Uncommon','Rare','Epic','Legendary','Mythical','Collectable']},
     {key:'type',label:'Type',type:'select',options:['Devil Fruit','Épée','Arme à feu','Accessoire','Style de combat','Bateau','Matériau']},
-    {key:'fruit',label:'Type de fruit',type:'select',options:['Aucun','Paramecia','Logia','Zoan']}
+    {key:'fruit',label:'Type de fruit',type:'select',options:['None','Paramecia','Logia','Zoan']}
   ],
   'Da Hood':[
     {key:'rarity',label:'Rareté',type:'select',options:['Common','Rare','Epic','Legendary','Exclusive']},
@@ -1318,7 +1318,7 @@ var GAME_ATTRS = {
   'Royale High':[
     {key:'rarity',label:'Rareté',type:'select',options:['Commun','Rare','Limité','Saisonnier','Légende']},
     {key:'type',label:'Type',type:'select',options:['Halo','Set','Ailes','Jupe','Chaussures','Accessoire','Diamants']},
-    {key:'tier',label:'Tier halo',type:'select',options:['Aucun','Low','Mid','High']}
+    {key:'tier',label:'Tier halo',type:'select',options:['None','Low','Mid','High']}
   ]
 };
 
@@ -1328,7 +1328,7 @@ function attrLine(attributes){
   for(var k in attributes){
     if(k==='rarity') continue;
     var v=attributes[k];
-    if(v===null||v===undefined||v===''||v==='Aucune'||v==='Aucun') continue;
+    if(v===null||v===undefined||v===''||v==='None'||v==='None') continue;
     if(k==='income_unit') continue;
     if(k==='income') parts.push('💰 '+v+(attributes.income_unit||'/s'));
     else if(k==='weight') parts.push('⚖️ '+v+' kg');
@@ -1469,7 +1469,7 @@ async function setUser(user) {
       await db.from('profiles').update({disabled:false}).eq('id', currentUser.id);
       await db.from('listings').update({active:true}).eq('user_id', currentUser.id);
       userProfile.disabled = false;
-      showToast('Compte réactivé ✅','success');
+      showToast('Account reactivated ✅','success');
     } else {
       await db.auth.signOut(); clearUser(); showPage('home'); return;
     }
@@ -1509,11 +1509,11 @@ async function loadProfile() {
 async function doLogin() {
   var email = document.getElementById('loginEmail').value.trim();
   var pwd = document.getElementById('loginPassword').value;
-  if (!email || !pwd) return showAlert('loginAlert','error','Remplis tous les champs !');
+  if (!email || !pwd) return showAlert('loginAlert','error','Fill in all fields!');
   setBtn('loginBtn', true, 'Connexion…');
   var res = await db.auth.signInWithPassword({email, password: pwd});
   setBtn('loginBtn', false, 'Se connecter');
-  if (res.error) return showAlert('loginAlert','error','Email ou mot de passe incorrect.');
+  if (res.error) return showAlert('loginAlert','error','Incorrect email or password.');
   try {
     var aal = await db.auth.mfa.getAuthenticatorAssuranceLevel();
     if (aal.data && aal.data.currentLevel === 'aal1' && aal.data.nextLevel === 'aal2') {
@@ -1524,7 +1524,7 @@ async function doLogin() {
     }
   } catch(e){}
   hideModal('loginModal');
-  showToast('Connexion réussie ! 🎉','success');
+  showToast('Logged in! 🎉','success');
   logLogin();
 }
 
@@ -1532,9 +1532,9 @@ async function doRegister() {
   var username = document.getElementById('registerUsername').value.trim();
   var email = document.getElementById('registerEmail').value.trim();
   var pwd = document.getElementById('registerPassword').value;
-  if (!username || !email || !pwd) return showAlert('registerAlert','error','Remplis tous les champs !');
-  if (username.length < 3) return showAlert('registerAlert','error','Pseudo trop court (min. 3 caractères).');
-  if (pwd.length < 6) return showAlert('registerAlert','error','Mot de passe trop court (min. 6 caractères).');
+  if (!username || !email || !pwd) return showAlert('registerAlert','error','Fill in all fields!');
+  if (username.length < 3) return showAlert('registerAlert','error','Username too short (min. 3 characters).');
+  if (pwd.length < 6) return showAlert('registerAlert','error','Password too short (min. 6 characters).');
   var check = await db.from('profiles').select('id').eq('username', username).maybeSingle();
   if (check.data) return showAlert('registerAlert','error','Nom d\'utilisateur indisponible.');
   setBtn('registerBtn', true, 'Création…');
@@ -1543,7 +1543,7 @@ async function doRegister() {
   setBtn('registerBtn', false, 'Créer mon compte');
   if (res.error) return showAlert('registerAlert','error', res.error.message);
   hideModal('registerModal');
-  showToast('Compte créé ! Vérifie ton email 🎉','success');
+  showToast('Account created! Check your email 🎉','success');
 }
 
 /* ══ Reset mot de passe par code email (sur le site, sans lien) ══ */
@@ -1557,11 +1557,11 @@ function resetForgotFlow() {
 }
 async function sendResetCode() {
   var email = (document.getElementById('fpEmail').value || '').trim();
-  if (!email || email.indexOf('@') === -1) return showAlert('forgotAlert','error','Entre un email valide.');
+  if (!email || email.indexOf('@') === -1) return showAlert('forgotAlert','error','Enter a valid email.');
   fpResetEmail = email;
   setBtn('fpSendBtn', true, 'Envoi…');
   var ex = await db.rpc('email_exists', { p_email: email });
-  if (!ex.error && ex.data === false) { setBtn('fpSendBtn', false, 'Envoyer le code'); return showAlert('forgotAlert','error','Aucun compte n est associé à cet email.'); }
+  if (!ex.error && ex.data === false) { setBtn('fpSendBtn', false, 'Envoyer le code'); return showAlert('forgotAlert','error','No account is linked to this email.'); }
   var res = await db.auth.resetPasswordForEmail(email);
   setBtn('fpSendBtn', false, 'Envoyer le code');
   if (res.error) return showAlert('forgotAlert','error', res.error.message);
@@ -1571,31 +1571,31 @@ async function sendResetCode() {
 }
 async function verifyResetCode() {
   var code = (document.getElementById('fpCode').value || '').trim();
-  if (!code) return showAlert('forgotAlert','error','Entre le code reçu par email.');
+  if (!code) return showAlert('forgotAlert','error','Enter the code received by email.');
   setBtn('fpVerifyBtn', true, 'Vérification…');
   var res = await db.auth.verifyOtp({ email: fpResetEmail, token: code, type: 'recovery' });
   setBtn('fpVerifyBtn', false, 'Vérifier le code');
-  if (res.error) return showAlert('forgotAlert','error','Code incorrect ou expiré.');
+  if (res.error) return showAlert('forgotAlert','error','Incorrect or expired code.');
   document.getElementById('fpStep2').style.display = 'none';
   document.getElementById('fpStep3').style.display = 'block';
-  showAlert('forgotAlert','success','Email vérifié ✅ Choisis ton nouveau mot de passe.');
+  showAlert('forgotAlert','success','Email verified ✅ Choose your new password.');
 }
 async function saveResetPassword() {
   var pwd = document.getElementById('fpNewPw').value;
-  if (!pwd || pwd.length < 6) return showAlert('forgotAlert','error','Mot de passe trop court (min. 6).');
+  if (!pwd || pwd.length < 6) return showAlert('forgotAlert','error','Password too short (min. 6).');
   setBtn('fpSaveBtn', true, 'Enregistrement…');
   var res = await db.auth.updateUser({ password: pwd });
   setBtn('fpSaveBtn', false, 'Changer le mot de passe');
   if (res.error) return showAlert('forgotAlert','error', res.error.message);
   hideModal('forgotModal');
   resetForgotFlow();
-  showToast('Mot de passe changé ✅ Tu es connecté.','success');
+  showToast('Password changed ✅ You are logged in.','success');
   showPage('home');
 }
 
 async function doResetPassword() {
   var pwd = document.getElementById('resetPwInput').value;
-  if (!pwd || pwd.length < 6) return showAlert('resetPwAlert','error','Mot de passe trop court (min. 6).');
+  if (!pwd || pwd.length < 6) return showAlert('resetPwAlert','error','Password too short (min. 6).');
   setBtn('resetPwBtn', true, 'Mise à jour…');
   var res = await db.auth.updateUser({ password: pwd });
   setBtn('resetPwBtn', false, 'Mettre à jour');
@@ -1603,40 +1603,40 @@ async function doResetPassword() {
   hideModal('resetPasswordModal');
   try { history.replaceState({}, '', location.origin + location.pathname); } catch(e){}
   document.getElementById('resetPwInput').value = '';
-  showToast('Mot de passe mis à jour ✅','success');
+  showToast('Password updated ✅','success');
   showPage('home');
 }
 
 async function doChangePassword() {
   if (!currentUser) return;
   var pwd = document.getElementById('newPwInput').value;
-  if (!pwd || pwd.length < 6) return showAlert('settingsAlert','error','Mot de passe trop court (min. 6).');
+  if (!pwd || pwd.length < 6) return showAlert('settingsAlert','error','Password too short (min. 6).');
   var res = await db.auth.updateUser({ password: pwd });
   if (res.error) return showAlert('settingsAlert','error', res.error.message);
   document.getElementById('newPwInput').value = '';
-  showAlert('settingsAlert','success','Mot de passe mis à jour ✅');
+  showAlert('settingsAlert','success','Password updated ✅');
 }
 
 async function deactivateAccount() {
   if (!currentUser) return;
-  if (!confirm('Désactiver ton compte ?\n\nTon profil et tes annonces seront masqués. Tu pourras réactiver en te reconnectant.')) return;
+  if (!confirm('Deactivate your account?\n\nYour profile and listings will be hidden. You can reactivate by logging back in.')) return;
   await db.from('listings').update({active:false}).eq('user_id', currentUser.id);
   await db.from('profiles').update({disabled:true}).eq('id', currentUser.id);
   hideModal('settingsModal');
   await db.auth.signOut(); clearUser(); showPage('home');
-  showToast('Compte désactivé. Reconnecte-toi pour le réactiver.','info');
+  showToast('Account deactivated. Log back in to reactivate it.','info');
 }
 
 async function deleteAccount() {
   if (!currentUser) return;
   var conf = (document.getElementById('deleteConfirmInput').value || '').trim();
-  if (conf !== 'SUPPRIMER') return showAlert('settingsAlert','error','Tape SUPPRIMER (en majuscules) pour confirmer.');
+  if (conf !== 'DELETE' && conf !== 'SUPPRIMER') return showAlert('settingsAlert','error','Type DELETE (uppercase) to confirm.');
   if (!confirm('Dernière confirmation : supprimer DÉFINITIVEMENT ton compte ?')) return;
   var res = await db.rpc('delete_my_account');
   if (res.error) return showAlert('settingsAlert','error','Suppression impossible : ' + rpcMsg(res.error) + '. Lance le SQL delete_my_account ou contacte le support.');
   hideModal('settingsModal');
   await db.auth.signOut(); clearUser(); showPage('home');
-  showToast('Compte supprimé. À bientôt 👋','success');
+  showToast('Account deleted. See you soon 👋','success');
 }
 
 function openSettings() { showModal('settingsModal'); refreshMfaStatus(); loadLoginHistory(); }
@@ -1663,7 +1663,7 @@ async function loadLoginHistory() {
   try {
     var res = await db.from('login_logs').select('created_at,device,user_agent').eq('user_id', currentUser.id).order('created_at',{ascending:false}).limit(5);
     if (res.error) { box.innerHTML = 'Active l historique : lance le SQL login_logs.'; return; }
-    if (!res.data || !res.data.length) { box.innerHTML = 'Aucune connexion enregistrée pour le moment.'; return; }
+    if (!res.data || !res.data.length) { box.innerHTML = 'No login recorded yet.'; return; }
     box.innerHTML = res.data.map(function(r){
       var d = new Date(r.created_at).toLocaleString('fr-FR');
       return '<div style="padding:6px 0;border-bottom:1px solid var(--border)">🕑 ' + d + '<br><span style="color:var(--muted)">' + escHtml(r.device || r.user_agent || '') + '</span></div>';
@@ -1674,7 +1674,7 @@ async function logoutAllSessions() {
   if (!confirm('Déconnecter TOUTES tes sessions sur tous les appareils ?')) return;
   try { await db.auth.signOut({ scope: 'global' }); } catch(e){ await db.auth.signOut(); }
   clearUser(); showPage('home');
-  showToast('Toutes les sessions ont été déconnectées.','success');
+  showToast('All sessions have been logged out.','success');
 }
 
 /* ══ 2FA (TOTP) via Supabase MFA ══ */
@@ -1701,7 +1701,7 @@ async function refreshMfaStatus() {
   } catch(e){ statusEl.innerHTML = '2FA indisponible (vérifie que MFA est activé dans Supabase).'; }
 }
 async function mfaStart() {
-  showAlert('mfaAlert','info','Préparation…');
+  showAlert('mfaAlert','info','Preparing…');
   try {
     // nettoie un éventuel facteur non vérifié resté en attente
     var f = await db.auth.mfa.listFactors();
@@ -1720,36 +1720,36 @@ async function mfaStart() {
 }
 async function mfaVerifyEnroll() {
   var code = (document.getElementById('mfaCode').value || '').trim();
-  if (!code) return showAlert('mfaAlert','error','Entre le code de ton app.');
+  if (!code) return showAlert('mfaAlert','error','Enter the code from your app.');
   var ch = await db.auth.mfa.challenge({ factorId: window._mfaFactorId });
   if (ch.error) return showAlert('mfaAlert','error', ch.error.message);
   var v = await db.auth.mfa.verify({ factorId: window._mfaFactorId, challengeId: ch.data.id, code: code });
-  if (v.error) return showAlert('mfaAlert','error','Code incorrect, réessaie.');
+  if (v.error) return showAlert('mfaAlert','error','Incorrect code, try again.');
   document.getElementById('mfaCode').value = '';
-  showAlert('mfaAlert','success','2FA activée ✅');
+  showAlert('mfaAlert','success','2FA enabled ✅');
   refreshMfaStatus();
 }
 async function mfaDisable(factorId) {
   if (!confirm('Désactiver la double authentification ?')) return;
   var res = await db.auth.mfa.unenroll({ factorId: factorId });
   if (res.error) return showAlert('mfaAlert','error', res.error.message);
-  showAlert('mfaAlert','success','2FA désactivée.');
+  showAlert('mfaAlert','success','2FA disabled.');
   refreshMfaStatus();
 }
 async function submitMfaLogin() {
   var code = (document.getElementById('mfaLoginCode').value || '').trim();
-  if (!code) return showAlert('mfaLoginAlert','error','Entre le code.');
+  if (!code) return showAlert('mfaLoginAlert','error','Enter the code.');
   setBtn('mfaLoginBtn', true, 'Vérification…');
   var f = await db.auth.mfa.listFactors();
   var totp = ((f.data && f.data.totp) ? f.data.totp : []).filter(function(x){ return x.status==='verified'; })[0];
-  if (!totp) { setBtn('mfaLoginBtn', false, 'Valider'); return showAlert('mfaLoginAlert','error','Aucun facteur 2FA trouvé.'); }
+  if (!totp) { setBtn('mfaLoginBtn', false, 'Valider'); return showAlert('mfaLoginAlert','error','No 2FA factor found.'); }
   var ch = await db.auth.mfa.challenge({ factorId: totp.id });
   if (ch.error) { setBtn('mfaLoginBtn', false, 'Valider'); return showAlert('mfaLoginAlert','error', ch.error.message); }
   var v = await db.auth.mfa.verify({ factorId: totp.id, challengeId: ch.data.id, code: code });
   setBtn('mfaLoginBtn', false, 'Valider');
-  if (v.error) return showAlert('mfaLoginAlert','error','Code incorrect ou expiré.');
+  if (v.error) return showAlert('mfaLoginAlert','error','Incorrect or expired code.');
   hideModal('mfaLoginModal');
-  showToast('Connexion réussie ! 🎉','success');
+  showToast('Logged in! 🎉','success');
   logLogin();
 }
 
@@ -1764,7 +1764,7 @@ function toggleAi() {
 }
 function aiGreet() {
   aiAddMsg('Salut ! 👋 Je suis l assistant BlooMarket. Comment puis-je t aider ?', 'bot');
-  var chips = ['Comment acheter ?','Comment vendre ?','Récupérer un paiement','Un litige ?','Devenir vendeur vérifié'];
+  var chips = ['How to buy?','How to sell?','Get paid','A dispute?','Become a verified seller'];
   document.getElementById('aiChips').innerHTML = chips.map(function(t){ return '<span class="ai-chip" onclick="aiChip(this.textContent)">' + t + '</span>'; }).join('');
 }
 function aiAddMsg(text, who, actions, id) {
@@ -1813,32 +1813,32 @@ function aiAnswer(q) {
   var s = (q || '').toLowerCase();
   function has(){ for (var i=0;i<arguments.length;i++){ if (s.indexOf(arguments[i]) !== -1) return true; } return false; }
   if (has('achet','buy'))
-    return {text:'Pour acheter : recharge ton solde, ouvre une annonce et clique « Acheter ». Ton paiement reste en séquestre jusqu à ce que tu confirmes la réception. 🛒', actions:[{label:'Voir les annonces', onclick:"toggleAi();showPage(\'home\')"}]};
+    return {text:'To buy: top up your balance, open a listing and click « Buy ». Your payment stays in escrow until you confirm receipt. 🛒', actions:[{label:'View listings', onclick:"toggleAi();showPage(\'home\')"}]};
   if (has('vend','sell','annonce'))
-    return {text:'Pour vendre : clique sur « + Vendre », choisis le jeu puis l item dans la liste, ajoute au moins 3 photos, fixe ton prix et publie. 📦', actions:[{label:'Créer une annonce', onclick:'toggleAi();openSellModal()'}]};
+    return {text:'To sell: click « + Sell », choose the game then the item from the list, add at least 3 photos, set your price and publish. 📦', actions:[{label:'Create a listing', onclick:'toggleAi();openSellModal()'}]};
   if (has('paiement','payé','payer','retir','retrait','argent','withdraw','gagn','solde'))
-    return {text:'Tes ventes créditent ton solde (tu touches 90 %, commission 10 %). Pour récupérer ton argent : Dashboard → « Retirer des fonds » (PayPal), traité sous 24-48h. 💸', actions:[{label:'Mon dashboard', onclick:"toggleAi();showPage(\'dashboard\')"}]};
+    return {text:'Your sales credit your balance (you get 90%, 10% commission). To withdraw your money: Dashboard → « Withdraw funds » (PayPal), processed within 24-48h. 💸', actions:[{label:'My dashboard', onclick:"toggleAi();showPage(\'dashboard\')"}]};
   if (has('litige','dispute','arnaqu','probleme','problème','scam','rembours'))
-    return {text:'Souci sur une commande ? Ouvre la conversation de la commande et clique « ⚖️ Problème ». Un admin examine les preuves (garde tes captures) et tranche. ⚖️', actions:[{label:'Mes messages', onclick:"toggleAi();showPage(\'messages\')"}], escalate:true};
+    return {text:'Issue with an order? Open the order conversation and click « ⚖️ Problem ». An admin reviews the evidence (keep your screenshots) and decides. ⚖️', actions:[{label:'My messages', onclick:"toggleAi();showPage(\'messages\')"}], escalate:true};
   if (has('verifi','vérifi','badge','identit','kyc','18'))
-    return {text:'Pour devenir vendeur vérifié ✅ : lance « Devenir vendeur » depuis ton compte, envoie ta pièce d identité + un selfie et confirme tes 18 ans. L admin valide sous 24-48h, puis le badge ✅ apparaît partout sur ton profil.', actions:[{label:'Mon profil', onclick:"toggleAi();showPage(\'profile\')"}]};
+    return {text:'To become a verified seller ✅: start « Become a seller » from your account, send your ID + a selfie and confirm you are 18. The admin approves within 24-48h, then the ✅ badge appears across your profile.', actions:[{label:'My profile', onclick:"toggleAi();showPage(\'profile\')"}]};
   if (has('bloobux','fidélit','fidelit','points'))
-    return {text:'Les Bloobux sont des points de fidélité 🎁 (gagnés via achats, parrainage, events). Ils donnent des avantages et réductions mais ne sont PAS de l argent : impossible de les retirer ou de les convertir en euros.'};
+    return {text:'Bloobux are loyalty points 🎁 (earned via purchases, referrals, events). They give perks and discounts but are NOT money: you cannot withdraw or convert them to euros.'};
   if (has('commission','frais','pourcentage'))
-    return {text:'La commission BlooMarket est de 10 % par vente. Le vendeur reçoit 90 % du prix. 💰'};
+    return {text:'BlooMarket commission is 10% per sale. The seller receives 90% of the price. 💰'};
   if (has('contact','admin','humain','support','aide','parler','signal'))
-    return {text:'Je peux prévenir un admin pour toi. Décris ton souci et je le transmets. 🧑‍💼', escalate:true};
+    return {text:'I can notify an admin for you. Describe your issue and I will pass it on. 🧑‍💼', escalate:true};
   if (has('bonjour','salut','hello','coucou','hey','yo'))
-    return {text:'Salut ! 👋 Pose-moi ta question : acheter, vendre, paiement, litige, vendeur vérifié…'};
-  return {text:'Je ne suis pas sûr d avoir compris 🤔. Choisis un sujet ci-dessous, ou je peux transmettre ta question à un admin.', escalate:true};
+    return {text:'Hi! 👋 Ask me anything: buying, selling, payment, disputes, verified seller…'};
+  return {text:'I am not sure I understood 🤔. Pick a topic below, or I can forward your question to an admin.', escalate:true};
 }
 async function aiEscalate() {
-  if (!currentUser) { aiAddMsg('Connecte-toi d abord pour qu un admin puisse te recontacter. 🔑', 'bot'); return; }
+  if (!currentUser) { aiAddMsg('Log in first so an admin can get back to you. 🔑', 'bot'); return; }
   try {
-    var r = await db.from('support_tickets').insert({ user_id: currentUser.id, message: (aiLastQ || 'Demande d assistance').slice(0,500), type:'ai_escalation', status:'open' });
+    var r = await db.from('support_tickets').insert({ user_id: currentUser.id, message: (aiLastQ || 'Support request').slice(0,500), type:'ai_escalation', status:'open' });
     if (r.error) throw r.error;
-    aiAddMsg('✅ C est transmis ! Un admin va voir ton message et revenir vers toi.', 'bot');
-  } catch(e) { aiAddMsg('La remontée admin n est pas encore activée (lance le SQL support_tickets).', 'bot'); }
+    aiAddMsg('✅ Sent! An admin will see your message and get back to you.', 'bot');
+  } catch(e) { aiAddMsg('Admin escalation is not enabled yet (run the support_tickets SQL).', 'bot'); }
 }
 
 /* ══ ADMIN : signalements IA ══ */
@@ -1846,15 +1846,15 @@ async function adminSupport(el) {
   document.querySelectorAll('.admin-tab').forEach(function(t){ t.classList.remove('active'); });
   if (el) el.classList.add('active');
   var content = document.getElementById('adminContent');
-  content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Chargement…</div>';
+  content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Loading…</div>';
   var res = await db.from('support_tickets').select('*, profiles(username)').order('created_at',{ascending:false}).limit(100);
   if (res.error) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Active le SQL support_tickets pour voir les signalements remontés par l IA.</div>'; return; }
-  if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucun signalement.</div>'; return; }
+  if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No report.</div>'; return; }
   var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span>Utilisateur</span><span>Message</span><span>Statut</span><span>Action</span></div>';
   res.data.forEach(function(tk){
     var uname = (tk.profiles && tk.profiles.username) || '—';
-    var sb = tk.status === 'open' ? '<span class="badge-wait">Ouvert</span>' : '<span class="badge-ok">Résolu</span>';
-    var act = tk.status === 'open' ? '<button onclick="adminResolveTicket(' + tk.id + ')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Résolu</button>' : '—';
+    var sb = tk.status === 'open' ? '<span class="badge-wait">Open</span>' : '<span class="badge-ok">Resolved</span>';
+    var act = tk.status === 'open' ? '<button onclick="adminResolveTicket(' + tk.id + ')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Resolve</button>' : '—';
     html += '<div class="admin-table-row" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span style="font-weight:600">' + escHtml(uname) + '<br><span style="font-size:10px;color:var(--muted)">' + new Date(tk.created_at).toLocaleString('fr-FR') + '</span></span><span style="color:var(--muted2);font-size:11px">' + (tk.type==='report'?'🚩 ':'🤖 ') + escHtml(tk.message || '') + '</span>' + sb + '<span>' + act + '</span></div>';
   });
   content.innerHTML = html + '</div>';
@@ -1873,7 +1873,7 @@ function openPromote(id) {
   document.getElementById('promoteTiers').innerHTML = tiers.map(function(t){
     var ok = bal >= t.c;
     return '<button onclick="doPromote(' + t.d + ')" ' + (ok?'':'disabled') + ' style="width:100%;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;background:' + (ok?'rgba(251,191,36,0.12)':'rgba(255,255,255,0.04)') + ';border:1px solid ' + (ok?'rgba(251,191,36,0.3)':'var(--border)') + ';color:' + (ok?'#fff':'var(--muted)') + ';padding:13px 15px;border-radius:10px;cursor:' + (ok?'pointer':'not-allowed') + ';font-family:Inter,sans-serif;font-size:13px"><span>⭐ ' + t.l + '</span><strong style="color:#FBBF24">' + t.c + '€</strong></button>';
-  }).join('') + (bal < 5 ? '<p class="settings-desc" style="text-align:center;margin-top:6px">Solde insuffisant — recharge ton compte pour promouvoir.</p>' : '');
+  }).join('') + (bal < 5 ? '<p class="settings-desc" style="text-align:center;margin-top:6px">Insufficient balance — top up your account to promote.</p>' : '');
   document.getElementById('promoteAlert').innerHTML = '';
   showModal('promoteModal');
 }
@@ -1882,12 +1882,12 @@ async function doPromote(days) {
   var res = await db.rpc('promote_listing', { p_listing_id: currentPromoteId, p_days: days });
   if (res.error) return showAlert('promoteAlert','error', rpcMsg(res.error));
   hideModal('promoteModal');
-  showToast('Annonce promue ⭐ Elle remonte en tête !','success');
+  showToast('Listing promoted ⭐ It moves to the top!','success');
   await loadProfile(); loadMyListings(); loadListings();
 }
 
 async function reportUser() {
-  if (!currentUser) { showToast('Connecte-toi pour signaler.','error'); return; }
+  if (!currentUser) { showToast('Log in to report.','error'); return; }
   if (!currentChatOther) return;
   var reason = prompt('Pourquoi signales-tu cet utilisateur ? (arnaque, spam, insultes, contenu interdit…)');
   if (!reason) return;
@@ -1895,13 +1895,13 @@ async function reportUser() {
   try {
     var r = await db.from('support_tickets').insert({ user_id: currentUser.id, type:'report', message: '🚩 Signalement de ' + other + ' (' + currentChatOther + ') : ' + reason.slice(0,400) });
     if (r.error) throw r.error;
-    showToast('Signalement envoyé à l équipe. Merci 🙏','success');
-  } catch(e){ showToast('Active le SQL support_tickets pour les signalements.','error'); }
+    showToast('Report sent to the team. Thank you 🙏','success');
+  } catch(e){ showToast('Enable the support_tickets SQL for reports.','error'); }
 }
 
 async function logout() {
   await db.auth.signOut(); clearUser(); showPage('home');
-  showToast('Déconnecté','success');
+  showToast('Logged out','success');
 }
 
 /* ══ PROFILE ══ */
@@ -1958,7 +1958,7 @@ async function loadProfileReviews(sellerId) {
   var res = await db.from('reviews').select('*, buyer:profiles!reviews_buyer_id_fkey(username)').eq('seller_id', sellerId).order('created_at',{ascending:false}).limit(20);
   var cnt = document.getElementById('profileReviewCount');
   if (cnt) cnt.textContent = (res.data || []).length;
-  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:12px;color:var(--muted);font-size:13px">Aucun avis pour le moment.</div>'; return; }
+  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:12px;color:var(--muted);font-size:13px">No reviews yet.</div>'; return; }
   el.innerHTML = res.data.map(function(rv) {
     var bn = (rv.buyer && rv.buyer.username) || 'Acheteur';
     var dd = new Date(rv.created_at).toLocaleDateString('fr-FR');
@@ -1968,7 +1968,7 @@ async function loadProfileReviews(sellerId) {
 
 async function saveProfile() {
   var username = document.getElementById('editUsername').value.trim();
-  if (!username || username.length < 3) return showAlert('editProfileAlert','error','Pseudo trop court.');
+  if (!username || username.length < 3) return showAlert('editProfileAlert','error','Username too short.');
   var check = await db.from('profiles').select('id').eq('username', username).neq('id', currentUser.id).maybeSingle();
   if (check.data) return showAlert('editProfileAlert','error','Nom d\'utilisateur indisponible.');
   /* BLOC 9 : enregistrer bio / pays / date de naissance */
@@ -1979,7 +1979,7 @@ async function saveProfile() {
   if (res.error) return showAlert('editProfileAlert','error', res.error.message);
   await db.auth.updateUser({data:{username}});
   hideModal('editProfileModal');
-  showToast('Profil mis à jour !','success');
+  showToast('Profile updated!','success');
   await loadProfile();
   await loadProfilePage();
 }
@@ -1987,15 +1987,15 @@ async function saveProfile() {
 async function uploadAvatar(input) {
   if (!input.files || !input.files[0]) return;
   var file = input.files[0];
-  if (file.size > 5*1024*1024) return showToast('Image trop lourde (max 5 Mo)','error');
+  if (file.size > 5*1024*1024) return showToast('Image too large (max 5 MB)','error');
   var ext = file.name.split('.').pop();
   var path = currentUser.id + '/avatar.' + ext;
   var up = await db.storage.from('avatars').upload(path, file, {upsert:true});
-  if (up.error) { console.error('Upload avatar:', up.error); return showToast('Upload échoué : ' + (up.error.message || 'bucket "avatars" manquant ?'), 'error'); }
+  if (up.error) { console.error('Upload avatar:', up.error); return showToast('Upload failed: ' + (up.error.message || 'bucket "avatars" manquant ?'), 'error'); }
   var url = db.storage.from('avatars').getPublicUrl(path).data.publicUrl + '?t=' + Date.now();
   await db.from('profiles').update({avatar_url: url}).eq('id', currentUser.id);
   if (userProfile) userProfile.avatar_url = url;
-  showToast('Avatar mis à jour !','success');
+  showToast('Avatar updated!','success');
   await loadProfile();
   await loadProfilePage();
 }
@@ -2081,7 +2081,7 @@ function renderListings(listings, targetId) {
     html += '<div class="lc-title">' + escHtml(l.title) + '</div>';
     if (rar) html += '<span class="lc-rarity-tag" style="background:' + rarityColor(rar) + '">' + escHtml(rar) + '</span>';
     if (aline) html += '<div class="lc-attr-line">' + escHtml(aline) + '</div>';
-    html += '<div class="lc-seller"><div class="lc-seller-dot"></div>' + escHtml(seller) + (verified ? ' <span class="verified-badge">✓</span>' : '') + ((l.profiles && l.profiles.premium_badge) ? ' <span title="Vendeur premium">👑</span>' : '') + (isOwn ? ' <em style="font-size:10px;color:var(--muted)">(toi)</em>' : '') + '</div>';
+    html += '<div class="lc-seller"><div class="lc-seller-dot"></div>' + escHtml(seller) + (verified ? ' <span class="verified-badge">✓</span>' : '') + ((l.profiles && l.profiles.premium_badge) ? ' <span title="Premium seller">👑</span>' : '') + (isOwn ? ' <em style="font-size:10px;color:var(--muted)">(toi)</em>' : '') + '</div>';
     if (stock !== null) html += '<div class="lc-stock' + (stock <= 0 ? ' out' : '') + '">' + (stock <= 0 ? 'Rupture de stock' : ('En stock : ' + stock)) + '</div>';
     html += '<div class="lc-footer"><div class="lc-price">' + parseFloat(l.price).toFixed(2) + '€</div>';
     html += '<button class="lc-buy" onclick="event.stopPropagation();openDetailById(' + l.id + ')">Voir</button></div>';
@@ -2095,7 +2095,7 @@ async function openDetailById(id) {
   if (res.data) {
     openDetail(res.data);
     if (location.hash !== '#/listing/' + id) { location.hash = '#/listing/' + id; }
-  } else { showToast('Annonce introuvable','error'); }
+  } else { showToast('Listing not found','error'); }
 }
 function closeDetail() {
   hideModal('detailModal'); currentDetailId = null;
@@ -2107,7 +2107,7 @@ function copyListingLink(id) {
   var url = location.origin + location.pathname + '#/listing/' + id;
   function fallback(){ try { prompt('Copie ce lien :', url); } catch(e){} }
   try {
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(function(){ showToast('Lien copié ✅','success'); }, fallback);
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(function(){ showToast('Link copied ✅','success'); }, fallback);
     else fallback();
   } catch(e) { fallback(); }
 }
@@ -2153,30 +2153,30 @@ function openDetail(l) {
   html += '<div class="ld-title">' + escHtml(l.title) + '</div>';
   html += '<div class="ld-meta"><span class="ld-badge">' + escHtml(l.game) + '</span>';
   if (rar) html += '<span class="ld-rarity-tag" style="background:' + rarityColor(rar) + '">' + escHtml(rar) + '</span>';
-  if (verified) html += '<span class="ld-badge" style="color:var(--blue2);border-color:rgba(30,111,255,0.3)">✓ Vendeur vérifié</span>';
+  if (verified) html += '<span class="ld-badge" style="color:var(--blue2);border-color:rgba(30,111,255,0.3)">✓ Verified seller</span>';
   html += '</div>';
   if (aline) html += '<div class="ld-stock-info">📋 ' + escHtml(aline) + '</div>';
   if (stock !== null) html += '<div class="ld-stock-info"' + (stock <= 0 ? ' style="color:var(--red)"' : '') + '>' + (stock <= 0 ? '❌ Rupture de stock' : ('📦 En stock : ' + stock)) + '</div>';
-  html += '<div class="ld-desc">' + escHtml(l.description || 'Aucune description.') + '</div>';
+  html += '<div class="ld-desc">' + escHtml(l.description || 'No description.') + '</div>';
   var avLetter = seller[0].toUpperCase();
   var avatarInner = (l.profiles && l.profiles.avatar_url) ? '<img src="' + escHtml(l.profiles.avatar_url) + '">' : avLetter;
   html += '<div class="ld-seller-box" style="cursor:pointer" onclick="showSellerProfile(\'' + l.user_id + '\')">';
   html += '<div class="ld-seller-avatar">' + avatarInner + '</div>';
-  html += '<div class="ld-seller-info"><h4>' + escHtml(seller) + (verified ? ' <span class="verified-icon">✓</span>' : '') + '</h4><p>Voir le profil du vendeur →</p></div>';
+  html += '<div class="ld-seller-info"><h4>' + escHtml(seller) + (verified ? ' <span class="verified-icon">✓</span>' : '') + '</h4><p>View seller profile →</p></div>';
   if (!isOwn) html += '<button class="btn-msg" style="margin-left:auto" onclick="event.stopPropagation();openChat(\'' + l.user_id + '\',\'' + escHtml(seller) + '\',' + l.id + ')">💬 Contacter</button>';
   html += '</div>';
   html += '<div class="ld-price-row"><div class="ld-price">' + parseFloat(l.price).toFixed(2) + '€</div></div>';
-  html += '<button class="btn-cart-add" style="margin-bottom:12px" onclick="copyListingLink(' + l.id + ')">🔗 Copier le lien de l annonce</button>';
+  html += '<button class="btn-cart-add" style="margin-bottom:12px" onclick="copyListingLink(' + l.id + ')">🔗 Copy listing link</button>';
   if (!isOwn) {
     if (stock !== null && stock <= 0) {
       html += '<div style="font-size:13px;color:var(--red);font-weight:700">Cet article est en rupture de stock.</div>';
     } else {
       html += '<div class="ld-actions">';
-      html += '<button class="btn-buy-now" onclick="handleBuy(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + l.user_id + '\',' + l.price + ')">⚡ Acheter maintenant</button>';
-      html += '<button class="btn-cart-add" onclick="addToCart(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + escHtml(l.game) + '\',' + l.price + ',' + (imgs.length ? '\'' + escHtml(imgs[0]) + '\'' : 'null') + ',\'' + l.user_id + '\');hideModal(\'detailModal\')">🛒 Ajouter au panier</button>';
+      html += '<button class="btn-buy-now" onclick="handleBuy(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + l.user_id + '\',' + l.price + ')">⚡ Buy now</button>';
+      html += '<button class="btn-cart-add" onclick="addToCart(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + escHtml(l.game) + '\',' + l.price + ',' + (imgs.length ? '\'' + escHtml(imgs[0]) + '\'' : 'null') + ',\'' + l.user_id + '\');hideModal(\'detailModal\')">🛒 Add to cart</button>';
       html += '</div>';
     }
-  } else html += '<span style="font-size:12px;color:var(--muted)">Ton annonce</span>';
+  } else html += '<span style="font-size:12px;color:var(--muted)">Your listing</span>';
   document.getElementById('detailContent').innerHTML = html;
   showModal('detailModal');
 }
@@ -2218,10 +2218,10 @@ async function showSellerProfile(userId) {
     var h = '<div class="seller-public-card">';
     h += '<div class="sp-head"><div class="sp-avatar">' + avInner + '</div>';
     h += '<div style="flex:1"><div class="sp-name">' + escHtml(name) + (p.id_verified ? ' <span class="verified-icon">✓</span>' : '') + (p.premium_badge ? ' 👑' : '') + '</div>';
-    h += '<div class="sp-sub">' + (p.country ? escHtml(p.country) + ' · ' : '') + 'Membre depuis ' + since + '</div></div></div>';
+    h += '<div class="sp-sub">' + (p.country ? escHtml(p.country) + ' · ' : '') + 'Member since ' + since + '</div></div></div>';
     if (p.bio) h += '<p style="font-size:13px;color:var(--muted2);line-height:1.6;margin-bottom:12px">' + escHtml(p.bio) + '</p>';
     h += '<div class="sp-stats">';
-    h += '<div class="sp-stat"><div class="sp-stat-n">' + (salesRes.count || 0) + '</div><div class="sp-stat-l">Ventes</div></div>';
+    h += '<div class="sp-stat"><div class="sp-stat-n">' + (salesRes.count || 0) + '</div><div class="sp-stat-l">Sales</div></div>';
     h += '<div class="sp-stat"><div class="sp-stat-n">' + listings.length + '</div><div class="sp-stat-l">Annonces</div></div>';
     h += '<div class="sp-stat"><div class="sp-stat-n">' + (reviews.length ? avg.toFixed(1) : '—') + '</div><div class="sp-stat-l">Note</div></div>';
     h += '</div></div>';
@@ -2230,7 +2230,7 @@ async function showSellerProfile(userId) {
       h += '<div class="section-title">Annonces actives</div><div class="listings" id="spListings"></div>';
     }
     if (reviews.length) {
-      h += '<div class="section-title" style="margin-top:16px">Avis (' + reviews.length + ')</div>';
+      h += '<div class="section-title" style="margin-top:16px">Reviews (' + reviews.length + ')</div>';
       reviews.forEach(function(rv) {
         var bn = (rv.buyer && rv.buyer.username) || 'Acheteur';
         var dd = new Date(rv.created_at).toLocaleDateString('fr-FR');
@@ -2314,7 +2314,7 @@ async function doSell() {
   await loadProfile();
   if (!userProfile || !userProfile.id_verified) {
     hideModal('sellModal');
-    showToast('Tu dois être vendeur vérifié pour publier','error');
+    showToast('You must be a verified seller to publish','error');
     setTimeout(function(){ showModal('sellerVerifyModal'); }, 500);
     return;
   }
@@ -2325,10 +2325,10 @@ async function doSell() {
   var stock = parseInt(document.getElementById('sellStock').value);
   if (isNaN(stock) || stock < 1) stock = 1;
   var catList = (typeof ITEM_CATALOG !== 'undefined' && ITEM_CATALOG[game]) ? ITEM_CATALOG[game] : [];
-  if (catList.length && catList.indexOf(title) === -1) return showAlert('sellAlert','error','Choisis ton item dans la liste.');
-  if (!title || !price || !desc) return showAlert('sellAlert','error','Remplis tous les champs !');
-  if (sellImageFiles.length < 3) return showAlert('sellAlert','error','Ajoute au moins 3 photos.');
-  if (price <= 0) return showAlert('sellAlert','error','Prix invalide.');
+  if (catList.length && catList.indexOf(title) === -1) return showAlert('sellAlert','error','Choose your item from the list.');
+  if (!title || !price || !desc) return showAlert('sellAlert','error','Fill in all fields!');
+  if (sellImageFiles.length < 3) return showAlert('sellAlert','error','Add at least 3 photos.');
+  if (price <= 0) return showAlert('sellAlert','error','Invalid price.');
   setBtn('sellBtn', true, 'Publication…');
   var imageUrls = [];
   for (var i = 0; i < sellImageFiles.length; i++) {
@@ -2342,7 +2342,7 @@ async function doSell() {
   /* BLOC 5 : on enregistre aussi les attributs + le stock */
   var res = await db.from('listings').insert({user_id:currentUser.id, title, game, price, description:desc, active:true, image_urls:imageUrls, attributes:collectSellAttrs(), stock:stock});
   setBtn('sellBtn', false, "Publier l'annonce");
-  if (res.error) return showAlert('sellAlert','error','Erreur : ' + res.error.message);
+  if (res.error) return showAlert('sellAlert','error','Error: ' + res.error.message);
   hideModal('sellModal');
   document.getElementById('sellTitle').value = ''; renderItemPicker();
   document.getElementById('sellPrice').value = '';
@@ -2351,9 +2351,9 @@ async function doSell() {
   document.getElementById('sellImagePreview').innerHTML = '';
   sellImageFiles = []; sellImageDataURLs = [];
   renderSellAttrFields();
-  showToast('Annonce publiée ! 🎉','success');
+  showToast('Listing published! 🎉','success');
   loadListings();
-  await addNotification(currentUser.id, '📋', 'Annonce publiée', 'Ton annonce "' + title + '" est en ligne.');
+  await addNotification(currentUser.id, '📋', 'Annonce publiée', 'Your listing "' + title + '" est en ligne.');
 }
 
 /* ══ BUY ══ */
@@ -2389,7 +2389,7 @@ async function ensureOrderChat(listingId) {
       convId = (nc && nc.data) ? nc.data.id : null;
     }
     if (!convId) return;
-    var msg = '🛒 Achat effectué : « ' + title + ' ». 🔒 Paiement en séquestre. Le vendeur a 48h pour livrer — merci de finaliser la livraison ici.';
+    var msg = '🛒 Purchase completed: « ' + title + ' ». 🔒 Payment in escrow. The seller has 48h to deliver — please finalize delivery here.';
     await db.from('messages').insert({conversation_id:convId, sender_id:currentUser.id, content:msg, read:false});
     await db.from('conversations').update({last_message:msg, updated_at:new Date().toISOString()}).eq('id', convId);
   } catch(e) {}
@@ -2397,15 +2397,15 @@ async function ensureOrderChat(listingId) {
 
 async function buyFromBalance(listingIds, total, kind, quantities) {
   quantities = quantities || listingIds.map(function(){ return 1; });
-  showToast('Achat en cours…','info');
+  showToast('Purchase in progress…','info');
   for (var i = 0; i < listingIds.length; i++) {
     var r = await db.rpc('buy_listing', { p_listing_id: listingIds[i], p_qty: quantities[i] || 1 });
-    if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
+    if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
     await ensureOrderChat(listingIds[i]);
   }
   if (kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); hideModal('cartModal'); }
   await loadProfile();
-  showToast('Achat réussi ✅ (payé avec ton solde)','success');
+  showToast('Purchase successful ✅ (paid with your balance)','success');
   if (typeof loadListings === 'function') loadListings();
 }
 
@@ -2422,8 +2422,8 @@ async function openPayment(ctx) {
   var bx = 2 * Math.max(1, ids.length);
   var bxEl = document.getElementById('payBloobux'); if (bxEl) bxEl.textContent = '+' + bx + ' 🔷';
   document.getElementById('pay-errors').textContent = '';
-  document.getElementById('pay-element').innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted);font-size:13px">Chargement du paiement…</div>';
-  setBtn('payNowBtn', true, 'Chargement…');
+  document.getElementById('pay-element').innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted);font-size:13px">Loading payment…</div>';
+  setBtn('payNowBtn', true, 'Loading…');
   showModal('payModal');
   try {
     var res = await fetch('/api/create-payment', {
@@ -2442,7 +2442,7 @@ async function openPayment(ctx) {
     pe.mount('#pay-element');
     setBtn('payNowBtn', false, 'Payer ' + ctx.amount.toFixed(2) + '€');
   } catch(e) {
-    document.getElementById('pay-errors').textContent = e.message || 'Erreur de paiement';
+    document.getElementById('pay-errors').textContent = e.message || 'Payment error';
     setBtn('payNowBtn', false, 'Réessayer');
   }
 }
@@ -2475,7 +2475,7 @@ async function submitPayElement() {
     }
     if (payContext && payContext.kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); }
     hideModal('payModal');
-    showToast('Paiement réussi ! 🔒 ' + created + ' commande(s) en séquestre','success');
+    showToast('Payment successful! 🔒 ' + created + ' order(s) in escrow','success');
     loadListings();
     if (currentUser) { loadNotifications(); }
   } else {
@@ -2489,7 +2489,7 @@ async function handlePaymentReturn() {
   var rs = params.get('redirect_status');
   if (!pi) return;
   try { history.replaceState({}, '', location.origin + location.pathname); } catch(e){}
-  if (rs !== 'succeeded') { if (rs) showToast('Paiement non finalisé','error'); return; }
+  if (rs !== 'succeeded') { if (rs) showToast('Payment not completed','error'); return; }
   var pend = null;
   try { pend = JSON.parse(localStorage.getItem('bm_pending_order') || 'null'); } catch(e){}
   localStorage.removeItem('bm_pending_order');
@@ -2503,7 +2503,7 @@ async function handlePaymentReturn() {
     if (!r.error) { created++; await ensureOrderChat(pend.listingIds[i]); }
   }
   if (pend.kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); }
-  showToast('Paiement réussi ! 🔒 ' + created + ' commande(s) en séquestre','success');
+  showToast('Payment successful! 🔒 ' + created + ' order(s) in escrow','success');
   loadListings(); loadNotifications();
 }
 
@@ -2514,22 +2514,22 @@ function cartStockOf(id) {
   return (l.stock === null || l.stock === undefined || l.stock === '') ? null : parseInt(l.stock);
 }
 function addToCart(id, title, game, price, imgUrl, sellerId) {
-  if (!currentUser) { showToast('Connecte-toi pour utiliser le panier','error'); showModal('loginModal'); return; }
+  if (!currentUser) { showToast('Log in to use the cart','error'); showModal('loginModal'); return; }
   var st = cartStockOf(id);
   var exists = cart.find(function(c){ return c.id === id; });
   if (exists) {
-    if (st !== null && (exists.qty || 1) >= st) { showToast('Stock maximum atteint (' + st + ')','info'); return; }
+    if (st !== null && (exists.qty || 1) >= st) { showToast('Max stock reached (' + st + ')','info'); return; }
     exists.qty = (exists.qty || 1) + 1; exists.stock = st;
     localStorage.setItem('bm_cart', JSON.stringify(cart));
     updateCartBadge(); renderCartModal();
-    showToast('Quantité +1 🛒','success');
+    showToast('Quantity +1 🛒','success');
     return;
   }
-  if (st !== null && st <= 0) { showToast('Article en rupture de stock','error'); return; }
+  if (st !== null && st <= 0) { showToast('Item out of stock','error'); return; }
   cart.push({id: id, title: title, game: game, price: price, imgUrl: imgUrl, qty: 1, stock: st});
   localStorage.setItem('bm_cart', JSON.stringify(cart));
   updateCartBadge();
-  showToast('Ajouté au panier 🛒','success');
+  showToast('Added to cart 🛒','success');
   if (sellerId && currentUser && sellerId !== currentUser.id) { try { db.rpc('notify_cart_add', { p_listing_id: id }); } catch(e){} }
 }
 function cartQty(id, delta) {
@@ -2538,7 +2538,7 @@ function cartQty(id, delta) {
   var st = (it.stock === null || it.stock === undefined) ? cartStockOf(id) : it.stock;
   var q = (it.qty || 1) + delta;
   if (q < 1) q = 1;
-  if (st !== null && q > st) { q = st; showToast('Stock maximum : ' + st,'info'); }
+  if (st !== null && q > st) { q = st; showToast('Max stock: ' + st,'info'); }
   it.qty = q;
   localStorage.setItem('bm_cart', JSON.stringify(cart));
   updateCartBadge(); renderCartModal();
@@ -2575,7 +2575,7 @@ function filterItemList() {
   var q = (document.getElementById('sellItemSearch').value || '').toLowerCase();
   var list = document.getElementById('sellItemList'); if (!list) return;
   var matches = items.filter(function(it){ return it.toLowerCase().indexOf(q) !== -1; }).slice(0, 60);
-  if (!matches.length) { list.innerHTML = '<div class="item-opt-empty">Aucun item trouvé pour ce jeu</div>'; list.style.display = 'block'; return; }
+  if (!matches.length) { list.innerHTML = '<div class="item-opt-empty">No item found for this game</div>'; list.style.display = 'block'; return; }
   list.innerHTML = matches.map(function(it){ return '<div class="item-opt" data-v="' + escHtml(it) + '" onmousedown="chooseItem(this.dataset.v)">' + escHtml(it) + '</div>'; }).join('');
   list.style.display = 'block';
 }
@@ -2656,7 +2656,7 @@ function setFundsAmount(n) {
 async function handleStripePayment() {
   if (!currentUser) { hideModal('addFundsModal'); showModal('loginModal'); return; }
   var amount = parseFloat(document.getElementById('fundsAmount').value);
-  if (!amount || amount < 1) return showAlert('fundsAlert','error','Montant minimum : 1€');
+  if (!amount || amount < 1) return showAlert('fundsAlert','error','Minimum amount: €1');
   setBtn('payBtn', true, 'Traitement…');
   document.getElementById('card-errors').textContent = '';
   try {
@@ -2678,7 +2678,7 @@ async function handleStripePayment() {
       await db.from('profiles').update({balance: newBal}).eq('id', currentUser.id);
       await addNotification(currentUser.id, '💰', 'Rechargement réussi', '+' + amount.toFixed(2) + '€ crédité sur ton solde.');
       hideModal('addFundsModal');
-      showToast('Paiement réussi ! +' + amount.toFixed(2) + '€ 💰','success');
+      showToast('Payment successful! +' + amount.toFixed(2) + '€ 💰','success');
       document.getElementById('fundsAmount').value = '';
       cardElement.clear();
       await loadProfile();
@@ -2696,7 +2696,7 @@ async function loadMyListings() {
   if (!res.data) return;
   document.getElementById('dMyListings').textContent = res.data.length;
   var body = document.getElementById('myListingsBody');
-  if (!res.data.length) { body.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">Aucune annonce</div>'; return; }
+  if (!res.data.length) { body.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">No listing</div>'; return; }
   var html = '';
   res.data.forEach(function(l) {
     html += '<div class="dtr"><span>' + (GAME_ICONS[l.game]||'🎮') + ' ' + escHtml(l.title) + '</span>';
@@ -2728,7 +2728,7 @@ async function loadTransactionHistory() {
   var all = [...(buys.data||[]).map(function(o){return Object.assign({},o,{_type:'buy'});}), ...(sells.data||[]).map(function(o){return Object.assign({},o,{_type:'sell'});})];
   all.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});
   all = all.slice(0, 15);
-  if (!all.length) { el.innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted);font-size:13px">Aucune transaction</div>'; return; }
+  if (!all.length) { el.innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted);font-size:13px">No transaction</div>'; return; }
   var html = '<div class="dtable"><div class="dth" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Item</span><span>Type</span><span>Montant</span><span>Date</span></div>';
   all.forEach(function(o) {
     var typeHtml = o._type === 'buy' ? '<span style="color:var(--red);font-size:11px;font-weight:700">ACHAT</span>' : '<span style="color:var(--green);font-size:11px;font-weight:700">VENTE</span>';
@@ -2741,9 +2741,9 @@ async function loadTransactionHistory() {
 }
 
 async function deleteListing(id) {
-  if (!confirm('Supprimer cette annonce ?')) return;
+  if (!confirm('Delete this listing?')) return;
   await db.from('listings').update({active:false}).eq('id', id).eq('user_id', currentUser.id);
-  showToast('Annonce supprimée','success');
+  showToast('Listing deleted','success');
   loadMyListings(); loadListings();
 }
 
@@ -2765,72 +2765,72 @@ async function loadOrders() {
   } else {
     res = await db.from('orders').select('*, buyer:profiles!orders_buyer_id_fkey(username)').eq('seller_id', currentUser.id).order('created_at',{ascending:false});
   }
-  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Aucune commande</div>'; return; }
+  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">No order</div>'; return; }
   var html = '';
   res.data.forEach(function(o) {
-    var other = currentOrderTab === 'buying' ? ((o.seller && o.seller.username) || 'Vendeur') : ((o.buyer && o.buyer.username) || 'Acheteur');
+    var other = currentOrderTab === 'buying' ? ((o.seller && o.seller.username) || 'Seller') : ((o.buyer && o.buyer.username) || 'Buyer');
     var _dlMs = new Date(o.created_at).getTime() + 48*3600*1000;
     var _rem = _dlMs - Date.now();
     var deadlineHtml = '';
     if (o.status === 'pending') {
       if (_rem > 0) {
         var _h = Math.floor(_rem/3600000), _m = Math.floor((_rem%3600000)/60000);
-        deadlineHtml = '<div class="order-deadline">⏳ Livraison sous 48h — il reste <strong>' + _h + 'h ' + _m + 'm</strong></div>';
+        deadlineHtml = '<div class="order-deadline">⏳ Delivery within 48h — <strong>' + _h + 'h ' + _m + 'm</strong></div>';
       } else {
-        deadlineHtml = '<div class="order-deadline late">⏰ Délai de 48h dépassé' + (currentOrderTab === 'selling' ? ' — livre au plus vite !' : '') + '</div>';
+        deadlineHtml = '<div class="order-deadline late">⏰ 48h deadline passed' + (currentOrderTab === 'selling' ? ' — deliver asap!' : '') + '</div>';
       }
     }
-    var statusHtml = o.status === 'pending' ? '<span class="badge-wait">🔒 Séquestre</span>' :
-                     o.status === 'completed' ? '<span class="badge-ok">✅ Complété</span>' :
-                     o.status === 'disputed' ? '<span class="badge-cancel">⚖️ Litige</span>' :
-                     o.status === 'refunded' ? '<span class="badge-cancel">↩️ Remboursé</span>' :
-                     '<span class="badge-cancel">❌ Annulé</span>';
+    var statusHtml = o.status === 'pending' ? '<span class="badge-wait">🔒 Escrow</span>' :
+                     o.status === 'completed' ? '<span class="badge-ok">✅ Completed</span>' :
+                     o.status === 'disputed' ? '<span class="badge-cancel">⚖️ Dispute</span>' :
+                     o.status === 'refunded' ? '<span class="badge-cancel">↩️ Refunded</span>' :
+                     '<span class="badge-cancel">❌ Cancelled</span>';
     var actions = '';
     if (currentOrderTab === 'buying' && o.status === 'pending') {
       actions += '<button class="btn-sm btn-sm-ghost" onclick="openChat(\'' + (o.seller_id||'') + '\',\'' + escHtml(other) + '\',' + (o.listing_id||0) + ')">💬 Chat</button>';
-      actions += '<button class="btn-sm btn-sm-green" onclick="confirmOrder(' + o.id + ',\'' + o.seller_id + '\')">✅ Confirmer réception</button>';
+      actions += '<button class="btn-sm btn-sm-green" onclick="confirmOrder(' + o.id + ',\'' + o.seller_id + '\')">✅ Confirm receipt</button>';
       actions += '<button class="btn-sm btn-sm-red" onclick="openDispute(' + o.id + ')">⚖️ Signaler un problème</button>';
     } else if (currentOrderTab === 'selling' && o.status === 'pending') {
       actions += '<button class="btn-sm btn-sm-ghost" onclick="openChat(\'' + (o.buyer_id||'') + '\',\'' + escHtml(other) + '\',' + (o.listing_id||0) + ')">💬 Chat</button>';
     } else if (o.status === 'completed' && currentOrderTab === 'buying' && !o.reviewed) {
-      actions += '<button class="btn-sm btn-sm-blue" onclick="openReviewModal(' + o.id + ',\'' + o.seller_id + '\')">⭐ Laisser un avis</button>';
+      actions += '<button class="btn-sm btn-sm-blue" onclick="openReviewModal(' + o.id + ',\'' + o.seller_id + '\')">⭐ Leave a review</button>';
     }
     if (currentOrderTab === 'buying' && o.status === 'pending' && _rem <= 0) {
-      actions += '<button class="btn-sm btn-sm-red" onclick="claimLateRefund(' + o.id + ')">↩️ Réclamer un remboursement</button>';
+      actions += '<button class="btn-sm btn-sm-red" onclick="claimLateRefund(' + o.id + ')">↩️ Request a refund</button>';
     }
     var commission = o.commission ? ' · Commission : ' + parseFloat(o.commission).toFixed(2) + '€' : '';
-    html += '<div class="order-item"><div class="order-header"><div class="order-title">' + escHtml(o.title||'Commande') + '</div>' + statusHtml + '</div>';
-    html += '<div class="order-meta">' + (currentOrderTab==='buying'?'Vendeur':'Acheteur') + ' : <strong>' + escHtml(other) + '</strong> · ' + parseFloat(o.price||0).toFixed(2) + '€' + commission + ' · ' + new Date(o.created_at).toLocaleDateString('fr-FR') + '</div>';
+    html += '<div class="order-item"><div class="order-header"><div class="order-title">' + escHtml(o.title||'Order') + '</div>' + statusHtml + '</div>';
+    html += '<div class="order-meta">' + (currentOrderTab==='buying'?'Seller':'Buyer') + ' : <strong>' + escHtml(other) + '</strong> · ' + parseFloat(o.price||0).toFixed(2) + '€' + commission + ' · ' + new Date(o.created_at).toLocaleDateString('fr-FR') + '</div>';
     html += deadlineHtml + '<div class="order-actions">' + actions + '</div></div>';
   });
   el.innerHTML = html;
 }
 
 async function confirmOrder(orderId, sellerId) {
-  if (!confirm("Confirmer que tu as bien reçu l'item ?\n\nL'argent en séquestre sera alors versé au vendeur. Action définitive.")) return;
+  if (!confirm("Confirm you received the item?\n\nThe escrowed money will then be released to the seller. This action is permanent.")) return;
   var r = await db.rpc('confirm_order', { p_order_id: orderId });
-  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
-  showToast('Réception confirmée ✅ Fonds versés au vendeur','success');
+  if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
+  showToast('Receipt confirmed ✅ Funds released to seller','success');
   loadOrders();
   loadChatOrder();
   setTimeout(function(){openReviewModal(orderId, sellerId);}, 500);
 }
 
 async function claimLateRefund(orderId) {
-  if (!confirm('Le vendeur a dépassé le délai de 48h pour livrer.\n\nDemander un remboursement ? Un litige prioritaire sera ouvert et un administrateur traitera le remboursement de ton paiement en séquestre.')) return;
+  if (!confirm('The seller missed the 48h delivery deadline.\n\nRequest a refund? A priority dispute will be opened and an administrator will process the refund of your escrowed payment.')) return;
   var r = await db.rpc('open_dispute', { p_order_id: orderId, p_reason: 'Délai de livraison de 48h dépassé — remboursement demandé' });
-  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
-  showToast('Remboursement demandé ↩️ Un admin va traiter le litige','info');
+  if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
+  showToast('Refund requested ↩️ An admin will handle the dispute','info');
   loadOrders();
 }
 async function openDispute(orderId) {
   var reason = prompt("Décris le problème (item non reçu, incorrect, tentative d'arnaque...) :");
   if (reason === null) return;
   reason = (reason || '').trim();
-  if (!reason) { showToast('Motif requis pour ouvrir un litige','error'); return; }
+  if (!reason) { showToast('A reason is required to open a dispute','error'); return; }
   var r = await db.rpc('open_dispute', { p_order_id: orderId, p_reason: reason });
-  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
-  showToast('Litige ouvert ⚖️ Un administrateur va vérifier','info');
+  if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
+  showToast('Dispute opened ⚖️ An administrator will review it','info');
   loadOrders();
   loadChatOrder();
 }
@@ -2847,13 +2847,13 @@ async function loadChatOrder() {
   res.data.forEach(function(o){
     var iAmBuyer = o.buyer_id === currentUser.id;
     html += '<div class="cob-row">';
-    html += '<div class="cob-info"><span class="cob-lock">🔒</span><div><div class="cob-title">'+escHtml(o.title||'Commande')+'</div><div class="cob-sub">'+parseFloat(o.price||0).toFixed(2)+'€ · en séquestre</div></div></div>';
+    html += '<div class="cob-info"><span class="cob-lock">🔒</span><div><div class="cob-title">'+escHtml(o.title||'Order')+'</div><div class="cob-sub">'+parseFloat(o.price||0).toFixed(2)+'€ · in escrow</div></div></div>';
     html += '<div class="cob-actions">';
     if (iAmBuyer) {
-      html += '<button class="btn-sm btn-sm-green" onclick="confirmOrder('+o.id+',\''+o.seller_id+'\')">✅ J\'ai bien reçu</button>';
-      html += '<button class="btn-sm btn-sm-red" onclick="openDispute('+o.id+')">⚖️ Problème</button>';
+      html += '<button class="btn-sm btn-sm-green" onclick="confirmOrder('+o.id+',\''+o.seller_id+'\')">✅ I received it</button>';
+      html += '<button class="btn-sm btn-sm-red" onclick="openDispute('+o.id+')">⚖️ Problem</button>';
     } else {
-      html += '<span class="cob-wait">⏳ En attente que l\'acheteur confirme</span>';
+      html += '<span class="cob-wait">⏳ Waiting for buyer to confirm</span>';
     }
     html += '</div></div>';
   });
@@ -2872,7 +2872,7 @@ async function openChat(otherUserId, otherUsername, listingId) {
     var newConv = await db.from('conversations').insert({user1_id:ids[0], user2_id:ids[1], listing_id:listingId}).select().single();
     conv = newConv.data;
   }
-  if (!conv) { showToast('Erreur chat','error'); return; }
+  if (!conv) { showToast('Chat error','error'); return; }
   currentChatConvId = conv.id;
   currentChatOther = otherUserId;
   loadChatOrder();
@@ -2927,7 +2927,7 @@ async function loadConversations() {
     .or('user1_id.eq.' + currentUser.id + ',user2_id.eq.' + currentUser.id)
     .order('updated_at',{ascending:false});
   var el = document.getElementById('convList');
-  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Aucune conversation</div>'; return; }
+  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">No conversation</div>'; return; }
   var html = '<div class="conv-list">';
   res.data.forEach(function(c) {
     var isUser1 = c.user1_id === currentUser.id;
@@ -2997,7 +2997,7 @@ async function loadNotifications() {
 
 function renderNotifications(notifs) {
   var el = document.getElementById('notifList');
-  if (!notifs.length) { el.innerHTML = '<div class="notif-empty">Aucune notification</div>'; return; }
+  if (!notifs.length) { el.innerHTML = '<div class="notif-empty">No notification</div>'; return; }
   el.innerHTML = notifs.map(function(n) {
     var d = new Date(n.created_at);
     var time = d.toLocaleDateString('fr-FR') + ' ' + d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
@@ -3030,7 +3030,7 @@ function openReviewModal(orderId, sellerId) {
   document.getElementById('reviewSellerId').value = sellerId;
   reviewRating = 0;
   document.querySelectorAll('.review-star').forEach(function(s){s.classList.remove('active');});
-  document.getElementById('reviewRatingLabel').textContent = 'Sélectionne une note';
+  document.getElementById('reviewRatingLabel').textContent = 'Select a rating';
   document.getElementById('reviewComment').value = '';
   document.getElementById('reviewAlert').innerHTML = '';
   showModal('reviewModal');
@@ -3043,18 +3043,18 @@ function setReviewRating(r) {
 }
 
 async function submitReview() {
-  if (!reviewRating) return showAlert('reviewAlert','error','Sélectionne une note !');
+  if (!reviewRating) return showAlert('reviewAlert','error','Select a rating!');
   var orderId = document.getElementById('reviewOrderId').value;
   var sellerId = document.getElementById('reviewSellerId').value;
   var comment = document.getElementById('reviewComment').value.trim();
-  setBtn('reviewBtn', true, 'Chargement…');
+  setBtn('reviewBtn', true, 'Loading…');
   var res = await db.from('reviews').insert({order_id:orderId, seller_id:sellerId, buyer_id:currentUser.id, rating:reviewRating, comment});
   if (!res.error) await db.from('orders').update({reviewed:true}).eq('id', orderId);
-  setBtn('reviewBtn', false, "Publier l'avis");
-  if (res.error) return showAlert('reviewAlert','error','Erreur : ' + res.error.message);
-  await addNotification(sellerId, '⭐', 'Nouvel avis reçu', 'Tu as reçu un avis ' + reviewRating + '/5.');
+  setBtn('reviewBtn', false, 'Post review');
+  if (res.error) return showAlert('reviewAlert','error','Error: ' + res.error.message);
+  await addNotification(sellerId, '⭐', 'New review received', 'You received a review ' + reviewRating + '/5.');
   hideModal('reviewModal');
-  showToast('Avis publié ! Merci ⭐','success');
+  showToast('Review posted! Thank you ⭐','success');
   loadOrders();
 }
 
@@ -3065,16 +3065,16 @@ async function requestWithdraw() {
   var amount = parseFloat(document.getElementById('withdrawAmount').value);
   var method = document.getElementById('withdrawMethod').value;
   var address = document.getElementById('withdrawAddress').value.trim();
-  if (!amount || amount < 1) return showAlert('withdrawAlert','error','Montant minimum : 1€');
+  if (!amount || amount < 1) return showAlert('withdrawAlert','error','Minimum amount: €1');
   if (!address) return showAlert('withdrawAlert','error','Remplis ton adresse ' + method + '.');
   var balance = parseFloat(userProfile ? userProfile.balance : 0);
-  if (balance < amount) return showAlert('withdrawAlert','error','Solde insuffisant (' + balance.toFixed(2) + '€)');
+  if (balance < amount) return showAlert('withdrawAlert','error','Insufficient balance (' + balance.toFixed(2) + '€)');
   if (!confirm('Demander un retrait de ' + amount.toFixed(2) + '€ via ' + method + ' ?')) return;
   var newBal = Math.round((balance - amount) * 100) / 100;
   await db.from('profiles').update({balance: newBal}).eq('id', currentUser.id);
   await db.from('withdrawals').insert({user_id:currentUser.id, amount, method, address, status:'pending'});
   await loadProfile();
-  showToast('Demande de retrait envoyée ✅','success');
+  showToast('Withdrawal request sent ✅','success');
   document.getElementById('withdrawAmount').value = '';
   document.getElementById('withdrawAddress').value = '';
   loadWithdrawHistory();
@@ -3084,9 +3084,9 @@ async function loadWithdrawHistory() {
   if (!currentUser) return;
   var res = await db.from('withdrawals').select('*').eq('user_id', currentUser.id).order('created_at',{ascending:false});
   var el = document.getElementById('withdrawHistory');
-  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Aucun retrait</div>'; return; }
+  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">No withdrawal</div>'; return; }
   el.innerHTML = res.data.map(function(w) {
-    var badge = w.status === 'approved' ? '<span class="badge-ok">✅ Approuvé</span>' : w.status === 'rejected' ? '<span class="badge-cancel">❌ Refusé</span>' : '<span class="badge-wait">⏳ En attente</span>';
+    var badge = w.status === 'approved' ? '<span class="badge-ok">✅ Approuvé</span>' : w.status === 'rejected' ? '<span class="badge-cancel">❌ Refusé</span>' : '<span class="badge-wait">⏳ Pending</span>';
     return '<div class="wh-row"><div><strong>' + parseFloat(w.amount).toFixed(2) + '€</strong> via ' + escHtml(w.method) + '<br><span style="font-size:11px;color:var(--muted)">' + escHtml(w.address) + ' · ' + new Date(w.created_at).toLocaleDateString('fr-FR') + '</span></div>' + badge + '</div>';
   }).join('');
 }
@@ -3118,11 +3118,11 @@ async function adminTab(tab, el) {
   var content = document.getElementById('adminContent');
   if (tab === 'users') {
     var res = await db.from('profiles').select('*').order('created_at',{ascending:false});
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucun utilisateur</div>'; return; }
-    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Pseudo</span><span>Solde</span><span>Vérifié</span><span>Inscrit</span><span>Actions</span></div>';
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No user</div>'; return; }
+    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Username</span><span>Balance</span><span>Verified</span><span>Joined</span><span>Actions</span></div>';
     res.data.forEach(function(u) {
       html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml(u.username||'—') + (u.banned ? ' <span style="color:#FCA5A5;font-size:10px">🚫 banni</span>' : '') + '</span><span style="color:var(--blue2)">' + parseFloat(u.balance||0).toFixed(2) + '€</span><span>' + (u.id_verified ? '✅' : '—') + '</span><span style="color:var(--muted)">' + new Date(u.created_at).toLocaleDateString('fr-FR') + '</span><span style="display:flex;gap:5px">';
-      html += '<button onclick="adminVerifyUser(\'' + u.id + '\',' + !u.id_verified + ')" class="btn-sm" style="background:rgba(34,197,94,0.1);color:#22C55E;border:1px solid rgba(34,197,94,0.2);font-size:10px">' + (u.id_verified ? 'Retirer' : 'Vérifier') + '</button>';
+      html += '<button onclick="adminVerifyUser(\'' + u.id + '\',' + !u.id_verified + ')" class="btn-sm" style="background:rgba(34,197,94,0.1);color:#22C55E;border:1px solid rgba(34,197,94,0.2);font-size:10px">' + (u.id_verified ? 'Remove' : 'Verify') + '</button>';
       html += '<button onclick="adminBanUser(\'' + u.id + '\',' + !u.banned + ')" class="btn-sm btn-sm-red" style="font-size:10px">' + (u.banned ? 'Débannir' : 'Bannir') + '</button>';
       html += '</span></div>';
     });
@@ -3130,7 +3130,7 @@ async function adminTab(tab, el) {
     content.innerHTML = html;
   } else if (tab === 'sellers') {
     var res = await db.from('seller_requests').select('*, profiles(username, id_verified)').order('created_at',{ascending:false});
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucune demande de vendeur</div>'; return; }
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No seller request</div>'; return; }
     var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.5fr 1fr 0.6fr 1fr 1.2fr"><span>Utilisateur</span><span>Téléphone</span><span>18+</span><span>Statut</span><span>Actions</span></div>';
     for (var i = 0; i < res.data.length; i++) {
       var s = res.data[i];
@@ -3140,28 +3140,28 @@ async function adminTab(tab, el) {
         var signed = await db.storage.from('kyc').createSignedUrl(s.id_card_url, 3600);
         if (signed.data) idlink = '<a href="' + signed.data.signedUrl + '" target="_blank" style="color:var(--blue2)">Voir pièce 🪪</a>';
       }
-      var sbadge = s.status === 'approved' ? '<span class="badge-ok">Approuvé</span>' : s.status === 'rejected' ? '<span class="badge-cancel">Refusé</span>' : '<span class="badge-wait">En attente</span>';
-      var acts = s.status === 'pending' ? '<button onclick="adminApproveSeller(\'' + s.user_id + '\',true)" class="btn-sm btn-sm-green" style="font-size:10px">✅ Valider</button> <button onclick="adminApproveSeller(\'' + s.user_id + '\',false)" class="btn-sm btn-sm-red" style="font-size:10px">❌ Refuser</button>' : '—';
+      var sbadge = s.status === 'approved' ? '<span class="badge-ok">Approved</span>' : s.status === 'rejected' ? '<span class="badge-cancel">Rejected</span>' : '<span class="badge-wait">Pending</span>';
+      var acts = s.status === 'pending' ? '<button onclick="adminApproveSeller(\'' + s.user_id + '\',true)" class="btn-sm btn-sm-green" style="font-size:10px">✅ Approve</button> <button onclick="adminApproveSeller(\'' + s.user_id + '\',false)" class="btn-sm btn-sm-red" style="font-size:10px">❌ Reject</button>' : '—';
       html += '<div class="admin-table-row" style="grid-template-columns:1.5fr 1fr 0.6fr 1fr 1.2fr"><span style="font-weight:600">' + escHtml(uname) + '<br><span style="font-size:10px;color:var(--muted)">' + idlink + '</span></span><span style="color:var(--muted)">' + escHtml(s.phone || '—') + '</span><span>' + (s.age_confirmed ? '✅' : '—') + '</span>' + sbadge + '<span>' + acts + '</span></div>';
     }
     html += '</div>';
     content.innerHTML = html;
   } else if (tab === 'disputes') {
     var res = await db.from('disputes').select('*, orders(title, price)').order('created_at',{ascending:false});
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucun litige</div>'; return; }
-    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.5fr 2fr 1fr 1.4fr"><span>Commande</span><span>Motif</span><span>Statut</span><span>Décision</span></div>';
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No dispute</div>'; return; }
+    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.5fr 2fr 1fr 1.4fr"><span>Order</span><span>Reason</span><span>Status</span><span>Decision</span></div>';
     res.data.forEach(function(dp) {
       var o = dp.orders || {};
-      var sbadge = dp.status === 'open' ? '<span class="badge-wait">Ouvert</span>' : dp.status === 'resolved_refund' ? '<span class="badge-cancel">Remboursé</span>' : '<span class="badge-ok">Versé vendeur</span>';
-      var acts = dp.status === 'open' ? '<button onclick="adminResolveDispute(' + dp.order_id + ',\'refund\')" class="btn-sm btn-sm-red" style="font-size:10px">↩️ Rembourser</button> <button onclick="adminResolveDispute(' + dp.order_id + ',\'release\')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Payer vendeur</button>' : '—';
+      var sbadge = dp.status === 'open' ? '<span class="badge-wait">Open</span>' : dp.status === 'resolved_refund' ? '<span class="badge-cancel">Refunded</span>' : '<span class="badge-ok">Paid to seller</span>';
+      var acts = dp.status === 'open' ? '<button onclick="adminResolveDispute(' + dp.order_id + ',\'refund\')" class="btn-sm btn-sm-red" style="font-size:10px">↩️ Refund</button> <button onclick="adminResolveDispute(' + dp.order_id + ',\'release\')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Pay seller</button>' : '—';
       html += '<div class="admin-table-row" style="grid-template-columns:1.5fr 2fr 1fr 1.4fr"><span style="font-weight:600">' + escHtml(o.title || ('#' + dp.order_id)) + '<br><span style="font-size:10px;color:var(--blue2)">' + parseFloat(o.price || 0).toFixed(2) + '€</span></span><span style="color:var(--muted2);font-size:11px">' + escHtml(dp.reason || '') + '</span>' + sbadge + '<span>' + acts + '</span></div>';
     });
     html += '</div>';
     content.innerHTML = html;
   } else if (tab === 'listings') {
     var res = await db.from('listings').select('*, profiles(username)').order('created_at',{ascending:false}).limit(50);
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucune annonce</div>'; return; }
-    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Item</span><span>Vendeur</span><span>Prix</span><span>Statut</span><span>Action</span></div>';
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No listing</div>'; return; }
+    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Item</span><span>Seller</span><span>Price</span><span>Status</span><span>Action</span></div>';
     res.data.forEach(function(l) {
       html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml(l.title||'—') + '</span><span style="color:var(--muted)">' + escHtml((l.profiles&&l.profiles.username)||'—') + '</span><span style="color:var(--blue2);font-weight:700">' + parseFloat(l.price||0).toFixed(2) + '€</span><span>' + (l.active ? '<span class="badge-ok">Actif</span>' : '<span class="badge-cancel">Inactif</span>') + '</span><span style="display:flex;gap:5px"><button onclick="adminToggleListing(' + l.id + ',' + (!l.active) + ')" class="btn-sm btn-sm-ghost" style="font-size:10px">' + (l.active ? 'Désactiver' : 'Activer') + '</button><button onclick="adminDeleteListing(' + l.id + ')" class="btn-sm btn-sm-red" style="font-size:10px">Supprimer</button></span></div>';
     });
@@ -3169,16 +3169,16 @@ async function adminTab(tab, el) {
     content.innerHTML = html;
   } else if (tab === 'orders') {
     var res = await db.from('orders').select('*').order('created_at',{ascending:false}).limit(50);
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucune commande</div>'; return; }
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No order</div>'; return; }
     var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Item</span><span>Prix</span><span>Commission</span><span>Statut</span></div>';
     res.data.forEach(function(o) {
-      html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml(o.title||'—') + '</span><span style="color:var(--blue2);font-weight:700">' + parseFloat(o.price||0).toFixed(2) + '€</span><span style="color:var(--green)">' + parseFloat(o.commission||0).toFixed(2) + '€</span><span>' + (o.status === 'completed' ? '<span class="badge-ok">Complété</span>' : o.status === 'pending' ? '<span class="badge-wait">En attente</span>' : '<span class="badge-cancel">Annulé</span>') + '</span></div>';
+      html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml(o.title||'—') + '</span><span style="color:var(--blue2);font-weight:700">' + parseFloat(o.price||0).toFixed(2) + '€</span><span style="color:var(--green)">' + parseFloat(o.commission||0).toFixed(2) + '€</span><span>' + (o.status === 'completed' ? '<span class="badge-ok">Completed</span>' : o.status === 'pending' ? '<span class="badge-wait">Pending</span>' : '<span class="badge-cancel">Cancelled</span>') + '</span></div>';
     });
     html += '</div>';
     content.innerHTML = html;
   } else if (tab === 'aconv') {
     var res = await db.from('conversations').select('*, user1:profiles!conversations_user1_id_fkey(username), user2:profiles!conversations_user2_id_fkey(username)').order('updated_at',{ascending:false}).limit(100);
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucune conversation</div>'; return; }
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No conversation</div>'; return; }
     var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 2fr 1fr"><span>Participants</span><span>Dernier message</span><span>Date</span></div>';
     res.data.forEach(function(c) {
       var u1 = (c.user1 && c.user1.username) || '—', u2 = (c.user2 && c.user2.username) || '—';
@@ -3189,11 +3189,11 @@ async function adminTab(tab, el) {
     content.innerHTML = html;
   } else if (tab === 'withdraws') {
     var res = await db.from('withdrawals').select('*, profiles(username)').order('created_at',{ascending:false});
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucun retrait</div>'; return; }
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No withdrawal</div>'; return; }
     var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Utilisateur</span><span>Montant</span><span>Méthode</span><span>Statut</span><span>Actions</span></div>';
     res.data.forEach(function(w) {
-      var badge = w.status === 'approved' ? '<span class="badge-ok">Approuvé</span>' : w.status === 'rejected' ? '<span class="badge-cancel">Refusé</span>' : '<span class="badge-wait">En attente</span>';
-      var actions = w.status === 'pending' ? '<button onclick="adminWithdraw(' + w.id + ',\'approved\',\'' + w.user_id + '\')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Approuver</button> <button onclick="adminWithdraw(' + w.id + ',\'rejected\',\'' + w.user_id + '\')" class="btn-sm btn-sm-red" style="font-size:10px">❌ Refuser</button>' : '—';
+      var badge = w.status === 'approved' ? '<span class="badge-ok">Approved</span>' : w.status === 'rejected' ? '<span class="badge-cancel">Rejected</span>' : '<span class="badge-wait">Pending</span>';
+      var actions = w.status === 'pending' ? '<button onclick="adminWithdraw(' + w.id + ',\'approved\',\'' + w.user_id + '\')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Approve</button> <button onclick="adminWithdraw(' + w.id + ',\'rejected\',\'' + w.user_id + '\')" class="btn-sm btn-sm-red" style="font-size:10px">❌ Reject</button>' : '—';
       html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml((w.profiles&&w.profiles.username)||'—') + '<br><span style="font-size:10px;color:var(--muted)">' + escHtml(w.address||'') + '</span></span><span style="color:var(--blue2);font-weight:700">' + parseFloat(w.amount||0).toFixed(2) + '€</span><span style="color:var(--muted)">' + escHtml(w.method||'—') + '</span>' + badge + '<span>' + actions + '</span></div>';
     });
     html += '</div>';
@@ -3203,14 +3203,14 @@ async function adminTab(tab, el) {
 
 async function adminVerifyUser(userId, verified) {
   var r = await db.rpc('admin_set_verified', { p_user_id: userId, p_verified: verified });
-  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
-  showToast(verified ? 'Utilisateur vérifié ✓' : 'Vérification retirée','success');
+  if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
+  showToast(verified ? 'Verified user ✓' : 'Vérification retirée','success');
   adminTab(currentAdminTab);
 }
 
 async function adminApproveSeller(userId, approve) {
   var r = await db.rpc('admin_set_verified', { p_user_id: userId, p_verified: approve });
-  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
+  if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
   showToast(approve ? 'Vendeur validé ✅' : 'Demande refusée','success');
   adminTab('sellers');
 }
@@ -3218,32 +3218,32 @@ async function adminApproveSeller(userId, approve) {
 async function adminResolveDispute(orderId, action) {
   if (!confirm(action === 'refund' ? "Rembourser l'acheteur ?" : 'Verser les fonds au vendeur ?')) return;
   var r = await db.rpc('admin_resolve_dispute', { p_order_id: orderId, p_action: action });
-  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
-  showToast('Litige résolu ✅','success');
+  if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
+  showToast('Dispute resolved ✅','success');
   adminTab('disputes');
 }
 
 async function adminDeleteListing(id) {
-  if (!confirm('Supprimer cette annonce ?')) return;
+  if (!confirm('Delete this listing?')) return;
   var r = await db.rpc('admin_delete_listing', { p_id: id });
   if (r.error) { r = await db.from('listings').update({active:false}).eq('id', id); }
-  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
-  showToast('Annonce supprimée','success');
+  if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
+  showToast('Listing deleted','success');
   adminTab(currentAdminTab); loadListings();
 }
 
 async function adminToggleListing(id, active) {
   var r = await db.rpc('admin_set_listing_active', { p_id: id, p_active: active });
   if (r.error) { r = await db.from('listings').update({active:active}).eq('id', id); }
-  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
+  if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
   showToast(active ? 'Annonce réactivée ✅' : 'Annonce désactivée','success');
   adminTab('listings'); loadListings();
 }
 
 async function adminBanUser(userId, banned) {
-  if (!confirm(banned ? 'Bannir cet utilisateur ? Ses annonces seront retirées de la vente.' : 'Débannir cet utilisateur ?')) return;
+  if (!confirm(banned ? 'Ban this user? Their listings will be removed from sale.' : 'Débannir cet utilisateur ?')) return;
   var r = await db.rpc('admin_ban_user', { p_user_id: userId, p_banned: banned });
-  if (r.error) { showToast('Erreur : ' + rpcMsg(r.error), 'error'); return; }
+  if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
   showToast(banned ? 'Utilisateur banni 🚫' : 'Utilisateur débanni ✅','success');
   adminTab('users');
 }
@@ -3256,12 +3256,12 @@ async function adminWithdraw(id, status, userId) {
       var profRes = await db.from('profiles').select('balance').eq('id', userId).single();
       var newBal = Math.round(((profRes.data ? parseFloat(profRes.data.balance) : 0) + parseFloat(wRes.data.amount)) * 100) / 100;
       await db.from('profiles').update({balance: newBal}).eq('id', userId);
-      await addNotification(userId, '❌', 'Retrait refusé', 'Ton retrait a été refusé. Le montant a été re-crédité.');
+      await addNotification(userId, '❌', 'Withdrawal rejected', 'Ton retrait a été refusé. Le montant a été re-crédité.');
     }
   } else {
     await addNotification(userId, '✅', 'Retrait approuvé', 'Ton retrait a été approuvé et sera traité sous 24h.');
   }
-  showToast(status === 'approved' ? 'Retrait approuvé ✅' : 'Retrait refusé','success');
+  showToast(status === 'approved' ? 'Withdrawal approved ✅' : 'Withdrawal rejected','success');
   adminTab(currentAdminTab);
 }
 
@@ -3396,7 +3396,7 @@ function previewSvId(input) {
 }
 async function submitSellerVerify() {
   if (!currentUser) return showModal('loginModal');
-  if (!document.getElementById('svAge').checked) return showAlert('sellerVerifyAlert','error','Tu dois certifier avoir 18 ans ou plus.');
+  if (!document.getElementById('svAge').checked) return showAlert('sellerVerifyAlert','error','You must certify you are 18 or older.');
   if (!svIdFile) return showAlert('sellerVerifyAlert','error','Ajoute une photo de ta pièce d\'identité.');
   setBtn('svBtn', true, 'Envoi…');
   var phone = document.getElementById('svPhone').value.trim();
@@ -3410,9 +3410,9 @@ async function submitSellerVerify() {
   var ins = await db.from('seller_requests').insert({user_id:currentUser.id, id_card_url:path, phone:phone, age_confirmed:true, status:'pending'});
   if (phone) db.from('profiles').update({phone:phone, age_confirmed:true}).eq('id', currentUser.id).then(function(){});
   setBtn('svBtn', false, 'Envoyer ma demande');
-  if (ins.error) return showAlert('sellerVerifyAlert','error','Erreur : ' + ins.error.message);
+  if (ins.error) return showAlert('sellerVerifyAlert','error','Error: ' + ins.error.message);
   hideModal('sellerVerifyModal');
-  showToast('Demande envoyée ✅ Réponse après vérification par l\'admin','success');
+  showToast('Request sent ✅ Reply after review by the admin','success');
 }
 
 async function loadReferral() {
@@ -3426,7 +3426,7 @@ function copyReferral() {
   var li = document.getElementById('referralLink'); if (!li) return;
   li.select();
   try { navigator.clipboard.writeText(li.value); } catch(e) { try { document.execCommand('copy'); } catch(e2){} }
-  showToast('Lien copié ! 🎁','success');
+  showToast('Link copied! 🎁','success');
 }
 
 async function openShop() {
@@ -3440,15 +3440,15 @@ function renderShop() {
   var bx = (userProfile && userProfile.bloobux) || 0;
   var hasP = userProfile && userProfile.premium_badge;
   var h = '';
-  h += shopItem('premium_badge', '', '👑 Badge Premium', 'Une couronne sur ton profil et tes annonces', 50, bx, hasP);
-  h += shopItem('color', '#3D8BFF', '🔵 Pseudo bleu', 'Affiche ton pseudo en bleu', 30, bx, false);
-  h += shopItem('color', '#22C55E', '🟢 Pseudo vert', 'Affiche ton pseudo en vert', 30, bx, false);
-  h += shopItem('color', '#FBBF24', '🟡 Pseudo doré', 'Affiche ton pseudo en doré', 30, bx, false);
+  h += shopItem('premium_badge', '', '👑 Premium badge', 'A crown on your profile and listings', 50, bx, hasP);
+  h += shopItem('color', '#3D8BFF', '🔵 Blue username', 'Show your username in blue', 30, bx, false);
+  h += shopItem('color', '#22C55E', '🟢 Green username', 'Show your username in green', 30, bx, false);
+  h += shopItem('color', '#FBBF24', '🟡 Gold username', 'Show your username in gold', 30, bx, false);
   document.getElementById('shopList').innerHTML = h;
 }
 function shopItem(perk, value, title, desc, cost, bx, owned) {
   var dis = (owned || bx < cost) ? 'disabled' : '';
-  var label = owned ? 'Débloqué' : (bx < cost ? 'Pas assez' : (cost + ' 🔷'));
+  var label = owned ? 'Unlocked' : (bx < cost ? 'Not enough' : (cost + ' 🔷'));
   return '<div class="shop-item"><div class="shop-info"><div class="shop-title">' + title + '</div><div class="shop-desc">' + desc + '</div></div>'
     + '<button class="btn-blue" ' + dis + ' onclick="redeemPerk(\'' + perk + '\',\'' + value + '\')">' + label + '</button></div>';
 }
@@ -3458,7 +3458,7 @@ async function redeemPerk(perk, value) {
   await loadProfile();
   document.getElementById('shopBalance').textContent = (userProfile && userProfile.bloobux) || 0;
   renderShop();
-  showToast('Avantage débloqué ✅','success');
+  showToast('Perk unlocked ✅','success');
   if (document.getElementById('profilePage').classList.contains('show')) loadProfilePage();
 }
 
@@ -3466,7 +3466,7 @@ document.addEventListener('DOMContentLoaded', function(){ renderSellAttrFields()
 init();
 </script>
 <!-- ── ASSISTANT IA ── -->
-<div id="aiFab" onclick="toggleAi()" title="Assistant BlooMarket">🤖</div>
+<div id="aiFab" onclick="toggleAi()" title="BlooMarket Assistant">🤖</div>
 <div id="aiPanel">
   <div class="ai-head"><div class="ai-head-t">🤖 Assistant BlooMarket</div><button class="ai-close" onclick="toggleAi()">✕</button></div>
   <div class="ai-msgs" id="aiMsgs"></div>
