@@ -806,6 +806,7 @@ body.auth-loading #userNav{display:none!important}
 <!-- ── ADMIN ── -->
 <div id="adminPage" class="page">
   <div class="dash-header"><div class="dash-title">⚙️ Administration</div></div>
+  <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn-ghost" onclick="loadAdminPage()" style="font-size:12px">🔄 Refresh stats</button></div>
   <div class="admin-stat-grid" id="adminStats"></div>
   <div class="admin-nav">
     <button class="admin-tab active" onclick="adminTab('users',this)">👥 Users</button>
@@ -3170,8 +3171,8 @@ async function loadAdminPage() {
   var sellersRes = await db.from('profiles').select('id',{count:'exact',head:true}).eq('id_verified', true);
   var vsRes = await db.rpc('visit_stats'); var v = (vsRes && vsRes.data) ? vsRes.data : {};
   document.getElementById('adminStats').innerHTML = [
-    {l:'Utilisateurs', v:usersRes.count||0}, {l:'Annonces actives', v:listingsRes.count||0},
-    {l:'Commandes', v:ordersRes.count||0}, {l:'Vendeurs vérifiés', v:sellersRes.count||0}, {l:'Revenus plateforme', v:totalRevenue.toFixed(2)+'€'}, {l:'Retraits en attente', v:withdrawsRes.count||0}, {l:'🟢 Actifs maintenant', v:(v.active||0)}, {l:'Visiteurs aujourd hui', v:(v.today||0)}, {l:'Visiteurs (7 jours)', v:(v.week||0)}, {l:'Visiteurs (30 jours)', v:(v.month||0)}
+    {l:'Users', v:usersRes.count||0}, {l:'Active listings', v:listingsRes.count||0},
+    {l:'Orders', v:ordersRes.count||0}, {l:'Verified sellers', v:sellersRes.count||0}, {l:'Platform revenue', v:totalRevenue.toFixed(2)+'€'}, {l:'Pending withdrawals', v:withdrawsRes.count||0}, {l:'🟢 Active now', v:(v.active||0)}, {l:'Visitors today', v:(v.today||0)}, {l:'Visitors (7 days)', v:(v.week||0)}, {l:'Visitors (30 days)', v:(v.month||0)}
   ].map(function(s){return '<div class="dc"><div class="dc-l">'+s.l+'</div><div class="dc-v">'+s.v+'</div></div>';}).join('');
   adminTab('users');
 }
