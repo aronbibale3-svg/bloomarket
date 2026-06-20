@@ -692,11 +692,6 @@ body.auth-loading #userNav{display:none!important}
         <span data-i18n="trust.verified">✅ Verified sellers</span>
         <span data-i18n="trust.support">💬 Responsive support</span>
       </div>
-      <div class="hb-stats">
-        <div><div class="hb-stat-n" id="statListings">0</div><div class="hb-stat-l" data-i18n="stat.listings">Listings</div></div>
-        <div><div class="hb-stat-n" id="statSellers">0</div><div class="hb-stat-l" data-i18n="stat.sellers">Verified sellers</div></div>
-        <div><div class="hb-stat-n">24/7</div><div class="hb-stat-l" data-i18n="stat.support">Support</div></div>
-      </div>
       <button id="heroSellerBtn" onclick="heroBecomeSeller()" style="margin-top:16px;background:linear-gradient(135deg,#1E6FFF,#0050CC);border:none;color:#fff;font-weight:800;font-size:13px;padding:12px 22px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 6px 18px rgba(30,111,255,0.35)" data-i18n="hero.cta">🚀 Become a seller</button>
     </div>
     <div style="font-size:64px;opacity:.7;flex-shrink:0">🛒</div>
@@ -939,6 +934,7 @@ body.auth-loading #userNav{display:none!important}
     <div class="fg"><label data-i18n="auth.username">Username</label><input type="text" id="registerUsername" placeholder="YourUsername" data-i18n-ph="auth.username.ph" oninput="signupFormStart()"></div>
     <div class="fg"><label data-i18n="auth.email">Email</label><input type="email" id="registerEmail" placeholder="your@email.com" data-i18n-ph="auth.email.ph"></div>
     <div class="fg"><label data-i18n="auth.password">Password</label><input type="password" id="registerPassword" placeholder="At least 6 characters" data-i18n-ph="auth.pwd.ph" onkeydown="if(event.key==='Enter')doRegister()"></div>
+    <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted2);margin:-2px 0 14px;cursor:pointer"><input type="checkbox" id="registerNewsletter" checked style="width:auto;margin:0"> <span data-i18n="reg.newsletter">📣 Keep me posted about new listings & deals</span></label>
     <button class="btn-submit" id="registerBtn" onclick="doRegister()" data-i18n="auth.create">Create my account</button>
     <p class="sw"><span data-i18n="auth.haveaccount">Already have an account?</span> <a data-i18n="auth.signin.link" onclick="switchModal('registerModal','loginModal')">Sign in</a></p>
   </div>
@@ -1436,7 +1432,7 @@ var I18N = {
     'trust.pay':'\uD83D\uDD12 Secure payments','trust.escrow':'\uD83D\uDEE1\uFE0F Anti-scam escrow',
     'trust.verified':'\u2705 Verified sellers','trust.support':'\uD83D\uDCAC Responsive support',
     'stat.listings':'Listings','stat.sellers':'Verified sellers','stat.support':'Support',
-    'hero.cta':'\uD83D\uDE80 Become a seller'
+    'hero.cta':'\uD83D\uDE80 Become a seller','welcome.title':'Welcome to BlooMarket!','welcome.text':'Get 5% off until July 15 with the code:','welcome.cta':'\uD83D\uDE80 Sign up now','reg.newsletter':'\uD83D\uDCE3 Keep me posted about new listings & deals'
   },
   fr: {
     'menu.language':'Langue','auth.email':'E-mail','auth.password':'Mot de passe','auth.username':"Nom d'utilisateur",'auth.email.ph':'ton@email.com','auth.username.ph':'TonPseudo','auth.pwd.ph':'Au moins 6 caract\u00E8res','auth.login.title':'Bon retour \uD83D\uDC4B','auth.login.sub':'Connecte-toi \u00E0 ton compte','auth.forgot':'Mot de passe oubli\u00E9 ?','auth.signin':'Se connecter','auth.noaccount':'Pas de compte ?','auth.signup.link':"S'inscrire",'auth.register.title':'Rejoins BlooMarket \uD83D\uDE80','auth.register.sub':'Cr\u00E9e ton compte gratuit','auth.create':'Cr\u00E9er mon compte','auth.haveaccount':'D\u00E9j\u00E0 un compte ?','auth.signin.link':'Se connecter','auth.forgot.title':'Mot de passe oubli\u00E9 \uD83D\uDD11','auth.forgot.sub':'R\u00E9initialise-le ici avec un code re\u00E7u par email.','auth.forgot.emaillabel':'E-mail du compte','auth.forgot.send':'Envoyer le code','auth.forgot.codelabel':'Code re\u00E7u par email','auth.forgot.codeph':'Code \u00E0 6 chiffres','auth.forgot.verify':'V\u00E9rifier le code','auth.forgot.resend':'Renvoyer le code','auth.forgot.newpw':'Nouveau mot de passe','auth.forgot.save':'Changer le mot de passe','auth.forgot.back':'\u2190 Retour \u00E0 la connexion','auth.check.title':'V\u00E9rifie tes emails','auth.check.sub':'On t\u2019a envoy\u00E9 un lien de confirmation. Clique dessus pour activer ton compte \u2014 tu seras redirig\u00E9 ici et connect\u00E9 automatiquement.','auth.check.ok':'Compris','auth.check.tip':'Astuce : v\u00E9rifie tes spams si tu ne le vois pas.','nav.login':'Connexion','nav.signup':'Inscription',
@@ -1446,7 +1442,7 @@ var I18N = {
     'trust.pay':'\uD83D\uDD12 Paiements s\u00E9curis\u00E9s','trust.escrow':'\uD83D\uDEE1\uFE0F S\u00E9questre anti-arnaque',
     'trust.verified':'\u2705 Vendeurs v\u00E9rifi\u00E9s','trust.support':'\uD83D\uDCAC Support r\u00E9actif',
     'stat.listings':'Annonces','stat.sellers':'Vendeurs v\u00E9rifi\u00E9s','stat.support':'Support',
-    'hero.cta':'\uD83D\uDE80 Devenir vendeur'
+    'hero.cta':'\uD83D\uDE80 Devenir vendeur','welcome.title':'Bienvenue sur BlooMarket !','welcome.text':'Profite de 5% de r\u00E9duction jusqu\u2019au 15 juillet avec le code :','welcome.cta':'\uD83D\uDE80 S\u2019inscrire maintenant','reg.newsletter':'\uD83D\uDCE3 Me tenir inform\u00E9 des nouvelles annonces et offres'
   },
   es: {
     'menu.language':'Idioma','auth.email':'Correo','auth.password':'Contrase\u00F1a','auth.username':'Nombre de usuario','auth.email.ph':'tu@correo.com','auth.username.ph':'TuUsuario','auth.pwd.ph':'Al menos 6 caracteres','auth.login.title':'Bienvenido de nuevo \uD83D\uDC4B','auth.login.sub':'Inicia sesi\u00F3n en tu cuenta','auth.forgot':'\u00BFOlvidaste tu contrase\u00F1a?','auth.signin':'Iniciar sesi\u00F3n','auth.noaccount':'\u00BFNo tienes cuenta?','auth.signup.link':'Reg\u00EDstrate','auth.register.title':'\u00DAnete a BlooMarket \uD83D\uDE80','auth.register.sub':'Crea tu cuenta gratis','auth.create':'Crear mi cuenta','auth.haveaccount':'\u00BFYa tienes cuenta?','auth.signin.link':'Iniciar sesi\u00F3n','auth.forgot.title':'Contrase\u00F1a olvidada \uD83D\uDD11','auth.forgot.sub':'Restab\u00E9cela aqu\u00ED con un c\u00F3digo enviado por correo.','auth.forgot.emaillabel':'Correo de la cuenta','auth.forgot.send':'Enviar c\u00F3digo','auth.forgot.codelabel':'C\u00F3digo recibido por correo','auth.forgot.codeph':'C\u00F3digo de 6 d\u00EDgitos','auth.forgot.verify':'Verificar c\u00F3digo','auth.forgot.resend':'Reenviar c\u00F3digo','auth.forgot.newpw':'Nueva contrase\u00F1a','auth.forgot.save':'Cambiar la contrase\u00F1a','auth.forgot.back':'\u2190 Volver al inicio de sesi\u00F3n','auth.check.title':'Revisa tu correo','auth.check.sub':'Te enviamos un enlace de confirmaci\u00F3n. Haz clic para activar tu cuenta \u2014 volver\u00E1s aqu\u00ED y se iniciar\u00E1 sesi\u00F3n autom\u00E1ticamente.','auth.check.ok':'Entendido','auth.check.tip':'Consejo: revisa tu carpeta de spam si no lo ves.','nav.login':'Iniciar sesi\u00F3n','nav.signup':'Registrarse',
@@ -1456,7 +1452,7 @@ var I18N = {
     'trust.pay':'\uD83D\uDD12 Pagos seguros','trust.escrow':'\uD83D\uDEE1\uFE0F Dep\u00F3sito anti-estafa',
     'trust.verified':'\u2705 Vendedores verificados','trust.support':'\uD83D\uDCAC Soporte receptivo',
     'stat.listings':'Anuncios','stat.sellers':'Vendedores verificados','stat.support':'Soporte',
-    'hero.cta':'\uD83D\uDE80 Conviértete en vendedor'
+    'hero.cta':'\uD83D\uDE80 Conviértete en vendedor','welcome.title':'\u00A1Bienvenido a BlooMarket!','welcome.text':'Obt\u00E9n un 5% de descuento hasta el 15 de julio con el c\u00F3digo:','welcome.cta':'\uD83D\uDE80 Reg\u00EDstrate ahora','reg.newsletter':'\uD83D\uDCE3 Mantenme informado de nuevos anuncios y ofertas'
   },
   pt: {
     'menu.language':'Idioma','auth.email':'E-mail','auth.password':'Senha','auth.username':'Nome de usu\u00E1rio','auth.email.ph':'seu@email.com','auth.username.ph':'SeuUsuario','auth.pwd.ph':'Pelo menos 6 caracteres','auth.login.title':'Bem-vindo de volta \uD83D\uDC4B','auth.login.sub':'Acesse sua conta','auth.forgot':'Esqueceu a senha?','auth.signin':'Entrar','auth.noaccount':'N\u00E3o tem conta?','auth.signup.link':'Cadastre-se','auth.register.title':'Junte-se ao BlooMarket \uD83D\uDE80','auth.register.sub':'Crie sua conta gr\u00E1tis','auth.create':'Criar minha conta','auth.haveaccount':'J\u00E1 tem conta?','auth.signin.link':'Entrar','auth.forgot.title':'Senha esquecida \uD83D\uDD11','auth.forgot.sub':'Redefina-a aqui com um c\u00F3digo enviado por e-mail.','auth.forgot.emaillabel':'E-mail da conta','auth.forgot.send':'Enviar c\u00F3digo','auth.forgot.codelabel':'C\u00F3digo recebido por e-mail','auth.forgot.codeph':'C\u00F3digo de 6 d\u00EDgitos','auth.forgot.verify':'Verificar c\u00F3digo','auth.forgot.resend':'Reenviar c\u00F3digo','auth.forgot.newpw':'Nova senha','auth.forgot.save':'Alterar senha','auth.forgot.back':'\u2190 Voltar ao login','auth.check.title':'Verifique seu e-mail','auth.check.sub':'Enviamos um link de confirma\u00E7\u00E3o. Clique nele para ativar sua conta \u2014 voc\u00EA voltar\u00E1 aqui e entrar\u00E1 automaticamente.','auth.check.ok':'Entendi','auth.check.tip':'Dica: verifique sua pasta de spam se n\u00E3o o encontrar.','nav.login':'Entrar','nav.signup':'Cadastrar',
@@ -1466,7 +1462,7 @@ var I18N = {
     'trust.pay':'\uD83D\uDD12 Pagamentos seguros','trust.escrow':'\uD83D\uDEE1\uFE0F Escrow antifraude',
     'trust.verified':'\u2705 Vendedores verificados','trust.support':'\uD83D\uDCAC Suporte \u00E1gil',
     'stat.listings':'An\u00FAncios','stat.sellers':'Vendedores verificados','stat.support':'Suporte',
-    'hero.cta':'\uD83D\uDE80 Torne-se vendedor'
+    'hero.cta':'\uD83D\uDE80 Torne-se vendedor','welcome.title':'Bem-vindo ao BlooMarket!','welcome.text':'Ganhe 5% de desconto at\u00E9 15 de julho com o c\u00F3digo:','welcome.cta':'\uD83D\uDE80 Cadastre-se agora','reg.newsletter':'\uD83D\uDCE3 Quero receber novidades de an\u00FAncios e ofertas'
   }
 };
 var LANG = 'en';
@@ -1504,6 +1500,8 @@ function setLang(l) {
 }
 function toggleLangMenu(){ var m=document.getElementById('langMenu'); if(m) m.style.display=(m.style.display==='block'?'none':'block'); }
 function hideLangMenu(){ var m=document.getElementById('langMenu'); if(m) m.style.display='none'; }
+function closeWelcome(){ var p=document.getElementById('welcomePopup'); if(p) p.style.display='none'; try{ localStorage.setItem('bm_welcome_seen','1'); }catch(e){} }
+function maybeShowWelcome(){ try{ if(localStorage.getItem('bm_welcome_seen')) return; }catch(e){} setTimeout(function(){ if(currentUser) return; var p=document.getElementById('welcomePopup'); if(p){ p.style.display='block'; applyI18n(); } }, 2000); }
 LANG = detectLang();
 /* ─────────── fin moteur i18n ─────────── */
 
@@ -1583,6 +1581,7 @@ new MutationObserver(function(){
 /* ══ INIT ══ */
 async function init() {
   applyI18n();
+  maybeShowWelcome();
   document.addEventListener('click', function(e){ var w=document.getElementById('langWrap'); var m=document.getElementById('langMenu'); if(m && w && !w.contains(e.target)) m.style.display='none'; });
   try { var _ref = new URLSearchParams(location.search).get('ref'); if (_ref) localStorage.setItem('bm_ref', _ref.toUpperCase()); } catch(e){}
   handlePaymentReturn();
@@ -1716,7 +1715,8 @@ async function doRegister() {
   try { await db.auth.signOut({ scope: 'local' }); } catch(e){}
   track('signup_submitted');
   var refCode = localStorage.getItem('bm_ref') || '';
-  var res = await db.auth.signUp({email, password: pwd, options:{ emailRedirectTo: SITE_URL, data:{username, ref_code: refCode}}});
+  var wantsNews = (document.getElementById('registerNewsletter') || {}).checked !== false;
+  var res = await db.auth.signUp({email, password: pwd, options:{ emailRedirectTo: SITE_URL, data:{username, ref_code: refCode, newsletter: wantsNews}}});
   setBtn('registerBtn', false, 'Create my account');
   if (res.error) { track('signup_error'); return showAlert('registerAlert','error', res.error.message); }
   track('signup_success');
@@ -3787,6 +3787,15 @@ init();
   <div class="ai-msgs" id="aiMsgs"></div>
   <div class="ai-chips" id="aiChips"></div>
   <div class="ai-input-row"><input id="aiInput" placeholder="Pose ta question…" onkeydown="if(event.key==='Enter')aiSend()"><button onclick="aiSend()">➤</button></div>
+</div>
+<!-- Pop-up de bienvenue -->
+<div id="welcomePopup" style="display:none;position:fixed;bottom:20px;right:20px;max-width:330px;background:linear-gradient(135deg,#0f1830,#0b1020);border:1px solid rgba(30,111,255,0.4);border-radius:16px;padding:20px;z-index:600;box-shadow:0 18px 50px rgba(0,0,0,0.55)">
+  <button onclick="closeWelcome()" style="position:absolute;top:9px;right:11px;background:none;border:none;color:#8aa;cursor:pointer;font-size:16px">✕</button>
+  <div style="font-size:30px">🎉</div>
+  <div style="font-weight:800;font-size:16px;margin:6px 0;color:#fff" data-i18n="welcome.title">Welcome to BlooMarket!</div>
+  <div style="font-size:13px;color:#b6c2d8;margin-bottom:10px" data-i18n="welcome.text">Get 5% off until July 15 with the code:</div>
+  <div style="font-weight:800;letter-spacing:3px;font-size:19px;color:#5b9bff;background:rgba(30,111,255,0.12);border:1px dashed rgba(30,111,255,0.5);border-radius:10px;padding:9px;text-align:center;margin-bottom:13px">WELCOME5</div>
+  <button onclick="closeWelcome();track('welcome_signup');showModal('registerModal')" style="width:100%;background:linear-gradient(135deg,#1E6FFF,#0050CC);border:none;color:#fff;font-weight:800;padding:11px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif" data-i18n="welcome.cta">🚀 Sign up now</button>
 </div>
 </body>
 </html>
