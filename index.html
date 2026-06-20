@@ -630,6 +630,7 @@ body.auth-loading #userNav{display:none!important}
     </div>
     <div id="userNav" style="display:none;align-items:center;gap:7px">
       <div class="cart-btn" onclick="showPage('messages')" title="Messages" style="position:relative">💬<div class="cart-badge" id="msgBadge" style="display:none">0</div></div>
+      <button id="partnerTopBtn" onclick="openPartner()" title="Partner dashboard" style="display:none;align-items:center;gap:4px;background:linear-gradient(135deg,#1E6FFF,#7B3FF0);border:none;color:#fff;font-weight:800;font-size:12px;padding:7px 12px;border-radius:9px;cursor:pointer;font-family:Inter,sans-serif">🤝 <span data-i18n="menu.partner">Partner</span></button>
       <div class="sell-btn" onclick="quickSell()" title="Sell an item">+</div>
       <div class="cart-btn" onclick="openCartModal()" title="My cart">
         🛒<div class="cart-badge" id="cartBadge">0</div>
@@ -651,6 +652,7 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-balance" style="color:var(--blue2)" title="Loyalty points (non-convertible)">🔷 <span id="dropBloobux">0</span> Bloobux</div>
         <div class="ud-verify-status unverified" id="udVerifyStatus">⚠ Non vérifié</div>
         <div class="ud-item" onclick="showPage('profile')">👤 My profile</div>
+        <div class="ud-item" onclick="openPartner()">🤝 Partner program</div>
         <div class="ud-item" onclick="toggleTheme()">🌙 Light / dark theme</div>
         <div class="ud-item" style="cursor:default;display:flex;align-items:center;gap:8px">🌐 <span data-i18n="menu.language">Language</span>
           <span style="margin-left:auto;display:flex;gap:4px">
@@ -848,6 +850,7 @@ body.auth-loading #userNav{display:none!important}
     <button class="admin-tab" onclick="adminTab('disputes',this)">⚖️ Disputes</button>
     <button class="admin-tab" onclick="adminTab('withdraws',this)">💸 Withdrawals</button>
     <button class="admin-tab" onclick="adminTab('aconv',this)">💬 Conversations</button>
+    <button class="admin-tab" onclick="adminTab('partners',this)">🤝 Partners</button>
     <button class="admin-tab" id="reportsTab" onclick="adminSupport(this)">🚩 Reports</button>
   </div>
   <div id="adminContent"></div>
@@ -1431,7 +1434,7 @@ function signupFormStart() { if (_suStarted) return; _suStarted = true; track('s
 /* ─────────── MOTEUR MULTILINGUE (i18n) ─────────── */
 var I18N = {
   en: {
-    'menu.language':'Language','auth.email':'Email','auth.password':'Password','auth.username':'Username','auth.email.ph':'your@email.com','auth.username.ph':'YourUsername','auth.pwd.ph':'At least 6 characters','auth.login.title':'Welcome back \uD83D\uDC4B','auth.login.sub':'Sign in to your account','auth.forgot':'Forgot password?','auth.signin':'Sign in','auth.noaccount':'No account?','auth.signup.link':'Sign up','auth.register.title':'Join BlooMarket \uD83D\uDE80','auth.register.sub':'Create your free account','auth.create':'Create my account','auth.haveaccount':'Already have an account?','auth.signin.link':'Sign in','auth.forgot.title':'Forgot password \uD83D\uDD11','auth.forgot.sub':'Reset it here with a code sent by email.','auth.forgot.emaillabel':'Account email','auth.forgot.send':'Send code','auth.forgot.codelabel':'Code received by email','auth.forgot.codeph':'6-digit code','auth.forgot.verify':'Verify code','auth.forgot.resend':'Resend code','auth.forgot.newpw':'New password','auth.forgot.save':'Change password','auth.forgot.back':'\u2190 Back to login','auth.check.title':'Check your email','auth.check.sub':"We sent you a confirmation link. Click it to activate your account \u2014 you'll be brought back here and logged in automatically.",'auth.check.ok':'Got it','auth.check.tip':"Tip: check your spam folder if you don't see it.",'nav.login':'Login','nav.signup':'Sign up',
+    'menu.language':'Language','menu.partner':'Partner','auth.email':'Email','auth.password':'Password','auth.username':'Username','auth.email.ph':'your@email.com','auth.username.ph':'YourUsername','auth.pwd.ph':'At least 6 characters','auth.login.title':'Welcome back \uD83D\uDC4B','auth.login.sub':'Sign in to your account','auth.forgot':'Forgot password?','auth.signin':'Sign in','auth.noaccount':'No account?','auth.signup.link':'Sign up','auth.register.title':'Join BlooMarket \uD83D\uDE80','auth.register.sub':'Create your free account','auth.create':'Create my account','auth.haveaccount':'Already have an account?','auth.signin.link':'Sign in','auth.forgot.title':'Forgot password \uD83D\uDD11','auth.forgot.sub':'Reset it here with a code sent by email.','auth.forgot.emaillabel':'Account email','auth.forgot.send':'Send code','auth.forgot.codelabel':'Code received by email','auth.forgot.codeph':'6-digit code','auth.forgot.verify':'Verify code','auth.forgot.resend':'Resend code','auth.forgot.newpw':'New password','auth.forgot.save':'Change password','auth.forgot.back':'\u2190 Back to login','auth.check.title':'Check your email','auth.check.sub':"We sent you a confirmation link. Click it to activate your account \u2014 you'll be brought back here and logged in automatically.",'auth.check.ok':'Got it','auth.check.tip':"Tip: check your spam folder if you don't see it.",'nav.login':'Login','nav.signup':'Sign up',
     'search.ph':'Search a Roblox item...',
     'hero.title':'\uD83D\uDCB0 Sell your Roblox items safely \uD83C\uDFAE',
     'hero.sub':'Free listings \u00B7 Secure Stripe payment \u00B7 Escrow protection until you receive your item.',
@@ -1441,7 +1444,7 @@ var I18N = {
     'hero.cta':'\uD83D\uDE80 Become a seller','welcome.title':'Welcome to BlooMarket!','welcome.text':'Get 5% off until July 15 with the code:','welcome.cta':'\uD83D\uDE80 Sign up now','reg.newsletter':'\uD83D\uDCE3 Keep me posted about new listings & deals','edit.title':'Edit listing \u270F\uFE0F','edit.sub':'Update your listing details','edit.name':'Item name','edit.price':'Price (\u20AC)','edit.stock':'Stock','edit.desc':'Description','edit.save':'Save changes','pay.apply':'Apply','pay.promo.ph':'Discount code','pay.discount':'Discount','pay.bonus':'Bonus','sell.title':'Create a listing \u2795','sell.publish':'Publish listing','edit.imgnote':'Current images are kept. Add new photos only if you want to replace them.'
   },
   fr: {
-    'menu.language':'Langue','auth.email':'E-mail','auth.password':'Mot de passe','auth.username':"Nom d'utilisateur",'auth.email.ph':'ton@email.com','auth.username.ph':'TonPseudo','auth.pwd.ph':'Au moins 6 caract\u00E8res','auth.login.title':'Bon retour \uD83D\uDC4B','auth.login.sub':'Connecte-toi \u00E0 ton compte','auth.forgot':'Mot de passe oubli\u00E9 ?','auth.signin':'Se connecter','auth.noaccount':'Pas de compte ?','auth.signup.link':"S'inscrire",'auth.register.title':'Rejoins BlooMarket \uD83D\uDE80','auth.register.sub':'Cr\u00E9e ton compte gratuit','auth.create':'Cr\u00E9er mon compte','auth.haveaccount':'D\u00E9j\u00E0 un compte ?','auth.signin.link':'Se connecter','auth.forgot.title':'Mot de passe oubli\u00E9 \uD83D\uDD11','auth.forgot.sub':'R\u00E9initialise-le ici avec un code re\u00E7u par email.','auth.forgot.emaillabel':'E-mail du compte','auth.forgot.send':'Envoyer le code','auth.forgot.codelabel':'Code re\u00E7u par email','auth.forgot.codeph':'Code \u00E0 6 chiffres','auth.forgot.verify':'V\u00E9rifier le code','auth.forgot.resend':'Renvoyer le code','auth.forgot.newpw':'Nouveau mot de passe','auth.forgot.save':'Changer le mot de passe','auth.forgot.back':'\u2190 Retour \u00E0 la connexion','auth.check.title':'V\u00E9rifie tes emails','auth.check.sub':'On t\u2019a envoy\u00E9 un lien de confirmation. Clique dessus pour activer ton compte \u2014 tu seras redirig\u00E9 ici et connect\u00E9 automatiquement.','auth.check.ok':'Compris','auth.check.tip':'Astuce : v\u00E9rifie tes spams si tu ne le vois pas.','nav.login':'Connexion','nav.signup':'Inscription',
+    'menu.language':'Langue','menu.partner':'Partenaire','auth.email':'E-mail','auth.password':'Mot de passe','auth.username':"Nom d'utilisateur",'auth.email.ph':'ton@email.com','auth.username.ph':'TonPseudo','auth.pwd.ph':'Au moins 6 caract\u00E8res','auth.login.title':'Bon retour \uD83D\uDC4B','auth.login.sub':'Connecte-toi \u00E0 ton compte','auth.forgot':'Mot de passe oubli\u00E9 ?','auth.signin':'Se connecter','auth.noaccount':'Pas de compte ?','auth.signup.link':"S'inscrire",'auth.register.title':'Rejoins BlooMarket \uD83D\uDE80','auth.register.sub':'Cr\u00E9e ton compte gratuit','auth.create':'Cr\u00E9er mon compte','auth.haveaccount':'D\u00E9j\u00E0 un compte ?','auth.signin.link':'Se connecter','auth.forgot.title':'Mot de passe oubli\u00E9 \uD83D\uDD11','auth.forgot.sub':'R\u00E9initialise-le ici avec un code re\u00E7u par email.','auth.forgot.emaillabel':'E-mail du compte','auth.forgot.send':'Envoyer le code','auth.forgot.codelabel':'Code re\u00E7u par email','auth.forgot.codeph':'Code \u00E0 6 chiffres','auth.forgot.verify':'V\u00E9rifier le code','auth.forgot.resend':'Renvoyer le code','auth.forgot.newpw':'Nouveau mot de passe','auth.forgot.save':'Changer le mot de passe','auth.forgot.back':'\u2190 Retour \u00E0 la connexion','auth.check.title':'V\u00E9rifie tes emails','auth.check.sub':'On t\u2019a envoy\u00E9 un lien de confirmation. Clique dessus pour activer ton compte \u2014 tu seras redirig\u00E9 ici et connect\u00E9 automatiquement.','auth.check.ok':'Compris','auth.check.tip':'Astuce : v\u00E9rifie tes spams si tu ne le vois pas.','nav.login':'Connexion','nav.signup':'Inscription',
     'search.ph':'Rechercher un objet Roblox...',
     'hero.title':'\uD83D\uDCB0 Vendez vos objets Roblox en toute s\u00E9curit\u00E9 \uD83C\uDFAE',
     'hero.sub':'Annonces gratuites \u00B7 Paiement Stripe s\u00E9curis\u00E9 \u00B7 Protection s\u00E9questre jusqu\u2019\u00E0 r\u00E9ception de votre objet.',
@@ -1451,7 +1454,7 @@ var I18N = {
     'hero.cta':'\uD83D\uDE80 Devenir vendeur','welcome.title':'Bienvenue sur BlooMarket !','welcome.text':'Profite de 5% de r\u00E9duction jusqu\u2019au 15 juillet avec le code :','welcome.cta':'\uD83D\uDE80 S\u2019inscrire maintenant','reg.newsletter':'\uD83D\uDCE3 Me tenir inform\u00E9 des nouvelles annonces et offres','edit.title':'Modifier l\u2019annonce \u270F\uFE0F','edit.sub':'Mets \u00E0 jour les infos de ton annonce','edit.name':'Nom de l\u2019objet','edit.price':'Prix (\u20AC)','edit.stock':'Stock','edit.desc':'Description','edit.save':'Enregistrer','pay.apply':'Appliquer','pay.promo.ph':'Code de r\u00E9duction','pay.discount':'R\u00E9duction','pay.bonus':'Bonus','sell.title':'Cr\u00E9er une annonce \u2795','sell.publish':'Publier l\u2019annonce','edit.imgnote':'Les images actuelles sont conserv\u00E9es. Ajoute de nouvelles photos seulement pour les remplacer.'
   },
   es: {
-    'menu.language':'Idioma','auth.email':'Correo','auth.password':'Contrase\u00F1a','auth.username':'Nombre de usuario','auth.email.ph':'tu@correo.com','auth.username.ph':'TuUsuario','auth.pwd.ph':'Al menos 6 caracteres','auth.login.title':'Bienvenido de nuevo \uD83D\uDC4B','auth.login.sub':'Inicia sesi\u00F3n en tu cuenta','auth.forgot':'\u00BFOlvidaste tu contrase\u00F1a?','auth.signin':'Iniciar sesi\u00F3n','auth.noaccount':'\u00BFNo tienes cuenta?','auth.signup.link':'Reg\u00EDstrate','auth.register.title':'\u00DAnete a BlooMarket \uD83D\uDE80','auth.register.sub':'Crea tu cuenta gratis','auth.create':'Crear mi cuenta','auth.haveaccount':'\u00BFYa tienes cuenta?','auth.signin.link':'Iniciar sesi\u00F3n','auth.forgot.title':'Contrase\u00F1a olvidada \uD83D\uDD11','auth.forgot.sub':'Restab\u00E9cela aqu\u00ED con un c\u00F3digo enviado por correo.','auth.forgot.emaillabel':'Correo de la cuenta','auth.forgot.send':'Enviar c\u00F3digo','auth.forgot.codelabel':'C\u00F3digo recibido por correo','auth.forgot.codeph':'C\u00F3digo de 6 d\u00EDgitos','auth.forgot.verify':'Verificar c\u00F3digo','auth.forgot.resend':'Reenviar c\u00F3digo','auth.forgot.newpw':'Nueva contrase\u00F1a','auth.forgot.save':'Cambiar la contrase\u00F1a','auth.forgot.back':'\u2190 Volver al inicio de sesi\u00F3n','auth.check.title':'Revisa tu correo','auth.check.sub':'Te enviamos un enlace de confirmaci\u00F3n. Haz clic para activar tu cuenta \u2014 volver\u00E1s aqu\u00ED y se iniciar\u00E1 sesi\u00F3n autom\u00E1ticamente.','auth.check.ok':'Entendido','auth.check.tip':'Consejo: revisa tu carpeta de spam si no lo ves.','nav.login':'Iniciar sesi\u00F3n','nav.signup':'Registrarse',
+    'menu.language':'Idioma','menu.partner':'Socio','auth.email':'Correo','auth.password':'Contrase\u00F1a','auth.username':'Nombre de usuario','auth.email.ph':'tu@correo.com','auth.username.ph':'TuUsuario','auth.pwd.ph':'Al menos 6 caracteres','auth.login.title':'Bienvenido de nuevo \uD83D\uDC4B','auth.login.sub':'Inicia sesi\u00F3n en tu cuenta','auth.forgot':'\u00BFOlvidaste tu contrase\u00F1a?','auth.signin':'Iniciar sesi\u00F3n','auth.noaccount':'\u00BFNo tienes cuenta?','auth.signup.link':'Reg\u00EDstrate','auth.register.title':'\u00DAnete a BlooMarket \uD83D\uDE80','auth.register.sub':'Crea tu cuenta gratis','auth.create':'Crear mi cuenta','auth.haveaccount':'\u00BFYa tienes cuenta?','auth.signin.link':'Iniciar sesi\u00F3n','auth.forgot.title':'Contrase\u00F1a olvidada \uD83D\uDD11','auth.forgot.sub':'Restab\u00E9cela aqu\u00ED con un c\u00F3digo enviado por correo.','auth.forgot.emaillabel':'Correo de la cuenta','auth.forgot.send':'Enviar c\u00F3digo','auth.forgot.codelabel':'C\u00F3digo recibido por correo','auth.forgot.codeph':'C\u00F3digo de 6 d\u00EDgitos','auth.forgot.verify':'Verificar c\u00F3digo','auth.forgot.resend':'Reenviar c\u00F3digo','auth.forgot.newpw':'Nueva contrase\u00F1a','auth.forgot.save':'Cambiar la contrase\u00F1a','auth.forgot.back':'\u2190 Volver al inicio de sesi\u00F3n','auth.check.title':'Revisa tu correo','auth.check.sub':'Te enviamos un enlace de confirmaci\u00F3n. Haz clic para activar tu cuenta \u2014 volver\u00E1s aqu\u00ED y se iniciar\u00E1 sesi\u00F3n autom\u00E1ticamente.','auth.check.ok':'Entendido','auth.check.tip':'Consejo: revisa tu carpeta de spam si no lo ves.','nav.login':'Iniciar sesi\u00F3n','nav.signup':'Registrarse',
     'search.ph':'Busca un objeto de Roblox...',
     'hero.title':'\uD83D\uDCB0 Vende tus objetos de Roblox de forma segura \uD83C\uDFAE',
     'hero.sub':'Anuncios gratis \u00B7 Pago seguro con Stripe \u00B7 Protecci\u00F3n de dep\u00F3sito hasta que recibas tu objeto.',
@@ -1461,7 +1464,7 @@ var I18N = {
     'hero.cta':'\uD83D\uDE80 Conviértete en vendedor','welcome.title':'\u00A1Bienvenido a BlooMarket!','welcome.text':'Obt\u00E9n un 5% de descuento hasta el 15 de julio con el c\u00F3digo:','welcome.cta':'\uD83D\uDE80 Reg\u00EDstrate ahora','reg.newsletter':'\uD83D\uDCE3 Mantenme informado de nuevos anuncios y ofertas','edit.title':'Editar anuncio \u270F\uFE0F','edit.sub':'Actualiza los datos de tu anuncio','edit.name':'Nombre del objeto','edit.price':'Precio (\u20AC)','edit.stock':'Stock','edit.desc':'Descripci\u00F3n','edit.save':'Guardar cambios','pay.apply':'Aplicar','pay.promo.ph':'C\u00F3digo de descuento','pay.discount':'Descuento','pay.bonus':'Bono','sell.title':'Crear un anuncio \u2795','sell.publish':'Publicar anuncio','edit.imgnote':'Las im\u00E1genes actuales se mantienen. A\u00F1ade nuevas fotos solo si quieres reemplazarlas.'
   },
   pt: {
-    'menu.language':'Idioma','auth.email':'E-mail','auth.password':'Senha','auth.username':'Nome de usu\u00E1rio','auth.email.ph':'seu@email.com','auth.username.ph':'SeuUsuario','auth.pwd.ph':'Pelo menos 6 caracteres','auth.login.title':'Bem-vindo de volta \uD83D\uDC4B','auth.login.sub':'Acesse sua conta','auth.forgot':'Esqueceu a senha?','auth.signin':'Entrar','auth.noaccount':'N\u00E3o tem conta?','auth.signup.link':'Cadastre-se','auth.register.title':'Junte-se ao BlooMarket \uD83D\uDE80','auth.register.sub':'Crie sua conta gr\u00E1tis','auth.create':'Criar minha conta','auth.haveaccount':'J\u00E1 tem conta?','auth.signin.link':'Entrar','auth.forgot.title':'Senha esquecida \uD83D\uDD11','auth.forgot.sub':'Redefina-a aqui com um c\u00F3digo enviado por e-mail.','auth.forgot.emaillabel':'E-mail da conta','auth.forgot.send':'Enviar c\u00F3digo','auth.forgot.codelabel':'C\u00F3digo recebido por e-mail','auth.forgot.codeph':'C\u00F3digo de 6 d\u00EDgitos','auth.forgot.verify':'Verificar c\u00F3digo','auth.forgot.resend':'Reenviar c\u00F3digo','auth.forgot.newpw':'Nova senha','auth.forgot.save':'Alterar senha','auth.forgot.back':'\u2190 Voltar ao login','auth.check.title':'Verifique seu e-mail','auth.check.sub':'Enviamos um link de confirma\u00E7\u00E3o. Clique nele para ativar sua conta \u2014 voc\u00EA voltar\u00E1 aqui e entrar\u00E1 automaticamente.','auth.check.ok':'Entendi','auth.check.tip':'Dica: verifique sua pasta de spam se n\u00E3o o encontrar.','nav.login':'Entrar','nav.signup':'Cadastrar',
+    'menu.language':'Idioma','menu.partner':'Parceiro','auth.email':'E-mail','auth.password':'Senha','auth.username':'Nome de usu\u00E1rio','auth.email.ph':'seu@email.com','auth.username.ph':'SeuUsuario','auth.pwd.ph':'Pelo menos 6 caracteres','auth.login.title':'Bem-vindo de volta \uD83D\uDC4B','auth.login.sub':'Acesse sua conta','auth.forgot':'Esqueceu a senha?','auth.signin':'Entrar','auth.noaccount':'N\u00E3o tem conta?','auth.signup.link':'Cadastre-se','auth.register.title':'Junte-se ao BlooMarket \uD83D\uDE80','auth.register.sub':'Crie sua conta gr\u00E1tis','auth.create':'Criar minha conta','auth.haveaccount':'J\u00E1 tem conta?','auth.signin.link':'Entrar','auth.forgot.title':'Senha esquecida \uD83D\uDD11','auth.forgot.sub':'Redefina-a aqui com um c\u00F3digo enviado por e-mail.','auth.forgot.emaillabel':'E-mail da conta','auth.forgot.send':'Enviar c\u00F3digo','auth.forgot.codelabel':'C\u00F3digo recebido por e-mail','auth.forgot.codeph':'C\u00F3digo de 6 d\u00EDgitos','auth.forgot.verify':'Verificar c\u00F3digo','auth.forgot.resend':'Reenviar c\u00F3digo','auth.forgot.newpw':'Nova senha','auth.forgot.save':'Alterar senha','auth.forgot.back':'\u2190 Voltar ao login','auth.check.title':'Verifique seu e-mail','auth.check.sub':'Enviamos um link de confirma\u00E7\u00E3o. Clique nele para ativar sua conta \u2014 voc\u00EA voltar\u00E1 aqui e entrar\u00E1 automaticamente.','auth.check.ok':'Entendi','auth.check.tip':'Dica: verifique sua pasta de spam se n\u00E3o o encontrar.','nav.login':'Entrar','nav.signup':'Cadastrar',
     'search.ph':'Pesquisar um item Roblox...',
     'hero.title':'\uD83D\uDCB0 Venda seus itens Roblox com seguran\u00E7a \uD83C\uDFAE',
     'hero.sub':'An\u00FAncios gr\u00E1tis \u00B7 Pagamento seguro via Stripe \u00B7 Prote\u00E7\u00E3o (escrow) at\u00E9 voc\u00EA receber seu item.',
@@ -1508,6 +1511,86 @@ function toggleLangMenu(){ var m=document.getElementById('langMenu'); if(m) m.st
 function hideLangMenu(){ var m=document.getElementById('langMenu'); if(m) m.style.display='none'; }
 function closeWelcome(){ var p=document.getElementById('welcomePopup'); if(p) p.style.display='none'; try{ localStorage.setItem('bm_welcome_seen','1'); }catch(e){} }
 function maybeShowWelcome(){ try{ if(localStorage.getItem('bm_welcome_seen')) return; }catch(e){} setTimeout(function(){ if(currentUser) return; var p=document.getElementById('welcomePopup'); if(p){ p.style.display='block'; applyI18n(); } }, 2000); }
+function partnerStatCard(label,val){ return '<div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:800">'+val+'</div><div style="font-size:11px;color:var(--muted)">'+label+'</div></div>'; }
+async function openPartner() {
+  if (!currentUser) { showModal('loginModal'); return; }
+  showModal('partnerModal');
+  var body = document.getElementById('partnerBody');
+  body.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Loading…</div>';
+  var r = await db.rpc('partner_stats');
+  if (r.error || !r.data) { body.innerHTML = '<div style="padding:14px;color:#FCA5A5;font-size:13px">Run bloomarket_FINAL.sql in Supabase to enable the partner program.</div>'; return; }
+  var d = r.data;
+  if (!d.partner) {
+    var ar = await db.rpc('my_partner_application');
+    var app = (ar && ar.data) ? ar.data : { exists:false };
+    if (app.exists && app.status === 'pending') { renderPartnerPending(app); return; }
+    renderPartnerApplyForm(app && app.status === 'rejected');
+    return;
+  }
+  var link = SITE_URL + '?ref=' + (d.code || '');
+  body.innerHTML =
+    '<div style="background:rgba(30,111,255,0.08);border:1px solid rgba(30,111,255,0.25);border-radius:10px;padding:12px;margin-bottom:14px">'
+    + '<div style="font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:.5px">YOUR REFERRAL LINK</div>'
+    + '<div style="display:flex;gap:8px"><input readonly value="' + link + '" id="partnerLink" style="flex:1;font-size:12px"><button onclick="copyPartnerLink()" style="background:rgba(30,111,255,0.2);border:1px solid rgba(30,111,255,0.4);color:#7fb0ff;padding:0 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700">Copy</button></div></div>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'
+    + partnerStatCard('Referrals', d.referrals || 0)
+    + partnerStatCard('Sales', d.sales || 0)
+    + partnerStatCard('Pending', (Number(d.pending) || 0).toFixed(2) + '€')
+    + partnerStatCard('Paid', (Number(d.paid) || 0).toFixed(2) + '€')
+    + '</div>'
+    + '<div style="font-size:12px;color:var(--muted);margin-bottom:12px">You earn <strong style="color:#7fb0ff">' + (d.rate || 25) + '%</strong> of our commission on each sale from your referrals.</div>'
+    + '<button class="btn-submit" onclick="requestPayout()">Request payout (min €10)</button>';
+}
+function renderPartnerPending(app){
+  var body = document.getElementById('partnerBody');
+  body.innerHTML =
+    '<div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.35);color:#FBBF24;border-radius:12px;padding:16px;font-size:13px;line-height:1.7">'
+    + '⏳ <strong>Application under review</strong><br>We received your application. To prove the channel is yours, add this code to your channel description (or a pinned post/comment):'
+    + '<div style="font-weight:800;letter-spacing:2px;font-size:18px;color:#fff;background:rgba(0,0,0,0.25);border-radius:9px;padding:10px;text-align:center;margin:10px 0">' + (app.code||'') + '</div>'
+    + 'Once it\'s on your channel, we\'ll verify and approve you. You\'ll get a notification 🔔</div>';
+}
+function renderPartnerApplyForm(wasRejected){
+  var body = document.getElementById('partnerBody');
+  body.innerHTML =
+    (wasRejected ? '<div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#FCA5A5;border-radius:9px;padding:10px;font-size:12px;margin-bottom:12px">Your previous application was not approved. You can apply again.</div>' : '')
+    + '<div style="font-size:13px;color:var(--muted2);margin-bottom:14px;line-height:1.6">Got an audience? Promote BlooMarket and earn <strong style="color:#7fb0ff">25%</strong> of our commission on every sale you bring in. Fill this in and we\'ll review it.</div>'
+    + '<div class="fg"><label>Platform</label><select id="paPlatform"><option value="youtube">YouTube</option><option value="tiktok">TikTok</option><option value="discord">Discord</option><option value="other">Other</option></select></div>'
+    + '<div class="fg"><label>Channel / profile link</label><input type="text" id="paChannel" placeholder="https://youtube.com/@yourchannel"></div>'
+    + '<div class="fg"><label>Followers / subscribers (approx.)</label><input type="number" id="paFollowers" min="0" placeholder="e.g. 20000"></div>'
+    + '<div class="fg"><label>Why do you want to join?</label><textarea id="paReason" rows="3" placeholder="Tell us about your content & audience"></textarea></div>'
+    + '<label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted2);margin-bottom:14px;cursor:pointer"><input type="checkbox" id="paAge" style="width:auto;margin:0"> I confirm I am 18 years old or older</label>'
+    + '<button class="btn-submit" id="paBtn" onclick="submitPartnerApplication()">Send my application</button>';
+}
+async function submitPartnerApplication(){
+  var platform = document.getElementById('paPlatform').value;
+  var channel = (document.getElementById('paChannel').value||'').trim();
+  var followers = parseInt(document.getElementById('paFollowers').value) || 0;
+  var reason = (document.getElementById('paReason').value||'').trim();
+  var age = document.getElementById('paAge').checked;
+  if (!channel) { showToast('Channel link required','error'); return; }
+  if (!age) { showToast('You must confirm you are 18 or older','error'); return; }
+  setBtn('paBtn', true, 'Sending…');
+  var r = await db.rpc('apply_partner', { p_platform:platform, p_channel:channel, p_followers:followers, p_reason:reason, p_age:age });
+  setBtn('paBtn', false, 'Send my application');
+  if (r.error) { showToast(rpcMsg(r.error),'error'); return; }
+  showToast('Application sent ✅ We\'ll review it soon.','success');
+  openPartner();
+}
+async function adminReviewPartner(id, approve) {
+  if (!approve && !confirm('Reject this partner application?')) return;
+  var r = await db.rpc('review_partner_app', { p_id: id, p_approve: approve, p_rate: 25 });
+  if (r.error) { showToast(rpcMsg(r.error),'error'); return; }
+  showToast(approve ? 'Partner approved ✅' : 'Application rejected','success');
+  adminTab('partners');
+  refreshAdminBadge();
+}
+function copyPartnerLink(){ var i=document.getElementById('partnerLink'); if(i){ i.select(); try{ navigator.clipboard.writeText(i.value); }catch(e){ try{document.execCommand('copy');}catch(e2){} } showToast('Link copied 📋','success'); } }
+async function requestPayout(){
+  var r = await db.rpc('request_partner_payout');
+  if (r.error) { showToast(rpcMsg(r.error),'error'); return; }
+  showToast('Payout requested ✅ We will process it shortly.','success');
+  openPartner();
+}
 var editingListingId = null;
 var editingExistingImages = [];
 function setSellAttrs(attrs) {
@@ -1696,6 +1779,7 @@ function clearUser() {
   document.getElementById('userNav').style.display = 'none';
   var am = document.getElementById('adminMenuItem'); if (am) am.style.display = 'none';
   var hsb = document.getElementById('heroSellerBtn'); if (hsb) hsb.style.display = 'inline-block';
+  var ptb = document.getElementById('partnerTopBtn'); if (ptb) ptb.style.display = 'none';
 }
 
 async function loadProfile() {
@@ -1713,6 +1797,7 @@ async function loadProfile() {
     else { vs.className = 'ud-verify-status unverified'; vs.innerHTML = '⚠ Non vérifié'; }
     var bsItem = document.getElementById('becomeSellerItem'); if (bsItem) bsItem.style.display = res.data.id_verified ? 'none' : 'flex';
     var hsb = document.getElementById('heroSellerBtn'); if (hsb) hsb.style.display = res.data.id_verified ? 'none' : 'inline-block';
+    var ptb = document.getElementById('partnerTopBtn'); if (ptb) ptb.style.display = res.data.is_partner ? 'inline-flex' : 'none';
     if (res.data.avatar_url) {
       var img = '<img src="' + res.data.avatar_url + '" onerror="this.style.display=\'none\'">';
       document.getElementById('userAvatar').innerHTML = img + '<span id="userAvatarText" style="display:none">' + res.data.username[0].toUpperCase() + '</span>';
@@ -3554,6 +3639,22 @@ async function adminTab(tab, el) {
     });
     html += '</div>';
     content.innerHTML = html;
+  } else if (tab === 'partners') {
+    var res = await db.rpc('admin_partner_apps');
+    if (res.error) { content.innerHTML = '<div style="padding:20px;text-align:center;color:#FCA5A5">Run bloomarket_FINAL.sql to enable partner applications.</div>'; return; }
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No partner application</div>'; return; }
+    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1fr 1.6fr 0.8fr 1.6fr 1.4fr"><span>Platform</span><span>Channel</span><span>Subs</span><span>Status / Code</span><span>Actions</span></div>';
+    res.data.forEach(function(a){
+      var sbadge = a.status === 'approved' ? '<span class="badge-ok">Approved</span>' : a.status === 'rejected' ? '<span class="badge-cancel">Rejected</span>' : '<span class="badge-wait">Pending</span>';
+      var chan = a.channel_url ? '<a href="' + escHtml(a.channel_url) + '" target="_blank" style="color:var(--blue2);word-break:break-all">' + escHtml(a.channel_url) + '</a>' : '—';
+      var acts = a.status === 'pending'
+        ? '<button onclick="adminReviewPartner(' + a.id + ',true)" class="btn-sm btn-sm-green" style="font-size:10px">✅ Approve</button> <button onclick="adminReviewPartner(' + a.id + ',false)" class="btn-sm btn-sm-red" style="font-size:10px">❌ Reject</button>'
+        : '—';
+      var reason = a.reason ? '<div style="font-size:10px;color:var(--muted);margin-top:3px">' + escHtml(a.reason) + '</div>' : '';
+      html += '<div class="admin-table-row" style="grid-template-columns:1fr 1.6fr 0.8fr 1.6fr 1.4fr"><span style="font-weight:600">' + escHtml(a.platform||'—') + '</span><span style="font-size:11px">' + chan + reason + '</span><span>' + (a.followers||0) + '</span><span>' + sbadge + '<br><span style="font-size:10px;color:var(--muted)">' + escHtml(a.verify_code||'') + '</span></span><span>' + acts + '</span></div>';
+    });
+    html += '</div>';
+    content.innerHTML = html;
   } else if (tab === 'sellers') {
     var res = await db.from('seller_requests').select('*, profiles(username, id_verified)').order('created_at',{ascending:false});
     if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No seller request</div>'; return; }
@@ -3900,6 +4001,16 @@ init();
   <div class="ai-chips" id="aiChips"></div>
   <div class="ai-input-row"><input id="aiInput" placeholder="Pose ta question…" onkeydown="if(event.key==='Enter')aiSend()"><button onclick="aiSend()">➤</button></div>
 </div>
+<!-- Programme partenaires -->
+<div class="overlay" id="partnerModal" onclick="closeOnBg(event,'partnerModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('partnerModal')">✕</button>
+    <div class="modal-h" style="text-align:left">🤝 Partner program</div>
+    <div class="modal-sub" style="text-align:left;margin-bottom:14px">Earn money by bringing buyers to BlooMarket.</div>
+    <div id="partnerBody"><div style="padding:20px;text-align:center;color:var(--muted)">Loading…</div></div>
+  </div>
+</div>
+
 <!-- Pop-up de bienvenue -->
 <div id="welcomePopup" style="display:none;position:fixed;bottom:20px;right:20px;max-width:330px;background:linear-gradient(135deg,#0f1830,#0b1020);border:1px solid rgba(30,111,255,0.4);border-radius:16px;padding:20px;z-index:600;box-shadow:0 18px 50px rgba(0,0,0,0.55)">
   <button onclick="closeWelcome()" style="position:absolute;top:9px;right:11px;background:none;border:none;color:#8aa;cursor:pointer;font-size:16px">✕</button>
