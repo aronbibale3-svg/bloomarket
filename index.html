@@ -1193,8 +1193,13 @@ body.auth-loading #userNav{display:none!important}
     <div class="modal-sub">Carte · Apple Pay · Google Pay</div>
     <div class="pay-summary-box">
       <div class="ps-row"><span id="payItemTitle">Item</span><span id="paySubtotal">0.00€</span></div>
+      <div class="ps-row" id="payDiscountLine" style="display:none;color:#86efac"><span data-i18n="pay.discount">Discount</span><span id="payDiscountVal">-0.00€</span></div>
       <div class="ps-row ps-muted"><span>Loyalty points earned</span><span id="payBloobux" style="color:var(--blue2)">+0 🔷</span></div>
       <div class="ps-row ps-total"><span>Total</span><strong id="payItemPrice">0.00€</strong></div>
+    </div>
+    <div style="display:flex;gap:8px;margin:12px 0 2px">
+      <input type="text" id="payPromoInput" placeholder="Discount code" data-i18n-ph="pay.promo.ph" style="flex:1;text-transform:uppercase">
+      <button type="button" onclick="applyPromoCode()" style="background:rgba(30,111,255,0.15);border:1px solid rgba(30,111,255,0.35);color:#7fb0ff;padding:0 16px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif" data-i18n="pay.apply">Apply</button>
     </div>
     <div id="pay-element" style="margin:14px 0"></div>
     <div id="pay-errors" style="color:#FCA5A5;font-size:12px;margin-bottom:10px"></div>
@@ -1432,7 +1437,7 @@ var I18N = {
     'trust.pay':'\uD83D\uDD12 Secure payments','trust.escrow':'\uD83D\uDEE1\uFE0F Anti-scam escrow',
     'trust.verified':'\u2705 Verified sellers','trust.support':'\uD83D\uDCAC Responsive support',
     'stat.listings':'Listings','stat.sellers':'Verified sellers','stat.support':'Support',
-    'hero.cta':'\uD83D\uDE80 Become a seller','welcome.title':'Welcome to BlooMarket!','welcome.text':'Get 5% off until July 15 with the code:','welcome.cta':'\uD83D\uDE80 Sign up now','reg.newsletter':'\uD83D\uDCE3 Keep me posted about new listings & deals'
+    'hero.cta':'\uD83D\uDE80 Become a seller','welcome.title':'Welcome to BlooMarket!','welcome.text':'Get 5% off until July 15 with the code:','welcome.cta':'\uD83D\uDE80 Sign up now','reg.newsletter':'\uD83D\uDCE3 Keep me posted about new listings & deals','edit.title':'Edit listing \u270F\uFE0F','edit.sub':'Update your listing details','edit.name':'Item name','edit.price':'Price (\u20AC)','edit.stock':'Stock','edit.desc':'Description','edit.save':'Save changes','pay.apply':'Apply','pay.promo.ph':'Discount code','pay.discount':'Discount'
   },
   fr: {
     'menu.language':'Langue','auth.email':'E-mail','auth.password':'Mot de passe','auth.username':"Nom d'utilisateur",'auth.email.ph':'ton@email.com','auth.username.ph':'TonPseudo','auth.pwd.ph':'Au moins 6 caract\u00E8res','auth.login.title':'Bon retour \uD83D\uDC4B','auth.login.sub':'Connecte-toi \u00E0 ton compte','auth.forgot':'Mot de passe oubli\u00E9 ?','auth.signin':'Se connecter','auth.noaccount':'Pas de compte ?','auth.signup.link':"S'inscrire",'auth.register.title':'Rejoins BlooMarket \uD83D\uDE80','auth.register.sub':'Cr\u00E9e ton compte gratuit','auth.create':'Cr\u00E9er mon compte','auth.haveaccount':'D\u00E9j\u00E0 un compte ?','auth.signin.link':'Se connecter','auth.forgot.title':'Mot de passe oubli\u00E9 \uD83D\uDD11','auth.forgot.sub':'R\u00E9initialise-le ici avec un code re\u00E7u par email.','auth.forgot.emaillabel':'E-mail du compte','auth.forgot.send':'Envoyer le code','auth.forgot.codelabel':'Code re\u00E7u par email','auth.forgot.codeph':'Code \u00E0 6 chiffres','auth.forgot.verify':'V\u00E9rifier le code','auth.forgot.resend':'Renvoyer le code','auth.forgot.newpw':'Nouveau mot de passe','auth.forgot.save':'Changer le mot de passe','auth.forgot.back':'\u2190 Retour \u00E0 la connexion','auth.check.title':'V\u00E9rifie tes emails','auth.check.sub':'On t\u2019a envoy\u00E9 un lien de confirmation. Clique dessus pour activer ton compte \u2014 tu seras redirig\u00E9 ici et connect\u00E9 automatiquement.','auth.check.ok':'Compris','auth.check.tip':'Astuce : v\u00E9rifie tes spams si tu ne le vois pas.','nav.login':'Connexion','nav.signup':'Inscription',
@@ -1442,7 +1447,7 @@ var I18N = {
     'trust.pay':'\uD83D\uDD12 Paiements s\u00E9curis\u00E9s','trust.escrow':'\uD83D\uDEE1\uFE0F S\u00E9questre anti-arnaque',
     'trust.verified':'\u2705 Vendeurs v\u00E9rifi\u00E9s','trust.support':'\uD83D\uDCAC Support r\u00E9actif',
     'stat.listings':'Annonces','stat.sellers':'Vendeurs v\u00E9rifi\u00E9s','stat.support':'Support',
-    'hero.cta':'\uD83D\uDE80 Devenir vendeur','welcome.title':'Bienvenue sur BlooMarket !','welcome.text':'Profite de 5% de r\u00E9duction jusqu\u2019au 15 juillet avec le code :','welcome.cta':'\uD83D\uDE80 S\u2019inscrire maintenant','reg.newsletter':'\uD83D\uDCE3 Me tenir inform\u00E9 des nouvelles annonces et offres'
+    'hero.cta':'\uD83D\uDE80 Devenir vendeur','welcome.title':'Bienvenue sur BlooMarket !','welcome.text':'Profite de 5% de r\u00E9duction jusqu\u2019au 15 juillet avec le code :','welcome.cta':'\uD83D\uDE80 S\u2019inscrire maintenant','reg.newsletter':'\uD83D\uDCE3 Me tenir inform\u00E9 des nouvelles annonces et offres','edit.title':'Modifier l\u2019annonce \u270F\uFE0F','edit.sub':'Mets \u00E0 jour les infos de ton annonce','edit.name':'Nom de l\u2019objet','edit.price':'Prix (\u20AC)','edit.stock':'Stock','edit.desc':'Description','edit.save':'Enregistrer','pay.apply':'Appliquer','pay.promo.ph':'Code de r\u00E9duction','pay.discount':'R\u00E9duction'
   },
   es: {
     'menu.language':'Idioma','auth.email':'Correo','auth.password':'Contrase\u00F1a','auth.username':'Nombre de usuario','auth.email.ph':'tu@correo.com','auth.username.ph':'TuUsuario','auth.pwd.ph':'Al menos 6 caracteres','auth.login.title':'Bienvenido de nuevo \uD83D\uDC4B','auth.login.sub':'Inicia sesi\u00F3n en tu cuenta','auth.forgot':'\u00BFOlvidaste tu contrase\u00F1a?','auth.signin':'Iniciar sesi\u00F3n','auth.noaccount':'\u00BFNo tienes cuenta?','auth.signup.link':'Reg\u00EDstrate','auth.register.title':'\u00DAnete a BlooMarket \uD83D\uDE80','auth.register.sub':'Crea tu cuenta gratis','auth.create':'Crear mi cuenta','auth.haveaccount':'\u00BFYa tienes cuenta?','auth.signin.link':'Iniciar sesi\u00F3n','auth.forgot.title':'Contrase\u00F1a olvidada \uD83D\uDD11','auth.forgot.sub':'Restab\u00E9cela aqu\u00ED con un c\u00F3digo enviado por correo.','auth.forgot.emaillabel':'Correo de la cuenta','auth.forgot.send':'Enviar c\u00F3digo','auth.forgot.codelabel':'C\u00F3digo recibido por correo','auth.forgot.codeph':'C\u00F3digo de 6 d\u00EDgitos','auth.forgot.verify':'Verificar c\u00F3digo','auth.forgot.resend':'Reenviar c\u00F3digo','auth.forgot.newpw':'Nueva contrase\u00F1a','auth.forgot.save':'Cambiar la contrase\u00F1a','auth.forgot.back':'\u2190 Volver al inicio de sesi\u00F3n','auth.check.title':'Revisa tu correo','auth.check.sub':'Te enviamos un enlace de confirmaci\u00F3n. Haz clic para activar tu cuenta \u2014 volver\u00E1s aqu\u00ED y se iniciar\u00E1 sesi\u00F3n autom\u00E1ticamente.','auth.check.ok':'Entendido','auth.check.tip':'Consejo: revisa tu carpeta de spam si no lo ves.','nav.login':'Iniciar sesi\u00F3n','nav.signup':'Registrarse',
@@ -1452,7 +1457,7 @@ var I18N = {
     'trust.pay':'\uD83D\uDD12 Pagos seguros','trust.escrow':'\uD83D\uDEE1\uFE0F Dep\u00F3sito anti-estafa',
     'trust.verified':'\u2705 Vendedores verificados','trust.support':'\uD83D\uDCAC Soporte receptivo',
     'stat.listings':'Anuncios','stat.sellers':'Vendedores verificados','stat.support':'Soporte',
-    'hero.cta':'\uD83D\uDE80 Conviértete en vendedor','welcome.title':'\u00A1Bienvenido a BlooMarket!','welcome.text':'Obt\u00E9n un 5% de descuento hasta el 15 de julio con el c\u00F3digo:','welcome.cta':'\uD83D\uDE80 Reg\u00EDstrate ahora','reg.newsletter':'\uD83D\uDCE3 Mantenme informado de nuevos anuncios y ofertas'
+    'hero.cta':'\uD83D\uDE80 Conviértete en vendedor','welcome.title':'\u00A1Bienvenido a BlooMarket!','welcome.text':'Obt\u00E9n un 5% de descuento hasta el 15 de julio con el c\u00F3digo:','welcome.cta':'\uD83D\uDE80 Reg\u00EDstrate ahora','reg.newsletter':'\uD83D\uDCE3 Mantenme informado de nuevos anuncios y ofertas','edit.title':'Editar anuncio \u270F\uFE0F','edit.sub':'Actualiza los datos de tu anuncio','edit.name':'Nombre del objeto','edit.price':'Precio (\u20AC)','edit.stock':'Stock','edit.desc':'Descripci\u00F3n','edit.save':'Guardar cambios','pay.apply':'Aplicar','pay.promo.ph':'C\u00F3digo de descuento','pay.discount':'Descuento'
   },
   pt: {
     'menu.language':'Idioma','auth.email':'E-mail','auth.password':'Senha','auth.username':'Nome de usu\u00E1rio','auth.email.ph':'seu@email.com','auth.username.ph':'SeuUsuario','auth.pwd.ph':'Pelo menos 6 caracteres','auth.login.title':'Bem-vindo de volta \uD83D\uDC4B','auth.login.sub':'Acesse sua conta','auth.forgot':'Esqueceu a senha?','auth.signin':'Entrar','auth.noaccount':'N\u00E3o tem conta?','auth.signup.link':'Cadastre-se','auth.register.title':'Junte-se ao BlooMarket \uD83D\uDE80','auth.register.sub':'Crie sua conta gr\u00E1tis','auth.create':'Criar minha conta','auth.haveaccount':'J\u00E1 tem conta?','auth.signin.link':'Entrar','auth.forgot.title':'Senha esquecida \uD83D\uDD11','auth.forgot.sub':'Redefina-a aqui com um c\u00F3digo enviado por e-mail.','auth.forgot.emaillabel':'E-mail da conta','auth.forgot.send':'Enviar c\u00F3digo','auth.forgot.codelabel':'C\u00F3digo recebido por e-mail','auth.forgot.codeph':'C\u00F3digo de 6 d\u00EDgitos','auth.forgot.verify':'Verificar c\u00F3digo','auth.forgot.resend':'Reenviar c\u00F3digo','auth.forgot.newpw':'Nova senha','auth.forgot.save':'Alterar senha','auth.forgot.back':'\u2190 Voltar ao login','auth.check.title':'Verifique seu e-mail','auth.check.sub':'Enviamos um link de confirma\u00E7\u00E3o. Clique nele para ativar sua conta \u2014 voc\u00EA voltar\u00E1 aqui e entrar\u00E1 automaticamente.','auth.check.ok':'Entendi','auth.check.tip':'Dica: verifique sua pasta de spam se n\u00E3o o encontrar.','nav.login':'Entrar','nav.signup':'Cadastrar',
@@ -1462,7 +1467,7 @@ var I18N = {
     'trust.pay':'\uD83D\uDD12 Pagamentos seguros','trust.escrow':'\uD83D\uDEE1\uFE0F Escrow antifraude',
     'trust.verified':'\u2705 Vendedores verificados','trust.support':'\uD83D\uDCAC Suporte \u00E1gil',
     'stat.listings':'An\u00FAncios','stat.sellers':'Vendedores verificados','stat.support':'Suporte',
-    'hero.cta':'\uD83D\uDE80 Torne-se vendedor','welcome.title':'Bem-vindo ao BlooMarket!','welcome.text':'Ganhe 5% de desconto at\u00E9 15 de julho com o c\u00F3digo:','welcome.cta':'\uD83D\uDE80 Cadastre-se agora','reg.newsletter':'\uD83D\uDCE3 Quero receber novidades de an\u00FAncios e ofertas'
+    'hero.cta':'\uD83D\uDE80 Torne-se vendedor','welcome.title':'Bem-vindo ao BlooMarket!','welcome.text':'Ganhe 5% de desconto at\u00E9 15 de julho com o c\u00F3digo:','welcome.cta':'\uD83D\uDE80 Cadastre-se agora','reg.newsletter':'\uD83D\uDCE3 Quero receber novidades de an\u00FAncios e ofertas','edit.title':'Editar an\u00FAncio \u270F\uFE0F','edit.sub':'Atualize os dados do seu an\u00FAncio','edit.name':'Nome do item','edit.price':'Pre\u00E7o (\u20AC)','edit.stock':'Estoque','edit.desc':'Descri\u00E7\u00E3o','edit.save':'Salvar altera\u00E7\u00F5es','pay.apply':'Aplicar','pay.promo.ph':'C\u00F3digo de desconto','pay.discount':'Desconto'
   }
 };
 var LANG = 'en';
@@ -1502,6 +1507,38 @@ function toggleLangMenu(){ var m=document.getElementById('langMenu'); if(m) m.st
 function hideLangMenu(){ var m=document.getElementById('langMenu'); if(m) m.style.display='none'; }
 function closeWelcome(){ var p=document.getElementById('welcomePopup'); if(p) p.style.display='none'; try{ localStorage.setItem('bm_welcome_seen','1'); }catch(e){} }
 function maybeShowWelcome(){ try{ if(localStorage.getItem('bm_welcome_seen')) return; }catch(e){} setTimeout(function(){ if(currentUser) return; var p=document.getElementById('welcomePopup'); if(p){ p.style.display='block'; applyI18n(); } }, 2000); }
+async function openEditListing(id) {
+  if (!currentUser) return;
+  var res = await db.from('listings').select('*').eq('id', id).eq('user_id', currentUser.id).maybeSingle();
+  if (!res.data) { showToast('Listing not found','error'); return; }
+  var l = res.data;
+  document.getElementById('editListingId').value = l.id;
+  document.getElementById('editTitle').value = l.title || '';
+  document.getElementById('editPrice').value = parseFloat(l.price || 0);
+  document.getElementById('editStock').value = (l.stock != null ? l.stock : '');
+  document.getElementById('editDesc').value = l.description || '';
+  document.getElementById('editListingAlert').innerHTML = '';
+  showModal('editListingModal');
+}
+async function saveEditListing() {
+  var id = document.getElementById('editListingId').value;
+  var title = document.getElementById('editTitle').value.trim();
+  var price = parseFloat(document.getElementById('editPrice').value);
+  var stockRaw = document.getElementById('editStock').value;
+  var desc = document.getElementById('editDesc').value.trim();
+  if (!title) return showAlert('editListingAlert','error','Name required.');
+  if (isNaN(price) || price <= 0) return showAlert('editListingAlert','error','Invalid price.');
+  var upd = { title: title, price: price, description: desc };
+  if (stockRaw !== '') { var st = parseInt(stockRaw, 10); if (!isNaN(st) && st >= 0) upd.stock = st; }
+  setBtn('editListingBtn', true, 'Saving…');
+  var res = await db.from('listings').update(upd).eq('id', id).eq('user_id', currentUser.id);
+  setBtn('editListingBtn', false, 'Save changes');
+  if (res.error) return showAlert('editListingAlert','error', res.error.message);
+  hideModal('editListingModal');
+  showToast('Listing updated ✅','success');
+  if (LISTING_CACHE[id]) { LISTING_CACHE[id].title = title; LISTING_CACHE[id].price = price; LISTING_CACHE[id].description = desc; if (upd.stock != null) LISTING_CACHE[id].stock = upd.stock; }
+  loadMyListings(); loadListings();
+}
 LANG = detectLang();
 /* ─────────── fin moteur i18n ─────────── */
 
@@ -1620,6 +1657,7 @@ function handleAuthChange(event, session) {
 /* ══ AUTH ══ */
 async function setUser(user) {
   currentUser = user;
+  try { if (localStorage.getItem('bm_cart_owner') !== user.id) { cart = []; localStorage.setItem('bm_cart','[]'); localStorage.setItem('bm_cart_owner', user.id); if (typeof updateCartBadge==='function') updateCartBadge(); } } catch(e){}
   document.getElementById('guestNav').style.display = 'none';
   document.getElementById('userNav').style.display = 'flex';
   var name = (user.user_metadata && user.user_metadata.username) ? user.user_metadata.username : user.email.split('@')[0];
@@ -1650,6 +1688,7 @@ async function setUser(user) {
 
 function clearUser() {
   currentUser = null; userProfile = null;
+  try { cart = []; localStorage.setItem('bm_cart','[]'); localStorage.removeItem('bm_cart_owner'); if (typeof updateCartBadge==='function') updateCartBadge(); } catch(e){}
   if (notifChannel) { db.removeChannel(notifChannel); notifChannel = null; }
   document.getElementById('guestNav').style.display = 'flex';
   document.getElementById('userNav').style.display = 'none';
@@ -2683,39 +2722,60 @@ async function buyFromBalance(listingIds, total, kind, quantities) {
 /* ══ PAIEMENT DIRECT (Stripe Payment Element : Carte + Apple Pay + Google Pay) ══ */
 var payElements = null, payClientSecret = null, payContext = null;
 
+var PROMO = { code:'', pct:0 };
+var PROMO_TABLE = { 'WELCOME5': { pct:5, until:'2026-07-15' } };
+function chargedAmount(){ var a = payContext.amount * (1 - (PROMO.pct||0)/100); return Math.round(a*100)/100; }
+function updatePayTotals(){
+  if (!payContext) return;
+  var base = payContext.amount, charged = chargedAmount();
+  var s=document.getElementById('paySubtotal'); if(s) s.textContent = base.toFixed(2)+'€';
+  var t=document.getElementById('payItemPrice'); if(t) t.textContent = charged.toFixed(2)+'€';
+  var dl=document.getElementById('payDiscountLine');
+  if (dl) { if (PROMO.pct>0){ dl.style.display='flex'; document.getElementById('payDiscountVal').textContent='-'+(base-charged).toFixed(2)+'€ ('+PROMO.code+')'; } else dl.style.display='none'; }
+}
+async function initPay(amount){
+  document.getElementById('pay-element').innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted);font-size:13px">Loading payment…</div>';
+  setBtn('payNowBtn', true, 'Loading…');
+  try {
+    var res = await fetch('/api/create-payment', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ amount: amount, userId: currentUser.id, buyerId: currentUser.id, kind: payContext.kind, listingIds: (payContext.listingIds||[]).join(',') }) });
+    var txt = await res.text(); var data;
+    try { data = JSON.parse(txt); } catch(e){ throw new Error('Payment server unreachable (/api/create-payment).'); }
+    if (data.error) throw new Error(data.error);
+    payClientSecret = data.clientSecret;
+    payElements = stripe.elements({ clientSecret: payClientSecret, appearance:{ theme:'night', variables:{ colorPrimary:'#1E6FFF', colorBackground:'#0d0f1a' } } });
+    var pe = payElements.create('payment', { layout:'tabs' });
+    document.getElementById('pay-element').innerHTML = '';
+    pe.mount('#pay-element');
+    setBtn('payNowBtn', false, 'Pay ' + amount.toFixed(2) + '€');
+  } catch(e){
+    document.getElementById('pay-errors').textContent = e.message || 'Payment error';
+    setBtn('payNowBtn', false, 'Retry');
+  }
+}
+async function applyPromoCode(){
+  var inp = document.getElementById('payPromoInput'); if (!inp) return;
+  var code = (inp.value||'').trim().toUpperCase(); if (!code) return;
+  var p = PROMO_TABLE[code];
+  if (!p) { showToast('Invalid code','error'); return; }
+  if (p.until && new Date() > new Date(p.until+'T23:59:59')) { showToast('Code expired','error'); return; }
+  PROMO = { code: code, pct: p.pct };
+  updatePayTotals();
+  showToast('Code applied: -'+p.pct+'% ✅','success');
+  await initPay(chargedAmount());
+}
 async function openPayment(ctx) {
   if (!currentUser) { showModal('loginModal'); return; }
   payContext = ctx;
+  PROMO = { code:'', pct:0 };
   var ids = ctx.listingIds || [];
   document.getElementById('payItemTitle').textContent = ctx.title;
-  document.getElementById('paySubtotal').textContent = ctx.amount.toFixed(2) + '€';
-  document.getElementById('payItemPrice').textContent = ctx.amount.toFixed(2) + '€';
+  var pin = document.getElementById('payPromoInput'); if (pin) pin.value = '';
   var bx = 2 * Math.max(1, ids.length);
   var bxEl = document.getElementById('payBloobux'); if (bxEl) bxEl.textContent = '+' + bx + ' 🔷';
   document.getElementById('pay-errors').textContent = '';
-  document.getElementById('pay-element').innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted);font-size:13px">Loading payment…</div>';
-  setBtn('payNowBtn', true, 'Loading…');
+  updatePayTotals();
   showModal('payModal');
-  try {
-    var res = await fetch('/api/create-payment', {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ amount: ctx.amount, userId: currentUser.id, buyerId: currentUser.id, kind: ctx.kind, listingIds: ids.join(',') })
-    });
-    var txt = await res.text();
-    var data;
-    try { data = JSON.parse(txt); }
-    catch(e) { throw new Error("Serveur de paiement injoignable (/api/create-payment). Vérifie que la fonction est déployée à la racine sur Vercel."); }
-    if (data.error) throw new Error(data.error);
-    payClientSecret = data.clientSecret;
-    payElements = stripe.elements({ clientSecret: payClientSecret, appearance: { theme: 'night', variables: { colorPrimary: '#1E6FFF', colorBackground: '#0d0f1a' } } });
-    var pe = payElements.create('payment', { layout: 'tabs' });
-    document.getElementById('pay-element').innerHTML = '';
-    pe.mount('#pay-element');
-    setBtn('payNowBtn', false, 'Payer ' + ctx.amount.toFixed(2) + '€');
-  } catch(e) {
-    document.getElementById('pay-errors').textContent = e.message || 'Payment error';
-    setBtn('payNowBtn', false, 'Réessayer');
-  }
+  await initPay(chargedAmount());
 }
 
 async function submitPayElement() {
@@ -3016,7 +3076,7 @@ async function loadMyListings() {
     html += '<span style="color:var(--blue2);font-weight:700">' + parseFloat(l.price).toFixed(2) + '€</span>';
     html += '<span style="color:var(--muted)">' + escHtml(l.game) + '</span>';
     var promo = (l.promoted_until && new Date(l.promoted_until).getTime() > Date.now()) ? '<span style="font-size:10px;color:#FBBF24;align-self:center">⭐ promu</span>' : '';
-    html += '<span style="display:flex;gap:6px;justify-content:flex-end">' + promo + '<button onclick="openPromote(' + l.id + ')" style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:#FBBF24;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">🚀 Promote</button><button onclick="deleteListing(' + l.id + ')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">Delete</button></span></div>';
+    html += '<span style="display:flex;gap:6px;justify-content:flex-end">' + promo + '<button onclick="openEditListing(' + l.id + ')" style="background:rgba(30,111,255,0.12);border:1px solid rgba(30,111,255,0.3);color:#7fb0ff;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">✏️ Edit</button><button onclick="openPromote(' + l.id + ')" style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:#FBBF24;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">🚀 Promote</button><button onclick="deleteListing(' + l.id + ')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">Delete</button></span></div>';
   });
   body.innerHTML = html;
   var salesRes = await db.from('orders').select('price').eq('seller_id', currentUser.id).eq('status','completed');
@@ -3788,6 +3848,24 @@ init();
   <div class="ai-chips" id="aiChips"></div>
   <div class="ai-input-row"><input id="aiInput" placeholder="Pose ta question…" onkeydown="if(event.key==='Enter')aiSend()"><button onclick="aiSend()">➤</button></div>
 </div>
+<!-- Modifier une annonce -->
+<div class="overlay" id="editListingModal" onclick="closeOnBg(event,'editListingModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('editListingModal')">✕</button>
+    <div class="modal-h" style="text-align:left" data-i18n="edit.title">Edit listing ✏️</div>
+    <div class="modal-sub" style="text-align:left;margin-bottom:16px" data-i18n="edit.sub">Update your listing details</div>
+    <div id="editListingAlert"></div>
+    <input type="hidden" id="editListingId">
+    <div class="fg"><label data-i18n="edit.name">Item name</label><input type="text" id="editTitle"></div>
+    <div class="sell-form-grid">
+      <div class="fg"><label data-i18n="edit.price">Price (€)</label><input type="number" id="editPrice" min="0" step="0.01"></div>
+      <div class="fg"><label data-i18n="edit.stock">Stock</label><input type="number" id="editStock" min="0" step="1" placeholder="∞"></div>
+    </div>
+    <div class="fg"><label data-i18n="edit.desc">Description</label><textarea id="editDesc" rows="3"></textarea></div>
+    <button class="btn-submit" id="editListingBtn" onclick="saveEditListing()" data-i18n="edit.save">Save changes</button>
+  </div>
+</div>
+
 <!-- Pop-up de bienvenue -->
 <div id="welcomePopup" style="display:none;position:fixed;bottom:20px;right:20px;max-width:330px;background:linear-gradient(135deg,#0f1830,#0b1020);border:1px solid rgba(30,111,255,0.4);border-radius:16px;padding:20px;z-index:600;box-shadow:0 18px 50px rgba(0,0,0,0.55)">
   <button onclick="closeWelcome()" style="position:absolute;top:9px;right:11px;background:none;border:none;color:#8aa;cursor:pointer;font-size:16px">✕</button>
