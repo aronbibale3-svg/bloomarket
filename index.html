@@ -84,6 +84,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .lang-menu div{padding:9px 12px;border-radius:7px;cursor:pointer;font-size:13px;white-space:nowrap;color:var(--text,#e8eefc)}
 .lang-menu div:hover{background:rgba(30,111,255,0.12)}
 @media(max-width:640px){#langWrap{display:none!important}}
+.ud-lang{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--muted);font-size:10px;font-weight:700;padding:3px 7px;border-radius:6px;cursor:pointer;font-family:Inter,sans-serif}
+.ud-lang.active{background:rgba(30,111,255,0.18);border-color:rgba(30,111,255,0.4);color:#7fb0ff}
 .hb-trust span{font-size:11px;font-weight:600;color:#dbe5f5;background:rgba(30,111,255,0.10);border:1px solid rgba(30,111,255,0.22);padding:5px 10px;border-radius:8px}
 .hb-stats{display:flex;gap:20px}
 .hb-stat-n{font-size:17px;font-weight:800;color:var(--blue2)}
@@ -110,7 +112,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .listing-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;position:relative}
 .listing-card:hover{border-color:rgba(30,111,255,0.4);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
 .lc-img{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);position:relative;overflow:hidden}
-.lc-img img{width:100%;height:100%;object-fit:contain;padding:8px;transition:transform .25s ease}
+.lc-img img{width:100%;height:100%;object-fit:cover;padding:0;transition:transform .25s ease}
 .listing-card:hover .lc-img img{transform:scale(1.06)}
 .lc-img-fallback{font-size:44px}
 .lc-game-badge{position:absolute;top:4px;left:4px;background:rgba(7,8,15,0.6);border:1px solid rgba(255,255,255,0.1);padding:2px;border-radius:6px;backdrop-filter:blur(3px)}
@@ -650,6 +652,14 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-verify-status unverified" id="udVerifyStatus">⚠ Non vérifié</div>
         <div class="ud-item" onclick="showPage('profile')">👤 My profile</div>
         <div class="ud-item" onclick="toggleTheme()">🌙 Light / dark theme</div>
+        <div class="ud-item" style="cursor:default;display:flex;align-items:center;gap:8px">🌐 <span data-i18n="menu.language">Language</span>
+          <span style="margin-left:auto;display:flex;gap:4px">
+            <button data-lang="en" class="ud-lang" onclick="event.stopPropagation();setLang('en')">EN</button>
+            <button data-lang="fr" class="ud-lang" onclick="event.stopPropagation();setLang('fr')">FR</button>
+            <button data-lang="es" class="ud-lang" onclick="event.stopPropagation();setLang('es')">ES</button>
+            <button data-lang="pt" class="ud-lang" onclick="event.stopPropagation();setLang('pt')">PT</button>
+          </span>
+        </div>
         <div class="ud-item" onclick="showPage('dashboard')">📊 Dashboard</div>
         <div class="ud-item" onclick="showPage('orders')">📦 My orders</div>
         <div class="ud-item" onclick="showPage('messages')">💬 Messages</div>
@@ -908,14 +918,14 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="loginModal" onclick="closeOnBg(event,'loginModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('loginModal')">✕</button>
-    <div class="modal-h">Welcome back 👋</div>
-    <div class="modal-sub">Sign in to your account</div>
+    <div class="modal-h" data-i18n="auth.login.title">Welcome back 👋</div>
+    <div class="modal-sub" data-i18n="auth.login.sub">Sign in to your account</div>
     <div id="loginAlert"></div>
-    <div class="fg"><label>Email</label><input type="email" id="loginEmail" placeholder="ton@email.com"></div>
-    <div class="fg"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div style="text-align:right;margin-top:-6px;margin-bottom:13px"><a style="font-size:12px;color:var(--blue2);cursor:pointer" onclick="resetForgotFlow();switchModal('loginModal','forgotModal')">Forgot password?</a></div>
-    <button class="btn-submit" id="loginBtn" onclick="doLogin()">Sign in</button>
-    <p class="sw">No account? <a onclick="switchModal('loginModal','registerModal')">Sign up</a></p>
+    <div class="fg"><label data-i18n="auth.email">Email</label><input type="email" id="loginEmail" placeholder="your@email.com" data-i18n-ph="auth.email.ph"></div>
+    <div class="fg"><label data-i18n="auth.password">Password</label><input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div style="text-align:right;margin-top:-6px;margin-bottom:13px"><a style="font-size:12px;color:var(--blue2);cursor:pointer" onclick="resetForgotFlow();switchModal('loginModal','forgotModal')" data-i18n="auth.forgot">Forgot password?</a></div>
+    <button class="btn-submit" id="loginBtn" onclick="doLogin()" data-i18n="auth.signin">Sign in</button>
+    <p class="sw"><span data-i18n="auth.noaccount">No account?</span> <a data-i18n="auth.signup.link" onclick="switchModal('loginModal','registerModal')">Sign up</a></p>
   </div>
 </div>
 
@@ -923,14 +933,14 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="registerModal" onclick="closeOnBg(event,'registerModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('registerModal')">✕</button>
-    <div class="modal-h">Join BlooMarket 🚀</div>
-    <div class="modal-sub">Create your free account</div>
+    <div class="modal-h" data-i18n="auth.register.title">Join BlooMarket 🚀</div>
+    <div class="modal-sub" data-i18n="auth.register.sub">Create your free account</div>
     <div id="registerAlert"></div>
-    <div class="fg"><label>Username</label><input type="text" id="registerUsername" placeholder="YourUsername" oninput="signupFormStart()"></div>
-    <div class="fg"><label>Email</label><input type="email" id="registerEmail" placeholder="ton@email.com"></div>
-    <div class="fg"><label>Password</label><input type="password" id="registerPassword" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')doRegister()"></div>
-    <button class="btn-submit" id="registerBtn" onclick="doRegister()">Create my account</button>
-    <p class="sw">Already have an account? <a onclick="switchModal('registerModal','loginModal')">Sign in</a></p>
+    <div class="fg"><label data-i18n="auth.username">Username</label><input type="text" id="registerUsername" placeholder="YourUsername" data-i18n-ph="auth.username.ph" oninput="signupFormStart()"></div>
+    <div class="fg"><label data-i18n="auth.email">Email</label><input type="email" id="registerEmail" placeholder="your@email.com" data-i18n-ph="auth.email.ph"></div>
+    <div class="fg"><label data-i18n="auth.password">Password</label><input type="password" id="registerPassword" placeholder="At least 6 characters" data-i18n-ph="auth.pwd.ph" onkeydown="if(event.key==='Enter')doRegister()"></div>
+    <button class="btn-submit" id="registerBtn" onclick="doRegister()" data-i18n="auth.create">Create my account</button>
+    <p class="sw"><span data-i18n="auth.haveaccount">Already have an account?</span> <a data-i18n="auth.signin.link" onclick="switchModal('registerModal','loginModal')">Sign in</a></p>
   </div>
 </div>
 
@@ -940,10 +950,10 @@ body.auth-loading #userNav{display:none!important}
     <button class="modal-close" onclick="hideModal('checkEmailModal')">✕</button>
     <div style="text-align:center">
       <div style="font-size:46px;margin-bottom:4px">📧</div>
-      <div class="modal-h">Check your email</div>
-      <div class="modal-sub">We sent you a confirmation link. Click it to activate your account — you'll be brought back here and logged in automatically.</div>
-      <button class="btn-submit" onclick="hideModal('checkEmailModal')">Got it</button>
-      <p class="sw" style="margin-top:10px;color:var(--muted)">Tip: check your spam folder if you don't see it.</p>
+      <div class="modal-h" data-i18n="auth.check.title">Check your email</div>
+      <div class="modal-sub" data-i18n="auth.check.sub">We sent you a confirmation link. Click it to activate your account — you'll be brought back here and logged in automatically.</div>
+      <button class="btn-submit" onclick="hideModal('checkEmailModal')" data-i18n="auth.check.ok">Got it</button>
+      <p class="sw" style="margin-top:10px;color:var(--muted)" data-i18n="auth.check.tip">Tip: check your spam folder if you don't see it.</p>
     </div>
   </div>
 </div>
@@ -952,23 +962,23 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="forgotModal" onclick="closeOnBg(event,'forgotModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('forgotModal')">✕</button>
-    <div class="modal-h">Forgot password 🔑</div>
-    <div class="modal-sub">Réinitialise-le ici avec un code reçu par email.</div>
+    <div class="modal-h" data-i18n="auth.forgot.title">Forgot password 🔑</div>
+    <div class="modal-sub" data-i18n="auth.forgot.sub">Reset it here with a code sent by email.</div>
     <div id="forgotAlert"></div>
     <div id="fpStep1">
-      <div class="fg"><label>Account email</label><input type="email" id="fpEmail" placeholder="your@email.com"></div>
-      <button class="btn-submit" id="fpSendBtn" onclick="sendResetCode()">Send code</button>
+      <div class="fg"><label data-i18n="auth.forgot.emaillabel">Account email</label><input type="email" id="fpEmail" placeholder="your@email.com" data-i18n-ph="auth.email.ph"></div>
+      <button class="btn-submit" id="fpSendBtn" onclick="sendResetCode()" data-i18n="auth.forgot.send">Send code</button>
     </div>
     <div id="fpStep2" style="display:none">
-      <div class="fg"><label>Code received by email</label><input type="text" id="fpCode" placeholder="6-digit code" inputmode="numeric"></div>
-      <button class="btn-submit" id="fpVerifyBtn" onclick="verifyResetCode()">Verify code</button>
-      <p class="sw"><a onclick="sendResetCode()">Resend code</a></p>
+      <div class="fg"><label data-i18n="auth.forgot.codelabel">Code received by email</label><input type="text" id="fpCode" placeholder="6-digit code" data-i18n-ph="auth.forgot.codeph" inputmode="numeric"></div>
+      <button class="btn-submit" id="fpVerifyBtn" onclick="verifyResetCode()" data-i18n="auth.forgot.verify">Verify code</button>
+      <p class="sw"><a onclick="sendResetCode()" data-i18n="auth.forgot.resend">Resend code</a></p>
     </div>
     <div id="fpStep3" style="display:none">
-      <div class="fg"><label>New password</label><input type="password" id="fpNewPw" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')saveResetPassword()"></div>
-      <button class="btn-submit" id="fpSaveBtn" onclick="saveResetPassword()">Changer le mot de passe</button>
+      <div class="fg"><label data-i18n="auth.forgot.newpw">New password</label><input type="password" id="fpNewPw" placeholder="At least 6 characters" data-i18n-ph="auth.pwd.ph" onkeydown="if(event.key==='Enter')saveResetPassword()"></div>
+      <button class="btn-submit" id="fpSaveBtn" onclick="saveResetPassword()" data-i18n="auth.forgot.save">Change password</button>
     </div>
-    <p class="sw"><a onclick="resetForgotFlow();switchModal('forgotModal','loginModal')">← Back to login</a></p>
+    <p class="sw"><a onclick="resetForgotFlow();switchModal('forgotModal','loginModal')" data-i18n="auth.forgot.back">← Back to login</a></p>
   </div>
 </div>
 
@@ -1419,7 +1429,7 @@ function signupFormStart() { if (_suStarted) return; _suStarted = true; track('s
 /* ─────────── MOTEUR MULTILINGUE (i18n) ─────────── */
 var I18N = {
   en: {
-    'nav.login':'Login','nav.signup':'Sign up',
+    'menu.language':'Language','auth.email':'Email','auth.password':'Password','auth.username':'Username','auth.email.ph':'your@email.com','auth.username.ph':'YourUsername','auth.pwd.ph':'At least 6 characters','auth.login.title':'Welcome back \uD83D\uDC4B','auth.login.sub':'Sign in to your account','auth.forgot':'Forgot password?','auth.signin':'Sign in','auth.noaccount':'No account?','auth.signup.link':'Sign up','auth.register.title':'Join BlooMarket \uD83D\uDE80','auth.register.sub':'Create your free account','auth.create':'Create my account','auth.haveaccount':'Already have an account?','auth.signin.link':'Sign in','auth.forgot.title':'Forgot password \uD83D\uDD11','auth.forgot.sub':'Reset it here with a code sent by email.','auth.forgot.emaillabel':'Account email','auth.forgot.send':'Send code','auth.forgot.codelabel':'Code received by email','auth.forgot.codeph':'6-digit code','auth.forgot.verify':'Verify code','auth.forgot.resend':'Resend code','auth.forgot.newpw':'New password','auth.forgot.save':'Change password','auth.forgot.back':'\u2190 Back to login','auth.check.title':'Check your email','auth.check.sub':"We sent you a confirmation link. Click it to activate your account \u2014 you'll be brought back here and logged in automatically.",'auth.check.ok':'Got it','auth.check.tip':"Tip: check your spam folder if you don't see it.",'nav.login':'Login','nav.signup':'Sign up',
     'search.ph':'Search a Roblox item...',
     'hero.title':'\uD83D\uDCB0 Sell your Roblox items safely \uD83C\uDFAE',
     'hero.sub':'Free listings \u00B7 Secure Stripe payment \u00B7 Escrow protection until you receive your item.',
@@ -1429,7 +1439,7 @@ var I18N = {
     'hero.cta':'\uD83D\uDE80 Become a seller'
   },
   fr: {
-    'nav.login':'Connexion','nav.signup':'Inscription',
+    'menu.language':'Langue','auth.email':'E-mail','auth.password':'Mot de passe','auth.username':"Nom d'utilisateur",'auth.email.ph':'ton@email.com','auth.username.ph':'TonPseudo','auth.pwd.ph':'Au moins 6 caract\u00E8res','auth.login.title':'Bon retour \uD83D\uDC4B','auth.login.sub':'Connecte-toi \u00E0 ton compte','auth.forgot':'Mot de passe oubli\u00E9 ?','auth.signin':'Se connecter','auth.noaccount':'Pas de compte ?','auth.signup.link':"S'inscrire",'auth.register.title':'Rejoins BlooMarket \uD83D\uDE80','auth.register.sub':'Cr\u00E9e ton compte gratuit','auth.create':'Cr\u00E9er mon compte','auth.haveaccount':'D\u00E9j\u00E0 un compte ?','auth.signin.link':'Se connecter','auth.forgot.title':'Mot de passe oubli\u00E9 \uD83D\uDD11','auth.forgot.sub':'R\u00E9initialise-le ici avec un code re\u00E7u par email.','auth.forgot.emaillabel':'E-mail du compte','auth.forgot.send':'Envoyer le code','auth.forgot.codelabel':'Code re\u00E7u par email','auth.forgot.codeph':'Code \u00E0 6 chiffres','auth.forgot.verify':'V\u00E9rifier le code','auth.forgot.resend':'Renvoyer le code','auth.forgot.newpw':'Nouveau mot de passe','auth.forgot.save':'Changer le mot de passe','auth.forgot.back':'\u2190 Retour \u00E0 la connexion','auth.check.title':'V\u00E9rifie tes emails','auth.check.sub':'On t\u2019a envoy\u00E9 un lien de confirmation. Clique dessus pour activer ton compte \u2014 tu seras redirig\u00E9 ici et connect\u00E9 automatiquement.','auth.check.ok':'Compris','auth.check.tip':'Astuce : v\u00E9rifie tes spams si tu ne le vois pas.','nav.login':'Connexion','nav.signup':'Inscription',
     'search.ph':'Rechercher un objet Roblox...',
     'hero.title':'\uD83D\uDCB0 Vendez vos objets Roblox en toute s\u00E9curit\u00E9 \uD83C\uDFAE',
     'hero.sub':'Annonces gratuites \u00B7 Paiement Stripe s\u00E9curis\u00E9 \u00B7 Protection s\u00E9questre jusqu\u2019\u00E0 r\u00E9ception de votre objet.',
@@ -1439,7 +1449,7 @@ var I18N = {
     'hero.cta':'\uD83D\uDE80 Devenir vendeur'
   },
   es: {
-    'nav.login':'Iniciar sesi\u00F3n','nav.signup':'Registrarse',
+    'menu.language':'Idioma','auth.email':'Correo','auth.password':'Contrase\u00F1a','auth.username':'Nombre de usuario','auth.email.ph':'tu@correo.com','auth.username.ph':'TuUsuario','auth.pwd.ph':'Al menos 6 caracteres','auth.login.title':'Bienvenido de nuevo \uD83D\uDC4B','auth.login.sub':'Inicia sesi\u00F3n en tu cuenta','auth.forgot':'\u00BFOlvidaste tu contrase\u00F1a?','auth.signin':'Iniciar sesi\u00F3n','auth.noaccount':'\u00BFNo tienes cuenta?','auth.signup.link':'Reg\u00EDstrate','auth.register.title':'\u00DAnete a BlooMarket \uD83D\uDE80','auth.register.sub':'Crea tu cuenta gratis','auth.create':'Crear mi cuenta','auth.haveaccount':'\u00BFYa tienes cuenta?','auth.signin.link':'Iniciar sesi\u00F3n','auth.forgot.title':'Contrase\u00F1a olvidada \uD83D\uDD11','auth.forgot.sub':'Restab\u00E9cela aqu\u00ED con un c\u00F3digo enviado por correo.','auth.forgot.emaillabel':'Correo de la cuenta','auth.forgot.send':'Enviar c\u00F3digo','auth.forgot.codelabel':'C\u00F3digo recibido por correo','auth.forgot.codeph':'C\u00F3digo de 6 d\u00EDgitos','auth.forgot.verify':'Verificar c\u00F3digo','auth.forgot.resend':'Reenviar c\u00F3digo','auth.forgot.newpw':'Nueva contrase\u00F1a','auth.forgot.save':'Cambiar la contrase\u00F1a','auth.forgot.back':'\u2190 Volver al inicio de sesi\u00F3n','auth.check.title':'Revisa tu correo','auth.check.sub':'Te enviamos un enlace de confirmaci\u00F3n. Haz clic para activar tu cuenta \u2014 volver\u00E1s aqu\u00ED y se iniciar\u00E1 sesi\u00F3n autom\u00E1ticamente.','auth.check.ok':'Entendido','auth.check.tip':'Consejo: revisa tu carpeta de spam si no lo ves.','nav.login':'Iniciar sesi\u00F3n','nav.signup':'Registrarse',
     'search.ph':'Busca un objeto de Roblox...',
     'hero.title':'\uD83D\uDCB0 Vende tus objetos de Roblox de forma segura \uD83C\uDFAE',
     'hero.sub':'Anuncios gratis \u00B7 Pago seguro con Stripe \u00B7 Protecci\u00F3n de dep\u00F3sito hasta que recibas tu objeto.',
@@ -1449,7 +1459,7 @@ var I18N = {
     'hero.cta':'\uD83D\uDE80 Conviértete en vendedor'
   },
   pt: {
-    'nav.login':'Entrar','nav.signup':'Cadastrar',
+    'menu.language':'Idioma','auth.email':'E-mail','auth.password':'Senha','auth.username':'Nome de usu\u00E1rio','auth.email.ph':'seu@email.com','auth.username.ph':'SeuUsuario','auth.pwd.ph':'Pelo menos 6 caracteres','auth.login.title':'Bem-vindo de volta \uD83D\uDC4B','auth.login.sub':'Acesse sua conta','auth.forgot':'Esqueceu a senha?','auth.signin':'Entrar','auth.noaccount':'N\u00E3o tem conta?','auth.signup.link':'Cadastre-se','auth.register.title':'Junte-se ao BlooMarket \uD83D\uDE80','auth.register.sub':'Crie sua conta gr\u00E1tis','auth.create':'Criar minha conta','auth.haveaccount':'J\u00E1 tem conta?','auth.signin.link':'Entrar','auth.forgot.title':'Senha esquecida \uD83D\uDD11','auth.forgot.sub':'Redefina-a aqui com um c\u00F3digo enviado por e-mail.','auth.forgot.emaillabel':'E-mail da conta','auth.forgot.send':'Enviar c\u00F3digo','auth.forgot.codelabel':'C\u00F3digo recebido por e-mail','auth.forgot.codeph':'C\u00F3digo de 6 d\u00EDgitos','auth.forgot.verify':'Verificar c\u00F3digo','auth.forgot.resend':'Reenviar c\u00F3digo','auth.forgot.newpw':'Nova senha','auth.forgot.save':'Alterar senha','auth.forgot.back':'\u2190 Voltar ao login','auth.check.title':'Verifique seu e-mail','auth.check.sub':'Enviamos um link de confirma\u00E7\u00E3o. Clique nele para ativar sua conta \u2014 voc\u00EA voltar\u00E1 aqui e entrar\u00E1 automaticamente.','auth.check.ok':'Entendi','auth.check.tip':'Dica: verifique sua pasta de spam se n\u00E3o o encontrar.','nav.login':'Entrar','nav.signup':'Cadastrar',
     'search.ph':'Pesquisar um item Roblox...',
     'hero.title':'\uD83D\uDCB0 Venda seus itens Roblox com seguran\u00E7a \uD83C\uDFAE',
     'hero.sub':'An\u00FAncios gr\u00E1tis \u00B7 Pagamento seguro via Stripe \u00B7 Prote\u00E7\u00E3o (escrow) at\u00E9 voc\u00EA receber seu item.',
@@ -1482,6 +1492,7 @@ function applyI18n() {
     document.querySelectorAll('[data-i18n-title]').forEach(function(el){ el.setAttribute('title', t(el.getAttribute('data-i18n-title'))); });
     document.documentElement.lang = LANG;
     var lc = document.getElementById('langCurrent'); if (lc) lc.textContent = LANG.toUpperCase();
+    document.querySelectorAll('.ud-lang').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-lang') === LANG); });
   } catch(e){}
 }
 function setLang(l) {
