@@ -83,7 +83,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .lang-menu{display:none;position:absolute;top:44px;right:0;background:var(--card,#0f1420);border:1px solid var(--border);border-radius:10px;padding:6px;z-index:300;min-width:160px;box-shadow:0 12px 34px rgba(0,0,0,0.45)}
 .lang-menu div{padding:9px 12px;border-radius:7px;cursor:pointer;font-size:13px;white-space:nowrap;color:var(--text,#e8eefc)}
 .lang-menu div:hover{background:rgba(30,111,255,0.12)}
-@media(max-width:640px){#langWrap{display:none!important}}
+@media(max-width:640px){#langWrap{display:none!important}#partnerTopBtn{display:none!important}}
 .ud-lang{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--muted);font-size:10px;font-weight:700;padding:3px 7px;border-radius:6px;cursor:pointer;font-family:Inter,sans-serif}
 .ud-lang.active{background:rgba(30,111,255,0.18);border-color:rgba(30,111,255,0.4);color:#7fb0ff}
 .hb-trust span{font-size:11px;font-weight:600;color:#dbe5f5;background:rgba(30,111,255,0.10);border:1px solid rgba(30,111,255,0.22);padding:5px 10px;border-radius:8px}
@@ -1531,6 +1531,7 @@ function hideLangMenu(){ var m=document.getElementById('langMenu'); if(m) m.styl
 function closeWelcome(){ var p=document.getElementById('welcomePopup'); if(p) p.style.display='none'; try{ localStorage.setItem('bm_welcome_seen','1'); }catch(e){} }
 function maybeShowWelcome(){ try{ if(localStorage.getItem('bm_welcome_seen')) return; }catch(e){} setTimeout(function(){ if(currentUser) return; var p=document.getElementById('welcomePopup'); if(p){ p.style.display='block'; applyI18n(); } }, 2000); }
 function partnerStatCard(label,val){ return '<div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center"><div style="font-size:20px;font-weight:800">'+val+'</div><div style="font-size:11px;color:var(--muted)">'+label+'</div></div>'; }
+function platformIcon(p){ var m={youtube:'▶️',tiktok:'🎵',x:'✖️',twitter:'✖️',facebook:'📘',snapchat:'👻',discord:'💬',instagram:'📸',other:'🌐'}; return m[(p||'').toLowerCase()]||'🌐'; }
 async function openPartner() {
   if (!currentUser) { showModal('loginModal'); return; }
   showModal('partnerModal');
@@ -1551,6 +1552,7 @@ async function openPartner() {
     '<div style="background:rgba(30,111,255,0.08);border:1px solid rgba(30,111,255,0.25);border-radius:10px;padding:12px;margin-bottom:14px">'
     + '<div style="font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:.5px">YOUR REFERRAL LINK</div>'
     + '<div style="display:flex;gap:8px"><input readonly value="' + link + '" id="partnerLink" style="flex:1;font-size:12px"><button onclick="copyPartnerLink()" style="background:rgba(30,111,255,0.2);border:1px solid rgba(30,111,255,0.4);color:#7fb0ff;padding:0 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700">Copy</button></div></div>'
+    + (d.promo ? '<div style="background:rgba(123,63,240,0.1);border:1px solid rgba(123,63,240,0.35);border-radius:10px;padding:12px;margin-bottom:14px"><div style="font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:.5px">YOUR PROMO CODE (-5% for your fans)</div><div style="display:flex;gap:8px;align-items:center"><div style="flex:1;font-weight:800;letter-spacing:2px;font-size:17px;color:#b794ff">' + d.promo + '</div><button onclick="copyText(\'' + d.promo + '\')" style="background:rgba(123,63,240,0.2);border:1px solid rgba(123,63,240,0.45);color:#b794ff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700">Copy</button></div></div>' : '')
     + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'
     + partnerStatCard('Referrals', d.referrals || 0)
     + partnerStatCard('Sales', d.sales || 0)
@@ -1573,7 +1575,7 @@ function renderPartnerApplyForm(wasRejected){
   body.innerHTML =
     (wasRejected ? '<div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#FCA5A5;border-radius:9px;padding:10px;font-size:12px;margin-bottom:12px">Your previous application was not approved. You can apply again.</div>' : '')
     + '<div style="font-size:13px;color:var(--muted2);margin-bottom:14px;line-height:1.6">Got an audience? Promote BlooMarket and earn <strong style="color:#7fb0ff">25%</strong> of our commission on every sale you bring in. Fill this in and we\'ll review it.</div>'
-    + '<div class="fg"><label>Platform</label><select id="paPlatform"><option value="youtube">YouTube</option><option value="tiktok">TikTok</option><option value="discord">Discord</option><option value="other">Other</option></select></div>'
+    + '<div class="fg"><label>Platform</label><select id="paPlatform"><option value="youtube">▶️ YouTube</option><option value="tiktok">🎵 TikTok</option><option value="x">✖️ X (Twitter)</option><option value="facebook">📘 Facebook</option><option value="snapchat">👻 Snapchat</option><option value="instagram">📸 Instagram</option><option value="discord">💬 Discord</option><option value="other">🌐 Other</option></select></div>'
     + '<div class="fg"><label>Channel / profile link</label><input type="text" id="paChannel" placeholder="https://youtube.com/@yourchannel"></div>'
     + '<div class="fg"><label>Followers / subscribers (approx.)</label><input type="number" id="paFollowers" min="0" placeholder="e.g. 20000"></div>'
     + '<div class="fg"><label>Why do you want to join?</label><textarea id="paReason" rows="3" placeholder="Tell us about your content & audience"></textarea></div>'
@@ -1603,6 +1605,14 @@ async function adminReviewPartner(id, approve) {
   adminTab('partners');
   refreshAdminBadge();
 }
+async function adminRevokePartner(id) {
+  if (!confirm('End this partnership? Their promo code and earnings tracking will stop.')) return;
+  var r = await db.rpc('revoke_partner_app', { p_id: id });
+  if (r.error) { showToast(rpcMsg(r.error),'error'); return; }
+  showToast('Partnership ended','success');
+  adminTab('partners');
+}
+function copyText(txt){ try{ navigator.clipboard.writeText(txt); }catch(e){} showToast('Copied 📋','success'); }
 function copyPartnerLink(){ var i=document.getElementById('partnerLink'); if(i){ i.select(); try{ navigator.clipboard.writeText(i.value); }catch(e){ try{document.execCommand('copy');}catch(e2){} } showToast('Link copied 📋','success'); } }
 async function requestPayout(){
   var r = await db.rpc('request_partner_payout');
@@ -2894,15 +2904,20 @@ async function applyPromoCode(){
   var inp = document.getElementById('payPromoInput'); if (!inp) return;
   var code = (inp.value||'').trim().toUpperCase(); if (!code) return;
   var p = PROMO_TABLE[code];
+  var isPartnerCode = false;
+  if (!p) {
+    var info = await db.rpc('partner_code_info', { p_code: code });
+    if (info && info.data && info.data.valid) { p = { pct:5, bonus:100 }; isPartnerCode = true; }
+  }
   if (!p) { showToast('Invalid code','error'); return; }
   if (p.until && new Date() > new Date(p.until+'T23:59:59')) { showToast('Code expired','error'); return; }
   var base = payContext.amount;
   var discounted = Math.round(base * (1 - (p.pct||0)/100) * 100) / 100;
   if (discounted >= 0.5) {
-    PROMO = { code: code, pct: p.pct||0, bonus: 0 };
+    PROMO = { code: code, pct: p.pct||0, bonus: 0, partner: isPartnerCode };
     showToast('Code applied: -'+(p.pct||0)+'% ✅','success');
   } else {
-    PROMO = { code: code, pct: 0, bonus: p.bonus||0 };
+    PROMO = { code: code, pct: 0, bonus: p.bonus||0, partner: isPartnerCode };
     showToast('🎁 Item too cheap for a discount — you\'ll get +'+(p.bonus||0)+' Bloobux instead!','success');
   }
   updatePayTotals();
@@ -2927,7 +2942,7 @@ async function submitPayElement() {
   if (!payElements || !payClientSecret) return;
   setBtn('payNowBtn', true, 'Paiement…');
   document.getElementById('pay-errors').textContent = '';
-  try { localStorage.setItem('bm_pending_order', JSON.stringify({ listingIds: (payContext&&payContext.listingIds)||[], quantities: (payContext&&payContext.quantities)||[], kind: (payContext&&payContext.kind)||'order', promoteId: (payContext&&payContext.promoteId)||null, promoteDays: (payContext&&payContext.promoteDays)||null, bonusBloobux: (PROMO&&PROMO.bonus)||0 })); } catch(e){}
+  try { localStorage.setItem('bm_pending_order', JSON.stringify({ listingIds: (payContext&&payContext.listingIds)||[], quantities: (payContext&&payContext.quantities)||[], kind: (payContext&&payContext.kind)||'order', promoteId: (payContext&&payContext.promoteId)||null, promoteDays: (payContext&&payContext.promoteDays)||null, bonusBloobux: (PROMO&&PROMO.bonus)||0, promoCode: (PROMO&&PROMO.code)||'', promoPartner: (PROMO&&PROMO.partner)||false })); } catch(e){}
   var result = await stripe.confirmPayment({
     elements: payElements,
     confirmParams: { return_url: location.origin + location.pathname },
@@ -2960,6 +2975,7 @@ async function submitPayElement() {
     }
     if (payContext && payContext.kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); }
     if (PROMO && PROMO.bonus > 0) { try { await db.rpc('add_bloobux', { p_amount: PROMO.bonus }); await loadProfile(); showToast('🎁 +' + PROMO.bonus + ' Bloobux added to your account!','success'); } catch(e){} }
+    if (PROMO && PROMO.partner && PROMO.code) { try { await db.rpc('attach_referrer_by_code', { p_code: PROMO.code }); } catch(e){} }
     hideModal('payModal');
     showToast('Payment successful! 🔒 ' + created + ' order(s) in escrow','success');
     loadListings();
@@ -2999,6 +3015,7 @@ async function handlePaymentReturn() {
   }
   if (pend.kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); }
   if (pend.bonusBloobux > 0) { try { await db.rpc('add_bloobux', { p_amount: pend.bonusBloobux }); await loadProfile(); showToast('🎁 +' + pend.bonusBloobux + ' Bloobux added!','success'); } catch(e){} }
+  if (pend.promoPartner && pend.promoCode) { try { await db.rpc('attach_referrer_by_code', { p_code: pend.promoCode }); } catch(e){} }
   showToast('Payment successful! 🔒 ' + created + ' order(s) in escrow','success');
   loadListings(); loadNotifications();
 }
@@ -3670,9 +3687,11 @@ async function adminTab(tab, el) {
       var chan = a.channel_url ? '<a href="' + escHtml(a.channel_url) + '" target="_blank" style="color:var(--blue2);word-break:break-all">' + escHtml(a.channel_url) + '</a>' : '—';
       var acts = a.status === 'pending'
         ? '<button onclick="adminReviewPartner(' + a.id + ',true)" class="btn-sm btn-sm-green" style="font-size:10px">✅ Approve</button> <button onclick="adminReviewPartner(' + a.id + ',false)" class="btn-sm btn-sm-red" style="font-size:10px">❌ Reject</button>'
+        : a.status === 'approved'
+        ? '<button onclick="adminRevokePartner(' + a.id + ')" class="btn-sm btn-sm-red" style="font-size:10px">🚫 Revoke</button>'
         : '—';
       var reason = a.reason ? '<div style="font-size:10px;color:var(--muted);margin-top:3px">' + escHtml(a.reason) + '</div>' : '';
-      html += '<div class="admin-table-row" style="grid-template-columns:1fr 1.6fr 0.8fr 1.6fr 1.4fr"><span style="font-weight:600">' + escHtml(a.platform||'—') + '</span><span style="font-size:11px">' + chan + reason + '</span><span>' + (a.followers||0) + '</span><span>' + sbadge + '<br><span style="font-size:10px;color:var(--muted)">' + escHtml(a.verify_code||'') + '</span></span><span>' + acts + '</span></div>';
+      html += '<div class="admin-table-row" style="grid-template-columns:1fr 1.6fr 0.8fr 1.6fr 1.4fr"><span style="font-weight:600">' + platformIcon(a.platform) + ' ' + escHtml(a.platform||'—') + '</span><span style="font-size:11px">' + chan + reason + '</span><span>' + (a.followers||0) + '</span><span>' + sbadge + '<br><span style="font-size:10px;color:var(--muted)">' + escHtml(a.verify_code||'') + '</span></span><span>' + acts + '</span></div>';
     });
     html += '</div>';
     content.innerHTML = html;
