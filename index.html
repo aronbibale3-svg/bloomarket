@@ -78,7 +78,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overf
 .hero-banner{background:linear-gradient(135deg,rgba(30,111,255,0.12),rgba(0,80,204,0.04));border:1px solid rgba(30,111,255,0.15);border-radius:14px;padding:24px 28px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;position:relative}
 .hero-banner::before{content:'';position:absolute;top:-50px;right:-50px;width:220px;height:220px;background:radial-gradient(circle,rgba(30,111,255,0.12),transparent 70%);border-radius:50%;pointer-events:none}
 .hb-title{font-size:20px;font-weight:900;letter-spacing:-.5px;margin-bottom:5px}
-.hb-sub{font-size:12px;color:var(--muted2);margin-bottom:14px}
+.hb-sub{font-size:12px;color:var(--muted2);margin-bottom:12px}
+.hb-trust{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;max-width:520px}
+.lang-menu{display:none;position:absolute;top:44px;right:0;background:var(--card,#0f1420);border:1px solid var(--border);border-radius:10px;padding:6px;z-index:300;min-width:160px;box-shadow:0 12px 34px rgba(0,0,0,0.45)}
+.lang-menu div{padding:9px 12px;border-radius:7px;cursor:pointer;font-size:13px;white-space:nowrap;color:var(--text,#e8eefc)}
+.lang-menu div:hover{background:rgba(30,111,255,0.12)}
+@media(max-width:640px){#langWrap{display:none!important}}
+.hb-trust span{font-size:11px;font-weight:600;color:#dbe5f5;background:rgba(30,111,255,0.10);border:1px solid rgba(30,111,255,0.22);padding:5px 10px;border-radius:8px}
 .hb-stats{display:flex;gap:20px}
 .hb-stat-n{font-size:17px;font-weight:800;color:var(--blue2)}
 .hb-stat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
@@ -602,14 +608,23 @@ body.auth-loading #userNav{display:none!important}
   </div>
   <div class="search-main">
     <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Search a Roblox item..." oninput="handleSearch()">
+    <input type="text" id="searchInput" placeholder="Search a Roblox item..." data-i18n-ph="search.ph" oninput="handleSearch()">
   </div>
   <div class="nav-r">
     <div id="authLoader" class="auth-loader"><span class="auth-spin"></span></div>
+    <div class="lang-wrap" id="langWrap" style="position:relative">
+      <button class="cart-btn" onclick="toggleLangMenu()" title="Language" style="font-size:13px;display:flex;align-items:center;gap:3px">🌐 <span id="langCurrent">EN</span></button>
+      <div class="lang-menu" id="langMenu">
+        <div onclick="setLang('en')">🇬🇧 English</div>
+        <div onclick="setLang('fr')">🇫🇷 Français</div>
+        <div onclick="setLang('es')">🇪🇸 Español</div>
+        <div onclick="setLang('pt')">🇵🇹 Português</div>
+      </div>
+    </div>
     <button class="cart-btn" id="themeToggle" onclick="toggleTheme()" title="Light / dark theme" style="font-size:15px">🌙</button>
     <div id="guestNav" style="display:flex;gap:7px">
-      <button class="btn-ghost" onclick="track('login_open');showModal('loginModal')">Login</button>
-      <button class="btn-blue" onclick="track('signup_open');showModal('registerModal')">Sign up</button>
+      <button class="btn-ghost" onclick="track('login_open');showModal('loginModal')" data-i18n="nav.login">Login</button>
+      <button class="btn-blue" onclick="track('signup_open');showModal('registerModal')" data-i18n="nav.signup">Sign up</button>
     </div>
     <div id="userNav" style="display:none;align-items:center;gap:7px">
       <div class="cart-btn" onclick="showPage('messages')" title="Messages" style="position:relative">💬<div class="cart-badge" id="msgBadge" style="display:none">0</div></div>
@@ -659,14 +674,20 @@ body.auth-loading #userNav{display:none!important}
 <div id="homePage" class="page show">
   <div class="hero-banner">
     <div>
-      <div class="hb-title">The reference Roblox marketplace 🎮</div>
-      <div class="hb-sub">Buy and sell your items safely · Stripe payment · Built-in messaging</div>
-      <div class="hb-stats">
-        <div><div class="hb-stat-n" id="statListings">0</div><div class="hb-stat-l">Listings</div></div>
-        <div><div class="hb-stat-n" id="statSellers">0</div><div class="hb-stat-l">Sellers</div></div>
-        <div><div class="hb-stat-n">24/7</div><div class="hb-stat-l">Support</div></div>
+      <div class="hb-title" data-i18n="hero.title">💰 Sell your Roblox items safely 🎮</div>
+      <div class="hb-sub" data-i18n="hero.sub">Free listings · Secure Stripe payment · Escrow protection until you receive your item.</div>
+      <div class="hb-trust">
+        <span data-i18n="trust.pay">🔒 Secure payments</span>
+        <span data-i18n="trust.escrow">🛡️ Anti-scam escrow</span>
+        <span data-i18n="trust.verified">✅ Verified sellers</span>
+        <span data-i18n="trust.support">💬 Responsive support</span>
       </div>
-      <button id="heroSellerBtn" onclick="heroBecomeSeller()" style="margin-top:16px;background:linear-gradient(135deg,#1E6FFF,#0050CC);border:none;color:#fff;font-weight:800;font-size:13px;padding:11px 20px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 6px 18px rgba(30,111,255,0.35)">🛡️ Become a seller</button>
+      <div class="hb-stats">
+        <div><div class="hb-stat-n" id="statListings">0</div><div class="hb-stat-l" data-i18n="stat.listings">Listings</div></div>
+        <div><div class="hb-stat-n" id="statSellers">0</div><div class="hb-stat-l" data-i18n="stat.sellers">Verified sellers</div></div>
+        <div><div class="hb-stat-n">24/7</div><div class="hb-stat-l" data-i18n="stat.support">Support</div></div>
+      </div>
+      <button id="heroSellerBtn" onclick="heroBecomeSeller()" style="margin-top:16px;background:linear-gradient(135deg,#1E6FFF,#0050CC);border:none;color:#fff;font-weight:800;font-size:13px;padding:12px 22px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 6px 18px rgba(30,111,255,0.35)" data-i18n="hero.cta">🚀 Become a seller</button>
     </div>
     <div style="font-size:64px;opacity:.7;flex-shrink:0">🛒</div>
   </div>
@@ -1394,6 +1415,87 @@ var MY_FAVORITES = {};
 function track(name, params) { try { if (window.gtag) gtag('event', name, params || {}); } catch(e){} }
 var _suStarted = false;
 function signupFormStart() { if (_suStarted) return; _suStarted = true; track('signup_form_start'); }
+
+/* ─────────── MOTEUR MULTILINGUE (i18n) ─────────── */
+var I18N = {
+  en: {
+    'nav.login':'Login','nav.signup':'Sign up',
+    'search.ph':'Search a Roblox item...',
+    'hero.title':'\uD83D\uDCB0 Sell your Roblox items safely \uD83C\uDFAE',
+    'hero.sub':'Free listings \u00B7 Secure Stripe payment \u00B7 Escrow protection until you receive your item.',
+    'trust.pay':'\uD83D\uDD12 Secure payments','trust.escrow':'\uD83D\uDEE1\uFE0F Anti-scam escrow',
+    'trust.verified':'\u2705 Verified sellers','trust.support':'\uD83D\uDCAC Responsive support',
+    'stat.listings':'Listings','stat.sellers':'Verified sellers','stat.support':'Support',
+    'hero.cta':'\uD83D\uDE80 Become a seller'
+  },
+  fr: {
+    'nav.login':'Connexion','nav.signup':'Inscription',
+    'search.ph':'Rechercher un objet Roblox...',
+    'hero.title':'\uD83D\uDCB0 Vendez vos objets Roblox en toute s\u00E9curit\u00E9 \uD83C\uDFAE',
+    'hero.sub':'Annonces gratuites \u00B7 Paiement Stripe s\u00E9curis\u00E9 \u00B7 Protection s\u00E9questre jusqu\u2019\u00E0 r\u00E9ception de votre objet.',
+    'trust.pay':'\uD83D\uDD12 Paiements s\u00E9curis\u00E9s','trust.escrow':'\uD83D\uDEE1\uFE0F S\u00E9questre anti-arnaque',
+    'trust.verified':'\u2705 Vendeurs v\u00E9rifi\u00E9s','trust.support':'\uD83D\uDCAC Support r\u00E9actif',
+    'stat.listings':'Annonces','stat.sellers':'Vendeurs v\u00E9rifi\u00E9s','stat.support':'Support',
+    'hero.cta':'\uD83D\uDE80 Devenir vendeur'
+  },
+  es: {
+    'nav.login':'Iniciar sesi\u00F3n','nav.signup':'Registrarse',
+    'search.ph':'Busca un objeto de Roblox...',
+    'hero.title':'\uD83D\uDCB0 Vende tus objetos de Roblox de forma segura \uD83C\uDFAE',
+    'hero.sub':'Anuncios gratis \u00B7 Pago seguro con Stripe \u00B7 Protecci\u00F3n de dep\u00F3sito hasta que recibas tu objeto.',
+    'trust.pay':'\uD83D\uDD12 Pagos seguros','trust.escrow':'\uD83D\uDEE1\uFE0F Dep\u00F3sito anti-estafa',
+    'trust.verified':'\u2705 Vendedores verificados','trust.support':'\uD83D\uDCAC Soporte receptivo',
+    'stat.listings':'Anuncios','stat.sellers':'Vendedores verificados','stat.support':'Soporte',
+    'hero.cta':'\uD83D\uDE80 Conviértete en vendedor'
+  },
+  pt: {
+    'nav.login':'Entrar','nav.signup':'Cadastrar',
+    'search.ph':'Pesquisar um item Roblox...',
+    'hero.title':'\uD83D\uDCB0 Venda seus itens Roblox com seguran\u00E7a \uD83C\uDFAE',
+    'hero.sub':'An\u00FAncios gr\u00E1tis \u00B7 Pagamento seguro via Stripe \u00B7 Prote\u00E7\u00E3o (escrow) at\u00E9 voc\u00EA receber seu item.',
+    'trust.pay':'\uD83D\uDD12 Pagamentos seguros','trust.escrow':'\uD83D\uDEE1\uFE0F Escrow antifraude',
+    'trust.verified':'\u2705 Vendedores verificados','trust.support':'\uD83D\uDCAC Suporte \u00E1gil',
+    'stat.listings':'An\u00FAncios','stat.sellers':'Vendedores verificados','stat.support':'Suporte',
+    'hero.cta':'\uD83D\uDE80 Torne-se vendedor'
+  }
+};
+var LANG = 'en';
+function detectLang() {
+  try {
+    var saved = localStorage.getItem('bm_lang');
+    if (saved && I18N[saved]) return saved;
+    var nav = ((navigator.language || navigator.userLanguage || 'en')).slice(0,2).toLowerCase();
+    if (I18N[nav]) return nav;
+  } catch(e){}
+  return 'en';
+}
+function t(key) {
+  var d = I18N[LANG] || I18N.en;
+  if (d && d[key] != null) return d[key];
+  if (I18N.en[key] != null) return I18N.en[key];
+  return key;
+}
+function applyI18n() {
+  try {
+    document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = t(el.getAttribute('data-i18n')); });
+    document.querySelectorAll('[data-i18n-ph]').forEach(function(el){ el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph'))); });
+    document.querySelectorAll('[data-i18n-title]').forEach(function(el){ el.setAttribute('title', t(el.getAttribute('data-i18n-title'))); });
+    document.documentElement.lang = LANG;
+    var lc = document.getElementById('langCurrent'); if (lc) lc.textContent = LANG.toUpperCase();
+  } catch(e){}
+}
+function setLang(l) {
+  if (!I18N[l]) return;
+  LANG = l;
+  try { localStorage.setItem('bm_lang', l); } catch(e){}
+  applyI18n();
+  hideLangMenu();
+}
+function toggleLangMenu(){ var m=document.getElementById('langMenu'); if(m) m.style.display=(m.style.display==='block'?'none':'block'); }
+function hideLangMenu(){ var m=document.getElementById('langMenu'); if(m) m.style.display='none'; }
+LANG = detectLang();
+/* ─────────── fin moteur i18n ─────────── */
+
 var currentDetailId = null;
 var cart = JSON.parse(localStorage.getItem('bm_cart') || '[]');
 cart.forEach(function(c){ if (!c.qty) c.qty = 1; });
@@ -1469,6 +1571,8 @@ new MutationObserver(function(){
 
 /* ══ INIT ══ */
 async function init() {
+  applyI18n();
+  document.addEventListener('click', function(e){ var w=document.getElementById('langWrap'); var m=document.getElementById('langMenu'); if(m && w && !w.contains(e.target)) m.style.display='none'; });
   try { var _ref = new URLSearchParams(location.search).get('ref'); if (_ref) localStorage.setItem('bm_ref', _ref.toUpperCase()); } catch(e){}
   handlePaymentReturn();
   if (/type=recovery/.test(location.hash) || /[?&]type=recovery/.test(location.search)) { setTimeout(function(){ revealAuthUI(); showModal('resetPasswordModal'); }, 600); }
