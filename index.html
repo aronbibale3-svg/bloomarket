@@ -606,8 +606,8 @@ body.auth-loading #userNav{display:none!important}
     <div id="authLoader" class="auth-loader"><span class="auth-spin"></span></div>
     <button class="cart-btn" id="themeToggle" onclick="toggleTheme()" title="Light / dark theme" style="font-size:15px">🌙</button>
     <div id="guestNav" style="display:flex;gap:7px">
-      <button class="btn-ghost" onclick="showModal('loginModal')">Login</button>
-      <button class="btn-blue" onclick="showModal('registerModal')">Sign up</button>
+      <button class="btn-ghost" onclick="track('login_open');showModal('loginModal')">Login</button>
+      <button class="btn-blue" onclick="track('signup_open');showModal('registerModal')">Sign up</button>
     </div>
     <div id="userNav" style="display:none;align-items:center;gap:7px">
       <div class="cart-btn" onclick="showPage('messages')" title="Messages" style="position:relative">💬<div class="cart-badge" id="msgBadge" style="display:none">0</div></div>
@@ -903,7 +903,7 @@ body.auth-loading #userNav{display:none!important}
     <div class="modal-h">Join BlooMarket 🚀</div>
     <div class="modal-sub">Create your free account</div>
     <div id="registerAlert"></div>
-    <div class="fg"><label>Username</label><input type="text" id="registerUsername" placeholder="YourUsername"></div>
+    <div class="fg"><label>Username</label><input type="text" id="registerUsername" placeholder="YourUsername" oninput="signupFormStart()"></div>
     <div class="fg"><label>Email</label><input type="email" id="registerEmail" placeholder="ton@email.com"></div>
     <div class="fg"><label>Password</label><input type="password" id="registerPassword" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')doRegister()"></div>
     <button class="btn-submit" id="registerBtn" onclick="doRegister()">Create my account</button>
@@ -1389,6 +1389,9 @@ var currentChatConvId = null, chatChannel = null, currentChatOther = null;
 var currentOrderTab = 'buying', reviewRating = 0;
 var LISTING_CACHE = {};
 var MY_FAVORITES = {};
+function track(name, params) { try { if (window.gtag) gtag('event', name, params || {}); } catch(e){} }
+var _suStarted = false;
+function signupFormStart() { if (_suStarted) return; _suStarted = true; track('signup_form_start'); }
 var currentDetailId = null;
 var cart = JSON.parse(localStorage.getItem('bm_cart') || '[]');
 cart.forEach(function(c){ if (!c.qty) c.qty = 1; });
@@ -1579,6 +1582,7 @@ async function doLogin() {
   } catch(e){}
   hideModal('loginModal');
   showToast('Logged in! 🎉','success');
+  track('login_success');
   logLogin();
 }
 
@@ -1593,10 +1597,12 @@ async function doRegister() {
   if (check.data) return showAlert('registerAlert','error','Username unavailable.');
   setBtn('registerBtn', true, 'Creating…');
   try { await db.auth.signOut({ scope: 'local' }); } catch(e){}
+  track('signup_submitted');
   var refCode = localStorage.getItem('bm_ref') || '';
   var res = await db.auth.signUp({email, password: pwd, options:{ emailRedirectTo: SITE_URL, data:{username, ref_code: refCode}}});
   setBtn('registerBtn', false, 'Create my account');
-  if (res.error) return showAlert('registerAlert','error', res.error.message);
+  if (res.error) { track('signup_error'); return showAlert('registerAlert','error', res.error.message); }
+  track('signup_success');
   if (!res.data || !res.data.session) {
     document.getElementById('registerAlert').innerHTML = '';
     hideModal('registerModal');
@@ -2499,6 +2505,7 @@ async function doSell() {
   sellImageFiles = []; sellImageDataURLs = [];
   renderSellAttrFields();
   showToast('Listing published! 🎉','success');
+  track('listing_published');
   loadListings();
   await addNotification(currentUser.id, '📋', 'Annonce publiée', 'Your listing "' + title + '" est en ligne.');
 }
@@ -2695,6 +2702,7 @@ function addToCart(id, title, game, price, imgUrl, sellerId) {
   localStorage.setItem('bm_cart', JSON.stringify(cart));
   updateCartBadge();
   showToast('Added to cart 🛒','success');
+  track('add_to_cart', { value: price });
   if (sellerId && currentUser && sellerId !== currentUser.id) { try { db.rpc('notify_cart_add', { p_listing_id: id }); } catch(e){} }
 }
 function cartQty(id, delta) {
@@ -2731,6 +2739,7 @@ async function openSellModal() {
   openSellerVerify();
 }
 async function openSellerVerify() {
+  track('become_seller_click');
   if (!currentUser) { showModal('loginModal'); return; }
   await loadProfile();
   if (userProfile && userProfile.id_verified) { showToast('You are already a verified seller ✅','success'); return; }
@@ -3601,6 +3610,7 @@ async function submitSellerVerify() {
   if (ins.error) return showAlert('sellerVerifyAlert','error','Error: ' + ins.error.message);
   hideModal('sellerVerifyModal');
   showToast('Request sent ✅ Reply after review by the admin','success');
+  track('seller_request_sent');
 }
 
 async function loadReferral() {
