@@ -1885,6 +1885,11 @@ async function loadProfile() {
   var res = await db.from('profiles').select('*').eq('id', currentUser.id).single();
   if (res.data) {
     userProfile = res.data;
+    if (res.data.username) {
+      var un = document.getElementById('userName'); if (un) un.textContent = res.data.username;
+      var uat = document.getElementById('userAvatarText'); if (uat) uat.textContent = res.data.username[0].toUpperCase();
+      var du = document.getElementById('dashUsername'); if (du) du.textContent = res.data.username;
+    }
     var bal = parseFloat(res.data.balance || 0).toFixed(2);
     document.getElementById('dropBalance').textContent = bal;
     document.getElementById('dashBalance').textContent = bal + '€';
@@ -1924,6 +1929,7 @@ async function doLogin() {
   showToast('Logged in! 🎉','success');
   track('login_success');
   logLogin();
+  setTimeout(function(){ location.reload(); }, 500);
 }
 
 async function doRegister() {
@@ -2097,9 +2103,9 @@ async function loadLoginHistory() {
 }
 async function logoutAllSessions() {
   if (!confirm('Déconnecter TOUTES tes sessions sur tous les appareils ?')) return;
-  try { await db.auth.signOut({ scope: 'global' }); } catch(e){ await db.auth.signOut(); }
-  clearUser(); showPage('home');
-  showToast('All sessions have been logged out.','success');
+  try { await db.auth.signOut({ scope: 'global' }); } catch(e){ try{ await db.auth.signOut(); }catch(e2){} }
+  try { localStorage.removeItem('bm_cart'); localStorage.removeItem('bm_cart_owner'); } catch(e){}
+  location.reload();
 }
 
 /* ══ 2FA (TOTP) via Supabase MFA ══ */
@@ -2176,6 +2182,7 @@ async function submitMfaLogin() {
   hideModal('mfaLoginModal');
   showToast('Logged in! 🎉','success');
   logLogin();
+  setTimeout(function(){ location.reload(); }, 500);
 }
 
 /* ══ ASSISTANT IA ══ */
@@ -2374,7 +2381,11 @@ async function reportUser() {
 }
 
 async function logout() {
-  await db.auth.signOut(); clearUser(); showPage('home');
+  try { await db.auth.signOut(); } catch(e){}
+  try { localStorage.removeItem('bm_cart'); localStorage.removeItem('bm_cart_owner'); } catch(e){}
+  location.reload();
+  return;
+  clearUser(); showPage('home');
   showToast('Logged out','success');
 }
 
