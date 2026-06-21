@@ -3627,12 +3627,15 @@ async function loadNotifications() {
 function renderNotifications(notifs) {
   var el = document.getElementById('notifList');
   if (!notifs.length) { el.innerHTML = '<div class="notif-empty">No notification</div>'; return; }
+  var typeIcon = { order:'🛒', cart:'🛒', message:'💬', newsletter:'🆕', partner:'🤝', payout:'💸' };
   el.innerHTML = notifs.map(function(n) {
     var d = new Date(n.created_at);
     var time = d.toLocaleDateString('fr-FR') + ' ' + d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+    var icon = n.icon || typeIcon[n.type] || '🔔';
+    var text = n.message ? escHtml(n.message) : (((n.title ? ('<strong>' + escHtml(n.title) + '</strong> — ') : '')) + escHtml(n.body || ''));
     return '<div class="notif-item' + (n.read ? '' : ' unread') + '" onclick="markNotifRead(' + n.id + ')">' +
-      '<div class="notif-ico">' + (n.icon||'🔔') + '</div>' +
-      '<div class="notif-body"><div class="notif-text"><strong>' + escHtml(n.title||'') + '</strong> — ' + escHtml(n.body||'') + '</div><div class="notif-time">' + time + '</div></div></div>';
+      '<div class="notif-ico">' + icon + '</div>' +
+      '<div class="notif-body"><div class="notif-text">' + text + '</div><div class="notif-time">' + time + '</div></div></div>';
   }).join('');
 }
 
