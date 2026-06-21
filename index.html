@@ -839,14 +839,12 @@ body.auth-loading #userNav{display:none!important}
     <div><div class="wallet-label">Available balance</div><div class="wallet-amount" id="withdrawBalance">0.00€</div><div class="wallet-sub">Minimum withdrawal: €1</div></div>
   </div>
   <div style="max-width:480px">
-    <div class="fg"><label>Withdrawal method</label>
-      <select id="withdrawMethod">
-        <option value="paypal">PayPal</option>
-        <option value="bank">Bank transfer</option>
-      </select>
-    </div>
-    <div class="fg"><label>Address / IBAN</label><input type="text" id="withdrawAddress" placeholder="Ex: your@email.com or IBAN"></div>
+    <div class="fg"><label>Withdrawal method</label><input type="text" value="🏦 Bank transfer (IBAN)" readonly style="opacity:.75;cursor:default"></div>
+    <div class="fg"><label>Account holder (full name)</label><input type="text" id="wdName" placeholder="Ex: Jean Dupont"></div>
+    <div class="fg"><label>IBAN</label><input type="text" id="wdIban" placeholder="Ex: FR76 3000 1007 9412 3456 7890 185"></div>
+    <div class="fg"><label>BIC / SWIFT (optional)</label><input type="text" id="wdBic" placeholder="Ex: BNPAFRPP"></div>
     <div class="fg"><label>Amount (€)</label><input type="number" id="withdrawAmount" placeholder="Ex: 5" min="1" step="0.01"></div>
+    <div style="font-size:11px;color:var(--muted);margin:-6px 0 12px">⚠️ Double-check your IBAN — transfers are processed manually within a few days.</div>
     <div id="withdrawAlert"></div>
     <button class="btn-submit" onclick="requestWithdraw()">Request withdrawal</button>
   </div>
@@ -1032,7 +1030,7 @@ body.auth-loading #userNav{display:none!important}
           <option value="Brawl Stars">💥 Brawl Stars</option>
         </select>
       </div>
-      <div class="fg"><label>Price (€)</label><input type="number" id="sellPrice" placeholder="0.50" min="0.50" step="0.01"></div>
+      <div class="fg"><label>Price (€)</label><input type="number" id="sellPrice" placeholder="1.00" min="1" step="0.01"></div>
     </div>
     <div id="sellAttrFields"></div>
     <div class="fg"><label>Stock (available quantity)</label><input type="number" id="sellStock" placeholder="1" min="1" step="1" value="1"></div>
@@ -2858,7 +2856,7 @@ async function doSell() {
   var catList = (typeof ITEM_CATALOG !== 'undefined' && ITEM_CATALOG[game]) ? ITEM_CATALOG[game] : [];
   if (catList.length && catList.indexOf(title) === -1) return showAlert('sellAlert','error','Choose your item from the list.');
   if (!title || !price || !desc) return showAlert('sellAlert','error','Fill in all fields!');
-  if (isNaN(price) || price < 0.5) return showAlert('sellAlert','error','Minimum price is €0.50.');
+  if (isNaN(price) || price < 1) return showAlert('sellAlert','error','Minimum price is €1.');
   if (!isEdit && sellImageFiles.length < 1) return showAlert('sellAlert','error','Add at least 1 photo.');
   setBtn('sellBtn', true, isEdit ? 'Saving…' : 'Publishing…');
   var imageUrls = isEdit ? (editingExistingImages || []).slice() : [];
@@ -3019,8 +3017,7 @@ async function applyPromoCode(){
   if (!p) { showToast('Invalid code','error'); return; }
   if (p.until && new Date() > new Date(p.until+'T23:59:59')) { showToast('Code expired','error'); return; }
   var base = payContext.amount;
-  var discounted = Math.round(base * (1 - (p.pct||0)/100) * 100) / 100;
-  if (discounted >= 0.5) {
+  if (base > 1) {
     PROMO = { code: code, pct: p.pct||0, bonus: 0, partner: isPartnerCode };
     showToast('Code applied: -'+(p.pct||0)+'% ✅','success');
   } else {
@@ -3481,7 +3478,13 @@ async function loadOrders() {
     }
     var commission = o.commission ? ' · Commission : ' + parseFloat(o.commission).toFixed(2) + '€' : '';
     html += '<div class="order-item"><div class="order-header"><div class="order-title">' + escHtml(o.title||'Order') + '</div>' + statusHtml + '</div>';
-    html += '<div class="order-meta">' + (currentOrderTab==='buying'?'Seller':'Buyer') + ' : <strong>' + escHtml(other) + '</strong> · ' + parseFloat(o.price||0).toFixed(2) + '€' + commission + ' · ' + new Date(o.created_at).toLocaleDateString('fr-FR') + '</div>';
+    var _price = parseFloat(o.price||0);
+    var _fee = Math.round((_price*0.015 + 0.25)*100)/100;
+    var _net = Math.max(0, Math.round((_price - _fee - parseFloat(o.commission||0))*100)/100);
+    var _tail = (currentOrderTab === 'selling')
+      ? 'Buyer : <strong>' + escHtml(other) + '</strong> · Sale ' + _price.toFixed(2) + '€ · <strong style="color:#6ee7b7">You receive: ' + _net.toFixed(2) + '€</strong> <span style="color:var(--muted);font-size:10px">(net, after Stripe + fees)</span>'
+      : 'Seller : <strong>' + escHtml(other) + '</strong> · ' + _price.toFixed(2) + '€';
+    html += '<div class="order-meta">' + _tail + ' · ' + new Date(o.created_at).toLocaleDateString('fr-FR') + '</div>';
     html += deadlineHtml + '<div class="order-actions">' + actions + '</div></div>';
   });
   el.innerHTML = html;
@@ -3747,20 +3750,23 @@ async function requestWithdraw() {
   if (!currentUser) return;
   await loadProfile();
   var amount = parseFloat(document.getElementById('withdrawAmount').value);
-  var method = document.getElementById('withdrawMethod').value;
-  var address = document.getElementById('withdrawAddress').value.trim();
+  var name = document.getElementById('wdName').value.trim();
+  var iban = document.getElementById('wdIban').value.trim().replace(/\s+/g,' ');
+  var bic = document.getElementById('wdBic').value.trim();
   if (!amount || amount < 1) return showAlert('withdrawAlert','error','Minimum amount: €1');
-  if (!address) return showAlert('withdrawAlert','error','Remplis ton adresse ' + method + '.');
+  if (!name) return showAlert('withdrawAlert','error','Enter the account holder full name.');
+  if (!iban || iban.replace(/\s/g,'').length < 14) return showAlert('withdrawAlert','error','Enter a valid IBAN.');
   var balance = parseFloat(userProfile ? userProfile.balance : 0);
   if (balance < amount) return showAlert('withdrawAlert','error','Insufficient balance (' + balance.toFixed(2) + '€)');
-  if (!confirm('Demander un retrait de ' + amount.toFixed(2) + '€ via ' + method + ' ?')) return;
+  if (!confirm('Request a €' + amount.toFixed(2) + ' bank transfer to this IBAN?')) return;
+  var address = 'Name: ' + name + ' | IBAN: ' + iban + (bic ? ' | BIC: ' + bic : '');
   var newBal = Math.round((balance - amount) * 100) / 100;
   await db.from('profiles').update({balance: newBal}).eq('id', currentUser.id);
-  await db.from('withdrawals').insert({user_id:currentUser.id, amount, method, address, status:'pending'});
+  await db.from('withdrawals').insert({user_id:currentUser.id, amount, method:'bank', address, status:'pending'});
   await loadProfile();
   showToast('Withdrawal request sent ✅','success');
   document.getElementById('withdrawAmount').value = '';
-  document.getElementById('withdrawAddress').value = '';
+  document.getElementById('wdName').value = ''; document.getElementById('wdIban').value = ''; document.getElementById('wdBic').value = '';
   loadWithdrawHistory();
 }
 
