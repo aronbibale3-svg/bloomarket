@@ -2894,10 +2894,12 @@ function startPurchase(listingIds, total, title, kind, quantities) {
 async function ensureOrderChat(listingId) {
   try {
     var lr = await db.from('listings').select('user_id,title').eq('id', listingId).maybeSingle();
-    if (!lr || !lr.data) return;
+    if (!lr || !lr.data) return null;
     var sellerId = lr.data.user_id;
-    if (!sellerId || sellerId === currentUser.id) return;
+    if (!sellerId || sellerId === currentUser.id) return null;
     var title = lr.data.title || 'Article';
+    var sname = 'Seller';
+    try { var sp = await db.from('profiles').select('username').eq('id', sellerId).maybeSingle(); if (sp && sp.data && sp.data.username) sname = sp.data.username; } catch(e){}
     var ids = [currentUser.id, sellerId].sort();
     var cr = await db.from('conversations').select('id').eq('user1_id', ids[0]).eq('user2_id', ids[1]).maybeSingle();
     var convId = (cr && cr.data) ? cr.data.id : null;
@@ -2905,11 +2907,13 @@ async function ensureOrderChat(listingId) {
       var nc = await db.from('conversations').insert({user1_id:ids[0], user2_id:ids[1], listing_id:listingId}).select('id').single();
       convId = (nc && nc.data) ? nc.data.id : null;
     }
-    if (!convId) return;
-    var msg = '🛒 Purchase completed: « ' + title + ' ». 🔒 Payment in escrow. The seller has 48h to deliver — please finalize delivery here.';
-    await db.from('messages').insert({conversation_id:convId, sender_id:currentUser.id, content:msg, read:false});
+    if (!convId) return null;
+    var msg = '🛒 Purchase completed: « ' + title + ' ». 🔒 Payment in escrow. The seller has 24h to deliver — please finalize delivery here.';
+    var mi = await db.from('messages').insert({conversation_id:convId, sender_id:currentUser.id, content:msg, read:false});
+    if (mi && mi.error) console.error('order chat message error:', mi.error);
     await db.from('conversations').update({last_message:msg, updated_at:new Date().toISOString()}).eq('id', convId);
-  } catch(e) {}
+    return { convId: convId, sellerId: sellerId, sellerName: sname, listingId: listingId };
+  } catch(e) { console.error('ensureOrderChat', e); return null; }
 }
 
 async function buyFromBalance(listingIds, total, kind, quantities) {
@@ -3038,10 +3042,10 @@ async function submitPayElement() {
     }
     var ids = (payContext && payContext.listingIds) || [];
     var qts = (payContext && payContext.quantities) || [];
-    var created = 0, lastErr = null;
+    var created = 0, lastErr = null, chatToOpen = null;
     for (var i = 0; i < ids.length; i++) {
       var r = await db.rpc('create_paid_order', { p_listing_id: ids[i], p_qty: qts[i] || 1 });
-      if (!r.error) { created++; await ensureOrderChat(ids[i]); }
+      if (!r.error) { created++; var ch = await ensureOrderChat(ids[i]); if (ch && !chatToOpen) chatToOpen = ch; }
       else { lastErr = r.error; console.error('create_paid_order failed:', r.error); }
     }
     if (payContext && payContext.kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); }
@@ -3056,6 +3060,7 @@ async function submitPayElement() {
     if (currentUser) { await loadProfile(); }
     loadListings();
     if (currentUser) { loadNotifications(); }
+    if (chatToOpen) { setTimeout(function(){ openChat(chatToOpen.sellerId, chatToOpen.sellerName, chatToOpen.listingId); }, 600); }
   } else {
     setBtn('payNowBtn', false, 'Payer');
   }
@@ -3393,15 +3398,15 @@ async function loadOrders() {
   var html = '';
   res.data.forEach(function(o) {
     var other = currentOrderTab === 'buying' ? ((o.seller && o.seller.username) || 'Seller') : ((o.buyer && o.buyer.username) || 'Buyer');
-    var _dlMs = new Date(o.created_at).getTime() + 48*3600*1000;
+    var _dlMs = new Date(o.created_at).getTime() + 24*3600*1000;
     var _rem = _dlMs - Date.now();
     var deadlineHtml = '';
     if (o.status === 'pending') {
       if (_rem > 0) {
         var _h = Math.floor(_rem/3600000), _m = Math.floor((_rem%3600000)/60000);
-        deadlineHtml = '<div class="order-deadline">⏳ Delivery within 48h — <strong>' + _h + 'h ' + _m + 'm</strong></div>';
+        deadlineHtml = '<div class="order-deadline">⏳ Delivery within 24h — <strong>' + _h + 'h ' + _m + 'm</strong></div>';
       } else {
-        deadlineHtml = '<div class="order-deadline late">⏰ 48h deadline passed' + (currentOrderTab === 'selling' ? ' — deliver asap!' : '') + '</div>';
+        deadlineHtml = '<div class="order-deadline late">⏰ 24h deadline passed' + (currentOrderTab === 'selling' ? ' — deliver asap!' : '') + '</div>';
       }
     }
     var statusHtml = o.status === 'pending' ? '<span class="badge-wait">🔒 Escrow</span>' :
@@ -3441,8 +3446,8 @@ async function confirmOrder(orderId, sellerId) {
 }
 
 async function claimLateRefund(orderId) {
-  if (!confirm('The seller missed the 48h delivery deadline.\n\nRequest a refund? A priority dispute will be opened and an administrator will process the refund of your escrowed payment.')) return;
-  var r = await db.rpc('open_dispute', { p_order_id: orderId, p_reason: 'Délai de livraison de 48h dépassé — remboursement demandé' });
+  if (!confirm('The seller missed the 24h delivery deadline.\n\nRequest a refund? A priority dispute will be opened and an administrator will process the refund of your escrowed payment.')) return;
+  var r = await db.rpc('open_dispute', { p_order_id: orderId, p_reason: 'Délai de livraison de 24h dépassé — remboursement demandé' });
   if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
   showToast('Refund requested ↩️ An admin will handle the dispute','info');
   loadOrders();
