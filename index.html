@@ -1454,8 +1454,21 @@ var ROBLOX_GAMES = ['Steal A Brainrot','Blox Fruits','Murder Mystery 2','Grow A 
 var currentPlatform = 'all';
 var CCY_RATES = { EUR:1, USD:1.08, GBP:0.85, BRL:5.90, CAD:1.47, AUD:1.65, MXN:18.5 };
 var CCY_SYM   = { EUR:'€', USD:'$', GBP:'£', BRL:'R$', CAD:'C$', AUD:'A$', MXN:'MX$' };
-var DISPLAY_CCY = 'EUR';
-try { DISPLAY_CCY = localStorage.getItem('bm_ccy') || 'EUR'; } catch(e){}
+function detectCcy(){
+  try {
+    var saved = localStorage.getItem('bm_ccy');
+    if (saved && CCY_RATES[saved]) return saved;
+    var loc = (navigator.language || navigator.userLanguage || 'en');
+    var region = (loc.split('-')[1] || '').toUpperCase();
+    var byRegion = { US:'USD', GB:'GBP', UK:'GBP', BR:'BRL', CA:'CAD', AU:'AUD', NZ:'AUD', MX:'MXN' };
+    if (region && byRegion[region]) return byRegion[region];
+    var lang = loc.slice(0,2).toLowerCase();
+    if (lang === 'en') return 'USD';
+    return 'EUR';
+  } catch(e){}
+  return 'EUR';
+}
+var DISPLAY_CCY = detectCcy();
 function fmtPrice(eur){
   eur = parseFloat(eur) || 0;
   var c = DISPLAY_CCY, r = CCY_RATES[c] || 1, sym = CCY_SYM[c] || '€';
