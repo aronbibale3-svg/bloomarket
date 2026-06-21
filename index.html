@@ -1690,6 +1690,28 @@ async function requestPayout(){
   openPartner();
 }
 var editingListingId = null;
+async function toggleListingActive(id, makeActive) {
+  var r = await db.from('listings').update({active: makeActive}).eq('id', id).eq('user_id', currentUser.id);
+  if (r.error) { showToast(r.error.message,'error'); return; }
+  showToast(makeActive ? 'Listing activated 🟢' : 'Listing paused 🔴','success');
+  loadMyListings(); loadListings();
+}
+async function openListingNote(id) {
+  var cur = MY_NOTES[id] || '';
+  document.getElementById('noteListingId').value = id;
+  document.getElementById('noteText').value = cur;
+  showModal('noteModal');
+}
+async function saveListingNote() {
+  var id = document.getElementById('noteListingId').value;
+  var note = document.getElementById('noteText').value;
+  var r = await db.from('listing_notes').upsert({ listing_id: parseInt(id,10), user_id: currentUser.id, note: note, updated_at: new Date().toISOString() }, { onConflict: 'listing_id' });
+  if (r.error) { showToast(r.error.message,'error'); return; }
+  MY_NOTES[id] = note;
+  hideModal('noteModal');
+  showToast('Private note saved 📝','success');
+  loadMyListings();
+}
 var editingExistingImages = [];
 function setSellAttrs(attrs) {
   attrs = attrs || {};
@@ -3332,20 +3354,39 @@ async function handleStripePayment() {
 }
 
 /* ══ DASHBOARD ══ */
+var MY_NOTES = {};
 async function loadMyListings() {
   if (!currentUser) return;
-  var res = await db.from('listings').select('*').eq('user_id', currentUser.id).eq('active', true).order('created_at',{ascending:false});
+  var res = await db.from('listings').select('*').eq('user_id', currentUser.id).order('created_at',{ascending:false});
   if (!res.data) return;
-  document.getElementById('dMyListings').textContent = res.data.length;
+  document.getElementById('dMyListings').textContent = res.data.filter(function(l){return l.active;}).length;
   var body = document.getElementById('myListingsBody');
-  if (!res.data.length) { body.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">No listing</div>'; return; }
-  var html = '';
+  // Notes privées
+  try { var nr = await db.from('listing_notes').select('listing_id,note').eq('user_id', currentUser.id); MY_NOTES = {}; if (nr.data) nr.data.forEach(function(n){ MY_NOTES[n.listing_id] = n.note; }); } catch(e){}
+  // Alerte livraison 24h (commandes en attente à livrer)
+  var alertHtml = '';
+  try {
+    var po = await db.from('orders').select('id,title,created_at').eq('seller_id', currentUser.id).eq('status','pending').order('created_at',{ascending:true});
+    if (po.data && po.data.length) {
+      var soon = po.data.map(function(o){ var rem = new Date(o.created_at).getTime() + 24*3600000 - Date.now(); var h = Math.max(0,Math.floor(rem/3600000)), m = Math.max(0,Math.floor((rem%3600000)/60000)); return { t:o.title||'item', late: rem<=0, h:h, m:m }; });
+      alertHtml = '<div style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.4);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:#FBBF24">⏰ <strong>' + po.data.length + ' order(s) to deliver within 24h.</strong> ' + soon.map(function(s){ return '« ' + escHtml(s.t) + ' » ' + (s.late ? '⚠️ overdue!' : ('— ' + s.h + 'h ' + s.m + 'm left')); }).join(' · ') + '</div>';
+    }
+  } catch(e){}
+  if (!res.data.length) { body.innerHTML = alertHtml + '<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">No listing</div>'; return; }
+  var html = alertHtml;
   res.data.forEach(function(l) {
-    html += '<div class="dtr"><span>' + (GAME_ICONS[l.game]||'🎮') + ' ' + escHtml(l.title) + '</span>';
+    var paused = !l.active;
+    var hasNote = MY_NOTES[l.id] && MY_NOTES[l.id].length;
+    html += '<div class="dtr" style="' + (paused ? 'opacity:.55' : '') + '"><span>' + (GAME_ICONS[l.game]||'🎮') + ' ' + escHtml(l.title) + (paused ? ' <em style="font-size:10px;color:#FCA5A5">(paused)</em>' : '') + '</span>';
     html += '<span style="color:var(--blue2);font-weight:700">' + parseFloat(l.price).toFixed(2) + '€</span>';
     html += '<span style="color:var(--muted)">' + escHtml(l.game) + '</span>';
     var promo = (l.promoted_until && new Date(l.promoted_until).getTime() > Date.now()) ? '<span style="font-size:10px;color:#FBBF24;align-self:center">⭐ promu</span>' : '';
-    html += '<span style="display:flex;gap:6px;justify-content:flex-end">' + promo + '<button onclick="openEditListing(' + l.id + ')" style="background:rgba(30,111,255,0.12);border:1px solid rgba(30,111,255,0.3);color:#7fb0ff;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">✏️ Edit</button><button onclick="openPromote(' + l.id + ')" style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:#FBBF24;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">🚀 Promote</button><button onclick="deleteListing(' + l.id + ')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif">Delete</button></span></div>';
+    var bP='padding:4px 9px;border-radius:6px;font-size:11px;cursor:pointer;font-family:Inter,sans-serif';
+    var noteBtn = '<button onclick="openListingNote(' + l.id + ')" title="Private note" style="background:' + (hasNote?'rgba(110,231,183,0.15)':'rgba(255,255,255,0.05)') + ';border:1px solid var(--border);color:' + (hasNote?'#6ee7b7':'var(--muted2)') + ';' + bP + '">📝</button>';
+    var pauseBtn = paused
+      ? '<button onclick="toggleListingActive(' + l.id + ',true)" style="background:rgba(110,231,183,0.12);border:1px solid rgba(110,231,183,0.3);color:#6ee7b7;' + bP + '">🟢 Activate</button>'
+      : '<button onclick="toggleListingActive(' + l.id + ',false)" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;' + bP + '">🔴 Pause</button>';
+    html += '<span style="display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap">' + promo + noteBtn + pauseBtn + '<button onclick="openEditListing(' + l.id + ')" style="background:rgba(30,111,255,0.12);border:1px solid rgba(30,111,255,0.3);color:#7fb0ff;' + bP + '">✏️ Edit</button><button onclick="openPromote(' + l.id + ')" style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:#FBBF24;' + bP + '">🚀</button><button onclick="deleteListing(' + l.id + ')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;' + bP + '">🗑️</button></span></div>';
   });
   body.innerHTML = html;
   var salesRes = await db.from('orders').select('price').eq('seller_id', currentUser.id).eq('status','completed');
@@ -4151,6 +4192,18 @@ init();
   <div class="ai-chips" id="aiChips"></div>
   <div class="ai-input-row"><input id="aiInput" placeholder="Pose ta question…" onkeydown="if(event.key==='Enter')aiSend()"><button onclick="aiSend()">➤</button></div>
 </div>
+<!-- Note privée vendeur -->
+<div class="overlay" id="noteModal" onclick="closeOnBg(event,'noteModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('noteModal')">✕</button>
+    <div class="modal-h" style="text-align:left">📝 Private note</div>
+    <div class="modal-sub" style="text-align:left;margin-bottom:14px">Only you can see this. Use it to remember where to buy the item (e.g. Eldorado link + price).</div>
+    <input type="hidden" id="noteListingId">
+    <div class="fg"><textarea id="noteText" rows="4" placeholder="e.g. Bought on Eldorado 1€ — eldorado.gg/..."></textarea></div>
+    <button class="btn-submit" onclick="saveListingNote()">Save note</button>
+  </div>
+</div>
+
 <!-- Détail partenaire (admin) -->
 <div class="overlay" id="partnerDetailModal" onclick="closeOnBg(event,'partnerDetailModal')">
   <div class="modal">
