@@ -3038,16 +3038,22 @@ async function submitPayElement() {
     }
     var ids = (payContext && payContext.listingIds) || [];
     var qts = (payContext && payContext.quantities) || [];
-    var created = 0;
+    var created = 0, lastErr = null;
     for (var i = 0; i < ids.length; i++) {
       var r = await db.rpc('create_paid_order', { p_listing_id: ids[i], p_qty: qts[i] || 1 });
       if (!r.error) { created++; await ensureOrderChat(ids[i]); }
+      else { lastErr = r.error; console.error('create_paid_order failed:', r.error); }
     }
     if (payContext && payContext.kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); }
     if (PROMO && PROMO.bonus > 0) { try { await db.rpc('add_bloobux', { p_amount: PROMO.bonus }); await loadProfile(); showToast('🎁 +' + PROMO.bonus + ' Bloobux added to your account!','success'); } catch(e){} }
     if (PROMO && PROMO.partner && PROMO.code) { try { await db.rpc('attach_referrer_by_code', { p_code: PROMO.code }); } catch(e){} }
     hideModal('payModal');
-    showToast('Payment successful! 🔒 ' + created + ' order(s) in escrow','success');
+    if (created === 0) {
+      showToast('⚠️ Payment received but the order could not be created' + (lastErr ? (': ' + (lastErr.message || rpcMsg(lastErr))) : '') + '. Contact support with this — you will be refunded or delivered.','error');
+    } else {
+      showToast('Payment successful! 🔒 ' + created + ' order(s) in escrow','success');
+    }
+    if (currentUser) { await loadProfile(); }
     loadListings();
     if (currentUser) { loadNotifications(); }
   } else {
