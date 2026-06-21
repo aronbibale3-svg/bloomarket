@@ -665,6 +665,15 @@ body.auth-loading #userNav{display:none!important}
             <button data-lang="fr" class="ud-lang" onclick="event.stopPropagation();setLang('fr')">FR</button>
             <button data-lang="es" class="ud-lang" onclick="event.stopPropagation();setLang('es')">ES</button>
             <button data-lang="pt" class="ud-lang" onclick="event.stopPropagation();setLang('pt')">PT</button>
+          </div>
+          <div style="font-size:10px;color:var(--muted);padding:8px 8px 4px;letter-spacing:.5px">CURRENCY (display)</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;padding:0 6px 4px">
+            <button data-ccy="EUR" class="ud-lang ud-ccy" onclick="event.stopPropagation();setCcy('EUR')">€ EUR</button>
+            <button data-ccy="USD" class="ud-lang ud-ccy" onclick="event.stopPropagation();setCcy('USD')">$ USD</button>
+            <button data-ccy="GBP" class="ud-lang ud-ccy" onclick="event.stopPropagation();setCcy('GBP')">£ GBP</button>
+            <button data-ccy="BRL" class="ud-lang ud-ccy" onclick="event.stopPropagation();setCcy('BRL')">R$ BRL</button>
+            <button data-ccy="CAD" class="ud-lang ud-ccy" onclick="event.stopPropagation();setCcy('CAD')">C$ CAD</button>
+            <button data-ccy="AUD" class="ud-lang ud-ccy" onclick="event.stopPropagation();setCcy('AUD')">A$ AUD</button>
           </span>
         </div>
         <div class="ud-item" onclick="showPage('dashboard')">📊 Dashboard</div>
@@ -1443,6 +1452,23 @@ var currentUser = null, userProfile = null;
 var currentFilter = 'all', currentSort = 'created_at', searchQuery = '';
 var ROBLOX_GAMES = ['Steal A Brainrot','Blox Fruits','Murder Mystery 2','Grow A Garden','Adopt Me','Grow A Garden 2','Jailbreak','Pet Simulator 99','Toilet Tower Defense','Grand Piece Online','Da Hood','Royale High'];
 var currentPlatform = 'all';
+var CCY_RATES = { EUR:1, USD:1.08, GBP:0.85, BRL:5.90, CAD:1.47, AUD:1.65, MXN:18.5 };
+var CCY_SYM   = { EUR:'€', USD:'$', GBP:'£', BRL:'R$', CAD:'C$', AUD:'A$', MXN:'MX$' };
+var DISPLAY_CCY = 'EUR';
+try { DISPLAY_CCY = localStorage.getItem('bm_ccy') || 'EUR'; } catch(e){}
+function fmtPrice(eur){
+  eur = parseFloat(eur) || 0;
+  var c = DISPLAY_CCY, r = CCY_RATES[c] || 1, sym = CCY_SYM[c] || '€';
+  if (c === 'EUR') return eur.toFixed(2) + '€';
+  return '≈ ' + sym + (eur * r).toFixed(2);
+}
+function setCcy(c){
+  DISPLAY_CCY = c;
+  try { localStorage.setItem('bm_ccy', c); } catch(e){}
+  document.querySelectorAll('.ud-ccy').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-ccy') === c); });
+  if (typeof loadListings === 'function') loadListings();
+  if (typeof renderCartModal === 'function') renderCartModal();
+}
 var currentChatConvId = null, chatChannel = null, currentChatOther = null;
 var currentOrderTab = 'buying', reviewRating = 0;
 var LISTING_CACHE = {};
@@ -1761,6 +1787,7 @@ new MutationObserver(function(){
 /* ══ INIT ══ */
 async function init() {
   applyI18n();
+  document.querySelectorAll('.ud-ccy').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-ccy') === DISPLAY_CCY); });
   maybeShowWelcome();
   document.addEventListener('click', function(e){ var w=document.getElementById('langWrap'); var m=document.getElementById('langMenu'); if(m && w && !w.contains(e.target)) m.style.display='none'; });
   try { var _ref = new URLSearchParams(location.search).get('ref'); if (_ref) { localStorage.setItem('bm_ref', _ref.toUpperCase()); db.rpc('track_referral_click', { p_code: _ref.toUpperCase(), p_visitor: VISITOR_ID }); } } catch(e){}
@@ -2521,7 +2548,7 @@ function renderListings(listings, targetId) {
     if (aline) html += '<div class="lc-attr-line">' + escHtml(aline) + '</div>';
     html += '<div class="lc-seller"><div class="lc-seller-dot"></div>' + escHtml(seller) + (verified ? ' <span class="verified-badge">✓</span>' : '') + ((l.profiles && l.profiles.premium_badge) ? ' <span title="Premium seller">👑</span>' : '') + (isOwn ? ' <em style="font-size:10px;color:var(--muted)">(you)</em>' : '') + '</div>';
     if (stock !== null) html += '<div class="lc-stock' + (stock <= 0 ? ' out' : '') + '">' + (stock <= 0 ? 'Rupture de stock' : ('En stock : ' + stock)) + '</div>';
-    html += '<div class="lc-footer"><div class="lc-price">' + parseFloat(l.price).toFixed(2) + '€</div>';
+    html += '<div class="lc-footer"><div class="lc-price">' + fmtPrice(l.price) + '</div>';
     html += '<button class="lc-buy" onclick="event.stopPropagation();openDetailById(' + l.id + ')">Voir</button></div>';
     html += '</div></div>';
   }
@@ -2619,7 +2646,7 @@ function openDetail(l) {
   html += '<div class="ld-seller-info"><h4>' + escHtml(seller) + (verified ? ' <span class="verified-icon">✓</span>' : '') + '</h4><p>View seller profile →</p></div>';
   if (!isOwn) html += '<button class="btn-msg" style="margin-left:auto" onclick="event.stopPropagation();openChat(\'' + l.user_id + '\',\'' + escHtml(seller) + '\',' + l.id + ')">💬 Contact</button>';
   html += '</div>';
-  html += '<div class="ld-price-row"><div class="ld-price">' + parseFloat(l.price).toFixed(2) + '€</div></div>';
+  html += '<div class="ld-price-row"><div class="ld-price">' + fmtPrice(l.price) + '</div></div>';
   html += '<button class="btn-cart-add" style="margin-bottom:12px" onclick="copyListingLink(' + l.id + ')">🔗 Copy listing link</button>';
   var favd2 = !!MY_FAVORITES[l.id];
   html += '<button class="btn-cart-add" style="margin-bottom:12px;' + (favd2 ? 'color:#FB7185;border-color:rgba(251,113,133,0.4)' : '') + '" onclick="toggleFavorite(' + l.id + ',this)">' + (favd2 ? '♥ Favorited' : '♡ Add to favorites') + ' (' + (l.favorites_count || 0) + ')</button>';
@@ -2895,8 +2922,9 @@ function chargedAmount(){ var a = payContext.amount * (1 - (PROMO.pct||0)/100); 
 function updatePayTotals(){
   if (!payContext) return;
   var base = payContext.amount, charged = chargedAmount();
-  var s=document.getElementById('paySubtotal'); if(s) s.textContent = base.toFixed(2)+'€';
-  var t=document.getElementById('payItemPrice'); if(t) t.textContent = charged.toFixed(2)+'€';
+  function payFmt(eur){ if (DISPLAY_CCY==='EUR') return eur.toFixed(2)+'€'; var r=CCY_RATES[DISPLAY_CCY]||1, sym=CCY_SYM[DISPLAY_CCY]||'€'; return '≈ '+sym+(eur*r).toFixed(2)+' ('+eur.toFixed(2)+'€)'; }
+  var s=document.getElementById('paySubtotal'); if(s) s.textContent = payFmt(base);
+  var t=document.getElementById('payItemPrice'); if(t) t.textContent = payFmt(charged);
   var dl=document.getElementById('payDiscountLine');
   var bl=document.getElementById('payBonusLine');
   if (PROMO.bonus>0) {
@@ -3191,12 +3219,12 @@ function renderCartModal() {
     html += '<div class="cart-item-icon">' + (item.imgUrl ? '<img src="' + escHtml(item.imgUrl) + '" onerror="this.parentNode.textContent=\'' + icon + '\'">' : gameCartIc(item.game, icon)) + '</div>';
     html += '<div class="cart-item-info"><div class="cart-item-title">' + escHtml(item.title) + '</div><div class="cart-item-sub">' + sub + '</div>';
     html += '<div class="cart-qty"><button onclick="cartQty(' + item.id + ',-1)">−</button><span>' + q + '</span><button onclick="cartQty(' + item.id + ',1)">+</button></div></div>';
-    html += '<div class="cart-item-price">' + (parseFloat(item.price) * q).toFixed(2) + '€</div>';
+    html += '<div class="cart-item-price">' + fmtPrice(parseFloat(item.price) * q) + '</div>';
     html += '<button class="cart-item-del" onclick="removeFromCart(' + item.id + ')">✕</button>';
     html += '</div>';
   });
   itemsEl.innerHTML = html;
-  totalEl.textContent = total.toFixed(2) + '€';
+  totalEl.textContent = fmtPrice(total);
 }
 
 async function checkoutCart() {
