@@ -616,7 +616,7 @@ body.auth-loading #userNav{display:none!important}
   </div>
   <div class="search-main">
     <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Search a Roblox item..." data-i18n-ph="search.ph" oninput="handleSearch()">
+    <input type="text" id="searchInput" placeholder="Rechercher un article Roblox..." data-i18n-ph="search.ph" oninput="handleSearch()">
   </div>
   <div class="nav-r">
     <div id="authLoader" class="auth-loader"><span class="auth-spin"></span></div>
@@ -631,12 +631,12 @@ body.auth-loading #userNav{display:none!important}
     </div>
     <button class="cart-btn" id="themeToggle" onclick="toggleTheme()" title="Light / dark theme" style="font-size:15px">🌙</button>
     <div id="guestNav" style="display:flex;gap:7px">
-      <button class="btn-ghost" onclick="track('login_open');showModal('loginModal')" data-i18n="nav.login">Login</button>
-      <button class="btn-blue" onclick="track('signup_open');showModal('registerModal')" data-i18n="nav.signup">Sign up</button>
+      <button class="btn-ghost" onclick="track('login_open');showModal('loginModal')" data-i18n="nav.login">Connexion</button>
+      <button class="btn-blue" onclick="track('signup_open');showModal('registerModal')" data-i18n="nav.signup">Inscription</button>
     </div>
     <div id="userNav" style="display:none;align-items:center;gap:7px">
       <div class="cart-btn" onclick="showPage('messages')" title="Messages" style="position:relative">💬<div class="cart-badge" id="msgBadge" style="display:none">0</div></div>
-      <button id="partnerTopBtn" onclick="openPartner()" title="Partner dashboard" style="display:none;align-items:center;justify-content:center;gap:4px;height:34px;padding:0 11px;flex-shrink:0;background:linear-gradient(135deg,#1E6FFF,#7B3FF0);border:none;color:#fff;font-weight:800;font-size:12px;line-height:1;border-radius:8px;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap">🤝 <span data-i18n="menu.partner">Partner</span></button>
+      <button id="partnerTopBtn" onclick="openPartner()" title="Partner dashboard" style="display:none;align-items:center;justify-content:center;gap:4px;height:34px;padding:0 11px;flex-shrink:0;background:linear-gradient(135deg,#1E6FFF,#7B3FF0);border:none;color:#fff;font-weight:800;font-size:12px;line-height:1;border-radius:8px;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap">🤝 <span data-i18n="menu.partner">Partenaire</span></button>
       <div class="sell-btn" onclick="quickSell()" title="Sell an item">+</div>
       <div class="cart-btn" onclick="openCartModal()" title="My cart">
         🛒<div class="cart-badge" id="cartBadge">0</div>
@@ -645,7 +645,7 @@ body.auth-loading #userNav{display:none!important}
         🔔<div class="notif-badge" id="notifBadge">0</div>
         <div class="notif-panel" id="notifPanel">
           <div class="notif-panel-header">Notifications <a onclick="markAllNotifsRead(event)">Tout lire</a></div>
-          <div id="notifList"><div class="notif-empty">No notification</div></div>
+          <div id="notifList"><div class="notif-empty">Aucune notification</div></div>
         </div>
       </div>
       <div class="account-icon" onclick="toggleAccountDropdown()">
@@ -660,14 +660,14 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-item" onclick="showPage('profile')">👤 My profile</div>
         <div class="ud-item" onclick="openPartner()">🤝 Partner program</div>
         <div class="ud-item" onclick="toggleTheme()">🌙 Light / dark theme</div>
-        <div class="ud-item" style="cursor:default;display:flex;align-items:center;gap:8px">🌐 <span data-i18n="menu.language">Language</span>
+        <div class="ud-item" style="cursor:default;display:flex;align-items:center;gap:8px">🌐 <span data-i18n="menu.language">Langue</span>
           <span style="margin-left:auto;display:flex;gap:4px">
             <button data-lang="en" class="ud-lang" onclick="event.stopPropagation();setLang('en')">EN</button>
             <button data-lang="fr" class="ud-lang" onclick="event.stopPropagation();setLang('fr')">FR</button>
             <button data-lang="es" class="ud-lang" onclick="event.stopPropagation();setLang('es')">ES</button>
             <button data-lang="pt" class="ud-lang" onclick="event.stopPropagation();setLang('pt')">PT</button>
           </div>
-          <div style="font-size:10px;color:var(--muted);padding:8px 8px 4px;letter-spacing:.5px">CURRENCY (display)</div>
+          <div style="font-size:10px;color:var(--muted);padding:8px 8px 4px;letter-spacing:.5px">DEVISE (affichage)</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;padding:0 6px 4px">
             <button data-ccy="EUR" class="ud-lang ud-ccy" onclick="event.stopPropagation();setCcy('EUR')">€ EUR</button>
             <button data-ccy="USD" class="ud-lang ud-ccy" onclick="event.stopPropagation();setCcy('USD')">$ USD</button>
@@ -737,10 +737,10 @@ body.auth-loading #userNav{display:none!important}
     <div class="cat-tab" onclick="filterGame('Da Hood',this)"><img class="cat-icon" src="data:image/webp;base64,UklGRkwRAABXRUJQVlA4IEARAACQRQCdASqAAIAAPl0kjkUjoiEZelc4OAXEtgBOmXG+/+S/ID8qvksq/97/rH6d9kHQn1h5TXS3/J9GHqe/Pn/W9wD9Vf9F/ZfWq9hH9V/5Pqs/ov+8/YX3nf7x/uf7H73f7f/ef1s/0fyKf2D/M9ZH6CH7l+nF7LH7n/tr7SH//01yTjpr4X/jn1n+Z/NPmmxLPl/5J/h8Uvxz1DvyX+bf5/axvqPQg9m/qv/J45vsvrnXj/sC/pv0XdFP6B/pf/b7h38x/uX/XCKErIzetj/e6h3T1uh55rE33yKRmDFjkRcxVahJnDezPIP27pWTEvfo/XpLBq/dgnoY1K6ztmOIII9+DmMqE03IfpYAdFkqoTxle8jiNk/5r/KPXALADAn0EyiBkmsnHMsugpZCX73KjSlYgEXuW2RAzwlaCFFBoUjAzTNTX3tcUv8GEag0yKqlUCQBWJcCmmvERvHFt1hfuY12K+e9UH55z4L2/yD8LGT2XY35DQecQXT5xf0QK8cZ1HF4qad3lVS/dIFjJjdc7kaWP/8MWxXqNuEgqQSZORfLxPVso51M4+vaz/Yk3ijKdF8xh/eyRT5YIiB1q0l1G/EwiRCK94e0elwQt4icOvKTEndZVFo2CxnstHlgVDmAkB0iO2O97YQSOEhMeLnwesVfPBE2feu/QThH89pxqgY3TxnQcvHi41hfYeqJYnQk2CS/YuMieDqw/DbS4rSidDajcVolxrqlMxJa3Bp6J0U/SnZAAP6m1+XI4s1KpxxESnbMm/oE6b+Ejr/1lfq6nIOe9eXDHH4e//PKwpg0s58/XVjkSDCLWyo8bSOBIiswB+dYq65+eLqGw+KIz/z5t5PrHdXRipDsCla9ouUIr//tO5PEtCIlnhogd1AB4Z3/yra1QHUgSlU/ppLceb4jkl2VOCwz+mKUOX7G0OUPSMLBTOf2CumWylVzmIr8Pqrj0VTupFdO/6zYei1aWctgUDlxtYW7xt7RmFiOP1M2Ev+Jlkrqxoq+Jyqg2yw1X3K8G2MI8G7d7RNNIbpymafyhAmSpsaHY9c2ZBte0FPGGkuCab2XTCcSxO/Hm8vznToRpZjU/hbEayzUrTz7Zocw2yIqDnUSFFs5539Xi+9fMGg8N6z7lXKdAWHq7+A6qwEJOxj1w3mtHmT1NvaizSKkG/bgwcvn++RE+z4DZxRTcJ4aMLTa4IE7TfaJDG3wYtmc4dNOXz4coYk6ib3ziUDmyZA/+wRzQc4y6Z8uAzIza4RfOl0p7+kdnLRM3nC+UqbjvxySrVFw7yGgCoUj7YuRVyd8qichOhYwlLYlgciOJ10DjZPDvPCgdfCsqazQY3baa6pJvlZ7KS+ys1sYYlmEyvN5a2U25KWykfjWintF4wM5I48irt/HhWWDnlm4AxZkrNAw3nyxxykFIl2YkcZuzNwvqy8r/BVTjrsgljGLC/edYeKGGMDjFAjJoVXOa7Ol8NFKQW3mPZ7+kOWzzMdGwI3Jd+Im59XIne3C+gSZ4Ns1gD6m1iwenT5nDfsAdXtn67NdzdkstDftUi7uBrffX7zzocGHPyZCWCoxtSbjw9pbOnJIZavmSTKqKMNePtGmW1K+8aRfnwRJ6x68Y9ZoX3b43Ppcq4ut1y0JrwyFHmvYy4ZLgNVs0Tcu3gUi8zKfSW37l+Y+H3WllK93Wy++9KtIbZ7jv7x4xDKsYRCw9s7/FTnQGhlzzT8XhFjbG7YniEDlx2ogzAkzL2B9p3OL+0nh9llVe0w4EA3LG2RurA26MdSRQOe6JnbZe8yNK4gkCmY+gmPToNfhrKfDUSH4iSo/tcW8x7rsSwUB+jw+/IqzRVaei6owxRKEP2Ljz0+DwAA275JLvGN2CeuyYEdATdTt4YuxdH6qw1qai1wHBM6dex3z5CQMMJTOTvOhy5ViDJ380DfL9sxz2anyQacnYvngFLI2/DKjKpJQxReUW7+DDv8aq9gy2cQFLhBoJ+qdAFgxolDi9HV3729v/9cFtf4j3429b492Kl+0/y44od/OKjVnoMC+QkX4K3Nexdz5xO7/OcLGcWQwAqBCmhr3qZz8oCqtFvON/vhEbR6hduJ/6wRfqEFxrksgnSiJwXbDfiztX3sVi3aQXxa2FZydNifvqO+aYi/OhQv5elXoYs3SYIq+iCHowJTA1ukEDpReCJA4PkHA6N2NaFpWQJSFZs3AgkxLlOWP70THGktL2Z/0Gf4X+/aj16eMuhGn4c/b3e7jfA2VtNPjAvw/t3UMrmi/wQC2/yell2F/+5ZFBrCfJXUBb6AdlRxCGpxvg/rWQpLPi/ymt96xSsUEUARrpwUU4DEqDJVkANnFq8XRcz6fGWaqF00ikamaFoRuHQohpfTVhXZkPsr1z+p11n6DBPvJ73nk4vsz7QBdWZ/IB5VffHgLxTce/HfE4F+ZEMFzm309u5RvExIhbbjwIJ9+UeC8tljk0H3a6eqOeuZRhK9+UIIJfBL9T0ABEADZRs2lasQloE8CEOxBfTgpflWN7j+ajIV6ZA5urZAA5CYAhBh7C+u03zQQlOWPys5mmnJoxwv7uVpbaN/w7sxkLgRFXOG8XlIST86rtvLiZ1VeBYfO8m+6P+QaOySrsjoej/JkCG9R3cKpCz5nbBPWvYq2uiKMsmUj1GK3biXctgSuujgoCI9DUcgcqElbnUkD8WXEWH8tZf0CjZohDiw6WE4+r7mbUNuCsDxQi48oUTpoc7GNBcCOwhUDDNg44WX5Nf3rz6TP+Pp+N7e/JVF2hD/MLzNB7yHwb2IrffQBZz93IAqDoPTBUzHGUQQeCNlH1784dwSv0HnhlvV5TUqlJWhTp8U9xnuF6Av7XWB7erukuo0QkulK258mgnn6q0TTHsU2bxmDRb1c7kYnMZ/2bCmOMi9tKh9cd2tCT9YyPtjyed3SCejOr45eP6i+ELsryZc8NFIGsVH3tnHQW89T5jIhlhgjHz9r0kHxqUtcnzu8Y+4Q87F3mXQ7MaYSQl8X0ZHLqssS4qj28LelqQne8/VRlNiN53/UcyHlKvaxGgD+kZ376ylxi8ptvkmw1AINfbn86xyF6w9+CLgMAtQn34BFaP5+Otu735o+Y1cr1QqWItLXFAI8oV20ZFr0YL+8S7YFWUGH8OhGmAYoJ0cE6abncdkTFrv8xpK4/uDDhoNHzsolIlwvVapOeQHD+PLo6P/O1OD553GudqyPzotBz+HSgWjmP/KNIOdm5rB9lIxnbddlgqSmKl8+GsI/BaGA2t/Uau7m2QX7FA+F5eI8h7dM9FGpL8hrOc/ahh0+YHCzVjPzNM4qp7DwBO9a04Jm7cFEPuPMP+PvEr9jO6OPD0dUkbK8v9L4v+6JRQe2aa/KI+zVpx+pBiq4k21HeKZm/a2FeQXwsg/0hgXcDWVi9MqlIXeKR5ADTZEdnPb46m34Nitw4r0M+s3jCec7nrhuMwm2kSQxfhMQSCL8W7ZMlyfahXga4h9APR5lo00tzWThLcGhd50BHYDYmfjNQ9FPPw6CTAXdtaIUA19WU+BB8b2yQDOax9+XzUq/3EY3l64hNvy8boCc2hD3d2kdp46dOf1RpCUAyLlKdJqt018HoZfqnEB2U+0/GJX4aO/+AmPIPbPxzHclrkJveoNSXwt3HH1P5R5k+PH+DKx4WxSlqNk2bl2ZAuH6oxjKMl30tCsRZo1HutrMFdScIsuoANjvFz0B1jZdC6ICwzkkvcx2ZnOC3o5/qh5oLPbBlZFO7he7WCOZbv6HJ+uKkG1Wjb70LudENpyu6a/+IlXPQzovyMuGLs3+nGR1GQBqCRjOZELGJR/RcXtfYbSpEf3iQ/6hUWhmQQ0MylSJBEirUcZixpCBdNJwNdXVnZJG9s3hpOgw/QP6ig5zlN0vdO6RgDyxTU9DacLzpygEvrZDQ14DCh/VLjnZyTtN3eshvTYl7+nBiXa0rCbLm7y+ZsXxdgzuHiYoQTTgo0ChpwURWrY4gsEOkyo2/LxCt5lxSrGQfOTNuXORpnJrm/un44Q+Gy52FPgO7guJA/BIS/PWH9urP5gbruGD8zHma2noNQv7pXO/6AtU39cZc9+M3OCIpA9tjoTh3hUPJwjIRHK/1l+Hzh3wHiSpDosRvh2PWy/StByTUufmV32V6iB8mUr+oS4Z3czr2dze4ed7b6jYfP8PzPKPfn2d2clu1pZnj0lTRGxCFqk3RQBO+9epbTXgWMx/cuBc6CJmEBX6uN2DeqvshyQqY6DmLwy3T/O31wHMzbX24r2tXxG6YX2XvKhOjmAS9hLvgbrRR/Xocjh1RDGe/pYt2HEeX/p6yHKaMW/1heoC1cw5BVBKtpKIsnft9jAFZYo94vMHnra3Djr3vNfzHbR2rUyD8Xjp7zN2JnTiUtdzyd791VbFoYnBc2DuSTaUs8pfQ8FQxzPrMIQepyz+5hf80eXWF5s1sN48cT/LO9oudANro+ekq3GI4htmozUULccU2lUVmtauAHHq56xsXoBkcq1lE2jFAAVl3eI2fOaYmxBLl+EKCD5MjXDtQn/mMv+Fymo4ubrr9BweTyFWueHoL8hcOlKcMDRI/X+k+WtwLrcygRO/ZZP3PGlnf7gM9FxsJWlLyrbZd48oGvfk+odUDEs73I3ioet+vzHCD8yLNrRL3nyZBN/vmtPA//vl7uVLVZmXjabBAk1RZWLBjOphktH3WWp5PbkEoyYdmmb53jFb9kRshmD951glUzaiqlgimOHkQGhfenvCh6vUGs7acnLJCvOoZ7KRzfhQVcty+8T9UeG1TtwY3Oqypl9vVNLkKQzQgszJlyt8V42RkSaU2GGO6ZWYTnRlHi05nGViiAIVXPszbBu1yZfJb6O9I2B06v2C102CQ/WxFrNfma6e0YcjzMPkmMoF8hEzqq+a1tZR61TvwuNYujrPfFf8pa+zQLtldrBL+ytkiBZdK7VBc9WsEqffVaE15Le2CYwVCVZcViVb60y72hICMqWC6aLOseS1EO/+4//mbDPp+GW6FFYwoYLHNyKYXUk6XNH/sfxOH3/Aq77rko/EwUaZY6cBTIxkfa3xi0DmJI+DywwOVBf+Ry9AnRCYuPlwSwkJ3TAqwXZC3nbbQUEuBJrABzbHCZXk6UDuCaAmOCfRYme8nIilwv7BMsbbaSpmNw1rXyxYhdhUtvJyWTi244rVnjdabyizxlRLQzUQwA4N2TgGGXV6dBzwZvngmwOAp8grzVaQRNY3badffiXE/jVJxrPvhMWp6U3KXStF8KGMn2wQlLGeS90t5FQYMFL4AnjL73gmg6aS3uMsR7PJzCGK3mHBYLL12SuVqiMKUgpi/rsJpmrbZlKLkxN2ijWbjfzaURt5Vi6Qoe4Q5JSCI1/MEllrA6/LaPnzpRTtDHJ+63PKqExI0Bv9JSsRhvU8Gk6/y2UVB5jXy7SjE3tRINb1A11zHFmZtiehBsUV8MfZVxbRcf8fHG+hKtabdmRlF8UnH7HIdXbN/ce+7O6bLeILkFu8ycZ5AGtTKh3dSMaJtgru1fI1Nf2PhdufUyDgmc1eyw6tYJ3pOJ3HHwB1evI168F1tFOTFwx1ypba3BEwB6iEJu6zNPpTSbjaPFQbCCEv7ka4buVk1CH+bL/zSqBcfiUjEOSuZ5pd9fHBocvPa6CHkqE3YGFfbUau2LkRpt26vIcatFORRw/S+h5H8uylADSP2Fx1jCR+M52WxFbyMqYNq7GYOg2eaOMkE79ChowLWlmMw+QreAoA7pRcaRGfGZfR0drSqMBrZAYkIvo8qK1iCzXN0yuT9X1x8I+DHDWV1vcJDANM7vTtLcrddEl6nYsa1VgYZal/L5sf2+FOSoMuFPmEQv0k/PPxYNpeZiMlNyuLGU7IdWxnInkVoAPAAAA=" alt="Da Hood"> Da Hood</div>
     <div class="cat-tab" onclick="filterGame('Royale High',this)"><img class="cat-icon" src="data:image/webp;base64,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" alt="Royale High"> Royale High</div>
   </div>
-  <div class="cat-search"><span class="cat-search-ic">🔎</span><input type="text" id="catSearchInput" placeholder="Search in this category..." oninput="handleCatSearch()"></div>
+  <div class="cat-search"><span class="cat-search-ic">🔎</span><input type="text" id="catSearchInput" placeholder="Rechercher dans cette catégorie..." oninput="handleCatSearch()"></div>
   <div class="filters-bar">
     <select class="filter-select" onchange="applySort(this.value)">
-      <option value="created_at">Most recent</option>
+      <option value="created_at">Plus récents</option>
       <option value="price_asc">Price: low to high</option>
       <option value="price_desc">Price: high to low</option>
       <option value="oldest">Plus anciens</option>
@@ -770,10 +770,10 @@ body.auth-loading #userNav{display:none!important}
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px" id="profileEmail">-</div>
       <div id="profileVerifiedBadge" style="display:none;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#22C55E;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-flex;align-items:center;gap:4px;margin-bottom:12px">✓ Verified seller</div>
       <div class="profile-stats-row">
-        <div class="profile-stat"><div class="profile-stat-n" id="profileStatSales">0</div><div class="profile-stat-l">Sales</div></div>
-        <div class="profile-stat"><div class="profile-stat-n" id="profileStatBuys">0</div><div class="profile-stat-l">Purchases</div></div>
-        <div class="profile-stat"><div class="profile-stat-n" id="profileStatRating">—</div><div class="profile-stat-l">Rating</div></div>
-        <div class="profile-stat"><div class="profile-stat-n" id="profileStatDate">—</div><div class="profile-stat-l">Since</div></div>
+        <div class="profile-stat"><div class="profile-stat-n" id="profileStatSales">0</div><div class="profile-stat-l">Ventes</div></div>
+        <div class="profile-stat"><div class="profile-stat-n" id="profileStatBuys">0</div><div class="profile-stat-l">Achats</div></div>
+        <div class="profile-stat"><div class="profile-stat-n" id="profileStatRating">—</div><div class="profile-stat-l">Note</div></div>
+        <div class="profile-stat"><div class="profile-stat-n" id="profileStatDate">—</div><div class="profile-stat-l">Depuis</div></div>
         <div class="profile-stat"><div class="profile-stat-n" id="profileStatBloobux" style="color:var(--blue2)">0</div><div class="profile-stat-l">Bloobux</div></div>
       </div>
     </div>
@@ -783,40 +783,40 @@ body.auth-loading #userNav{display:none!important}
   <div class="section-title">Parrainage 🎁</div>
   <div class="referral-box" id="referralBox" style="margin-bottom:22px">
     <p style="font-size:13px;color:var(--muted2);margin-bottom:10px">Partage ton lien : <strong>+5 Bloobux</strong> par filleul, <strong>+3</strong> pour lui.</p>
-    <div class="referral-row"><input id="referralLink" readonly value=""><button class="btn-blue" onclick="copyReferral()">Copy</button></div>
+    <div class="referral-row"><input id="referralLink" readonly value=""><button class="btn-blue" onclick="copyReferral()">Copier</button></div>
     <p style="font-size:12px;color:var(--muted);margin-top:8px">Filleuls : <strong id="referralCount">0</strong></p>
   </div>
   <div class="section-title">Avis reçus (<span id="profileReviewCount">0</span>)</div>
   <div id="profileReviews" style="margin-bottom:22px"></div>
-  <div class="section-title">My active listings</div>
+  <div class="section-title">Mes annonces actives</div>
   <div id="profileListings" class="listings"></div>
 </div>
 
 <!-- ── DASHBOARD ── -->
 <div id="dashPage" class="page">
   <div class="dash-header">
-    <div><div class="dash-title">Dashboard</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Welcome, <span id="dashUsername">-</span></div></div>
+    <div><div class="dash-title">Dashboard</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Bienvenue, <span id="dashUsername">-</span></div></div>
     <button class="btn-blue" onclick="openSellModal()">➕ Nouvelle annonce</button>
   </div>
   <div class="wallet-box">
-    <div><div class="wallet-label">Available balance</div><div class="wallet-amount" id="dashBalance">0.00€</div><div class="wallet-sub">Available to buy or withdraw</div></div>
+    <div><div class="wallet-label">Solde disponible</div><div class="wallet-amount" id="dashBalance">0.00€</div><div class="wallet-sub">Disponible pour acheter ou retirer</div></div>
     <div class="wallet-actions">
       <button class="btn-blue" onclick="showModal('addFundsModal')">💳 Top up</button>
       <button class="btn-ghost" onclick="showPage('withdrawPage')">💸 Retirer</button>
     </div>
   </div>
   <div class="dash-cards">
-    <div class="dc"><div class="dc-l">Active listings</div><div class="dc-v" id="dMyListings">0</div></div>
-    <div class="dc"><div class="dc-l">Completed sales</div><div class="dc-v" id="dSales">0</div></div>
-    <div class="dc"><div class="dc-l">Total earnings</div><div class="dc-v" id="dRevenue">0€</div></div>
-    <div class="dc"><div class="dc-l">Average rating</div><div class="dc-v" id="dRating">—</div><div class="dc-c">out of 5 ⭐</div></div>
+    <div class="dc"><div class="dc-l">Annonces actives</div><div class="dc-v" id="dMyListings">0</div></div>
+    <div class="dc"><div class="dc-l">Ventes finalisées</div><div class="dc-v" id="dSales">0</div></div>
+    <div class="dc"><div class="dc-l">Gains totaux</div><div class="dc-v" id="dRevenue">0€</div></div>
+    <div class="dc"><div class="dc-l">Note moyenne</div><div class="dc-v" id="dRating">—</div><div class="dc-c">out of 5 ⭐</div></div>
   </div>
-  <div class="section-title">My listings</div>
+  <div class="section-title">Mes annonces</div>
   <div class="dtable">
-    <div class="dth"><span>Item</span><span>Price</span><span>Game</span><span>Action</span></div>
-    <div id="myListingsBody"><div style="padding:28px;text-align:center;color:var(--muted);font-size:13px">No listing</div></div>
+    <div class="dth"><span>Article</span><span>Prix</span><span>Jeu</span><span>Action</span></div>
+    <div id="myListingsBody"><div style="padding:28px;text-align:center;color:var(--muted);font-size:13px">Aucune annonce</div></div>
   </div>
-  <div class="section-title">Transaction history</div>
+  <div class="section-title">Historique des transactions</div>
   <div id="transactionHistory"><div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Loading…</div></div>
 </div>
 
@@ -833,28 +833,28 @@ body.auth-loading #userNav{display:none!important}
 <!-- ── MESSAGES ── -->
 <div id="messagesPage" class="page">
   <div class="dash-header"><div class="dash-title">Messages 💬</div></div>
-  <div id="convList"><div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">No conversation</div></div>
+  <div id="convList"><div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Aucune conversation</div></div>
 </div>
 
 <!-- ── WITHDRAW ── -->
 <div id="withdrawPage" class="page">
   <div class="dash-header"><div class="dash-title">Withdraw funds 💸</div></div>
   <div class="wallet-box" style="margin-bottom:22px">
-    <div><div class="wallet-label">Available balance</div><div class="wallet-amount" id="withdrawBalance">0.00€</div><div class="wallet-sub">Minimum withdrawal: €1</div></div>
+    <div><div class="wallet-label">Solde disponible</div><div class="wallet-amount" id="withdrawBalance">0.00€</div><div class="wallet-sub">Minimum withdrawal: €1</div></div>
   </div>
   <div style="max-width:480px">
-    <div class="fg"><label>Withdrawal method</label><input type="text" value="🏦 Bank transfer (IBAN)" readonly style="opacity:.75;cursor:default"></div>
-    <div class="fg"><label>Account holder (full name)</label><input type="text" id="wdName" placeholder="Ex: Jean Dupont"></div>
+    <div class="fg"><label>Méthode de retrait</label><input type="text" value="🏦 Bank transfer (IBAN)" readonly style="opacity:.75;cursor:default"></div>
+    <div class="fg"><label>Titulaire du compte (nom complet)</label><input type="text" id="wdName" placeholder="Ex: Jean Dupont"></div>
     <div class="fg"><label>IBAN</label><input type="text" id="wdIban" placeholder="Ex: FR76 3000 1007 9412 3456 7890 185"></div>
-    <div class="fg"><label>BIC / SWIFT (optional)</label><input type="text" id="wdBic" placeholder="Ex: BNPAFRPP"></div>
-    <div class="fg"><label>Amount (€)</label><input type="number" id="withdrawAmount" placeholder="Ex: 5" min="1" step="0.01"></div>
+    <div class="fg"><label>BIC / SWIFT (optionnel)</label><input type="text" id="wdBic" placeholder="Ex: BNPAFRPP"></div>
+    <div class="fg"><label>Montant (€)</label><input type="number" id="withdrawAmount" placeholder="Ex: 5" min="1" step="0.01"></div>
     <div style="font-size:11px;color:var(--muted);margin:-6px 0 12px">⚠️ Double-check your IBAN — transfers are processed manually within a few days.</div>
     <div id="withdrawAlert"></div>
-    <button class="btn-submit" onclick="requestWithdraw()">Request withdrawal</button>
+    <button class="btn-submit" onclick="requestWithdraw()">Demander un retrait</button>
   </div>
   <div style="margin-top:28px">
-    <div class="section-title">Withdrawal history</div>
-    <div id="withdrawHistory" class="withdraw-history"><div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">No withdrawal</div></div>
+    <div class="section-title">Historique des retraits</div>
+    <div id="withdrawHistory" class="withdraw-history"><div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Aucun retrait</div></div>
   </div>
 </div>
 
@@ -864,15 +864,15 @@ body.auth-loading #userNav{display:none!important}
   <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn-ghost" onclick="loadAdminPage()" style="font-size:12px">🔄 Refresh stats</button></div>
   <div class="admin-stat-grid" id="adminStats"></div>
   <div class="admin-nav">
-    <button class="admin-tab active" onclick="adminTab('users',this)">👥 Users</button>
-    <button class="admin-tab" onclick="adminTab('sellers',this)">🛡️ Sellers</button>
-    <button class="admin-tab" onclick="adminTab('listings',this)">📋 Listings</button>
-    <button class="admin-tab" onclick="adminTab('orders',this)">📦 Orders</button>
-    <button class="admin-tab" onclick="adminTab('disputes',this)">⚖️ Disputes</button>
-    <button class="admin-tab" onclick="adminTab('withdraws',this)">💸 Withdrawals</button>
+    <button class="admin-tab active" onclick="adminTab('users',this)">👥 Utilisateurs</button>
+    <button class="admin-tab" onclick="adminTab('sellers',this)">🛡️ Vendeurs</button>
+    <button class="admin-tab" onclick="adminTab('listings',this)">📋 Annonces</button>
+    <button class="admin-tab" onclick="adminTab('orders',this)">📦 Commandes</button>
+    <button class="admin-tab" onclick="adminTab('disputes',this)">⚖️ Litiges</button>
+    <button class="admin-tab" onclick="adminTab('withdraws',this)">💸 Retraits</button>
     <button class="admin-tab" onclick="adminTab('aconv',this)">💬 Conversations</button>
-    <button class="admin-tab" onclick="adminTab('partners',this)">🤝 Partners</button>
-    <button class="admin-tab" id="reportsTab" onclick="adminSupport(this)">🚩 Reports</button>
+    <button class="admin-tab" onclick="adminTab('partners',this)">🤝 Partenaires</button>
+    <button class="admin-tab" id="reportsTab" onclick="adminSupport(this)">🚩 Signalements</button>
   </div>
   <div id="adminContent"></div>
 </div>
@@ -938,13 +938,13 @@ body.auth-loading #userNav{display:none!important}
   <div class="modal">
     <button class="modal-close" onclick="hideModal('loginModal')">✕</button>
     <div class="modal-h" data-i18n="auth.login.title">Welcome back 👋</div>
-    <div class="modal-sub" data-i18n="auth.login.sub">Sign in to your account</div>
+    <div class="modal-sub" data-i18n="auth.login.sub">Connecte-toi à ton compte</div>
     <div id="loginAlert"></div>
     <div class="fg"><label data-i18n="auth.email">Email</label><input type="email" id="loginEmail" placeholder="your@email.com" data-i18n-ph="auth.email.ph"></div>
-    <div class="fg"><label data-i18n="auth.password">Password</label><input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div style="text-align:right;margin-top:-6px;margin-bottom:13px"><a style="font-size:12px;color:var(--blue2);cursor:pointer" onclick="resetForgotFlow();switchModal('loginModal','forgotModal')" data-i18n="auth.forgot">Forgot password?</a></div>
-    <button class="btn-submit" id="loginBtn" onclick="doLogin()" data-i18n="auth.signin">Sign in</button>
-    <p class="sw"><span data-i18n="auth.noaccount">No account?</span> <a data-i18n="auth.signup.link" onclick="switchModal('loginModal','registerModal')">Sign up</a></p>
+    <div class="fg"><label data-i18n="auth.password">Mot de passe</label><input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div style="text-align:right;margin-top:-6px;margin-bottom:13px"><a style="font-size:12px;color:var(--blue2);cursor:pointer" onclick="resetForgotFlow();switchModal('loginModal','forgotModal')" data-i18n="auth.forgot">Mot de passe oublié ?</a></div>
+    <button class="btn-submit" id="loginBtn" onclick="doLogin()" data-i18n="auth.signin">Se connecter</button>
+    <p class="sw"><span data-i18n="auth.noaccount">Pas de compte ?</span> <a data-i18n="auth.signup.link" onclick="switchModal('loginModal','registerModal')">Inscription</a></p>
   </div>
 </div>
 
@@ -953,14 +953,14 @@ body.auth-loading #userNav{display:none!important}
   <div class="modal">
     <button class="modal-close" onclick="hideModal('registerModal')">✕</button>
     <div class="modal-h" data-i18n="auth.register.title">Join BlooMarket 🚀</div>
-    <div class="modal-sub" data-i18n="auth.register.sub">Create your free account</div>
+    <div class="modal-sub" data-i18n="auth.register.sub">Crée ton compte gratuit</div>
     <div id="registerAlert"></div>
-    <div class="fg"><label data-i18n="auth.username">Username</label><input type="text" id="registerUsername" placeholder="YourUsername" data-i18n-ph="auth.username.ph" oninput="signupFormStart()"></div>
+    <div class="fg"><label data-i18n="auth.username">Pseudo</label><input type="text" id="registerUsername" placeholder="TonPseudo" data-i18n-ph="auth.username.ph" oninput="signupFormStart()"></div>
     <div class="fg"><label data-i18n="auth.email">Email</label><input type="email" id="registerEmail" placeholder="your@email.com" data-i18n-ph="auth.email.ph"></div>
-    <div class="fg"><label data-i18n="auth.password">Password</label><input type="password" id="registerPassword" placeholder="At least 6 characters" data-i18n-ph="auth.pwd.ph" onkeydown="if(event.key==='Enter')doRegister()"></div>
+    <div class="fg"><label data-i18n="auth.password">Mot de passe</label><input type="password" id="registerPassword" placeholder="Au moins 6 caractères" data-i18n-ph="auth.pwd.ph" onkeydown="if(event.key==='Enter')doRegister()"></div>
     <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted2);margin:-2px 0 14px;cursor:pointer"><input type="checkbox" id="registerNewsletter" checked style="width:auto;margin:0"> <span data-i18n="reg.newsletter">📣 Keep me posted about new listings & deals</span></label>
-    <button class="btn-submit" id="registerBtn" onclick="doRegister()" data-i18n="auth.create">Create my account</button>
-    <p class="sw"><span data-i18n="auth.haveaccount">Already have an account?</span> <a data-i18n="auth.signin.link" onclick="switchModal('registerModal','loginModal')">Sign in</a></p>
+    <button class="btn-submit" id="registerBtn" onclick="doRegister()" data-i18n="auth.create">Créer mon compte</button>
+    <p class="sw"><span data-i18n="auth.haveaccount">Déjà un compte ?</span> <a data-i18n="auth.signin.link" onclick="switchModal('registerModal','loginModal')">Se connecter</a></p>
   </div>
 </div>
 
@@ -970,9 +970,9 @@ body.auth-loading #userNav{display:none!important}
     <button class="modal-close" onclick="hideModal('checkEmailModal')">✕</button>
     <div style="text-align:center">
       <div style="font-size:46px;margin-bottom:4px">📧</div>
-      <div class="modal-h" data-i18n="auth.check.title">Check your email</div>
+      <div class="modal-h" data-i18n="auth.check.title">Vérifie tes emails</div>
       <div class="modal-sub" data-i18n="auth.check.sub">We sent you a confirmation link. Click it to activate your account — you'll be brought back here and logged in automatically.</div>
-      <button class="btn-submit" onclick="hideModal('checkEmailModal')" data-i18n="auth.check.ok">Got it</button>
+      <button class="btn-submit" onclick="hideModal('checkEmailModal')" data-i18n="auth.check.ok">Compris</button>
       <p class="sw" style="margin-top:10px;color:var(--muted)" data-i18n="auth.check.tip">Tip: check your spam folder if you don't see it.</p>
     </div>
   </div>
@@ -983,20 +983,20 @@ body.auth-loading #userNav{display:none!important}
   <div class="modal">
     <button class="modal-close" onclick="hideModal('forgotModal')">✕</button>
     <div class="modal-h" data-i18n="auth.forgot.title">Forgot password 🔑</div>
-    <div class="modal-sub" data-i18n="auth.forgot.sub">Reset it here with a code sent by email.</div>
+    <div class="modal-sub" data-i18n="auth.forgot.sub">Réinitialise-le ici avec un code envoyé par email.</div>
     <div id="forgotAlert"></div>
     <div id="fpStep1">
-      <div class="fg"><label data-i18n="auth.forgot.emaillabel">Account email</label><input type="email" id="fpEmail" placeholder="your@email.com" data-i18n-ph="auth.email.ph"></div>
-      <button class="btn-submit" id="fpSendBtn" onclick="sendResetCode()" data-i18n="auth.forgot.send">Send code</button>
+      <div class="fg"><label data-i18n="auth.forgot.emaillabel">Email du compte</label><input type="email" id="fpEmail" placeholder="your@email.com" data-i18n-ph="auth.email.ph"></div>
+      <button class="btn-submit" id="fpSendBtn" onclick="sendResetCode()" data-i18n="auth.forgot.send">Envoyer le code</button>
     </div>
     <div id="fpStep2" style="display:none">
-      <div class="fg"><label data-i18n="auth.forgot.codelabel">Code received by email</label><input type="text" id="fpCode" placeholder="6-digit code" data-i18n-ph="auth.forgot.codeph" inputmode="numeric"></div>
-      <button class="btn-submit" id="fpVerifyBtn" onclick="verifyResetCode()" data-i18n="auth.forgot.verify">Verify code</button>
-      <p class="sw"><a onclick="sendResetCode()" data-i18n="auth.forgot.resend">Resend code</a></p>
+      <div class="fg"><label data-i18n="auth.forgot.codelabel">Code reçu par email</label><input type="text" id="fpCode" placeholder="Code à 6 chiffres" data-i18n-ph="auth.forgot.codeph" inputmode="numeric"></div>
+      <button class="btn-submit" id="fpVerifyBtn" onclick="verifyResetCode()" data-i18n="auth.forgot.verify">Vérifier le code</button>
+      <p class="sw"><a onclick="sendResetCode()" data-i18n="auth.forgot.resend">Renvoyer le code</a></p>
     </div>
     <div id="fpStep3" style="display:none">
-      <div class="fg"><label data-i18n="auth.forgot.newpw">New password</label><input type="password" id="fpNewPw" placeholder="At least 6 characters" data-i18n-ph="auth.pwd.ph" onkeydown="if(event.key==='Enter')saveResetPassword()"></div>
-      <button class="btn-submit" id="fpSaveBtn" onclick="saveResetPassword()" data-i18n="auth.forgot.save">Change password</button>
+      <div class="fg"><label data-i18n="auth.forgot.newpw">Nouveau mot de passe</label><input type="password" id="fpNewPw" placeholder="Au moins 6 caractères" data-i18n-ph="auth.pwd.ph" onkeydown="if(event.key==='Enter')saveResetPassword()"></div>
+      <button class="btn-submit" id="fpSaveBtn" onclick="saveResetPassword()" data-i18n="auth.forgot.save">Changer le mot de passe</button>
     </div>
     <p class="sw"><a onclick="resetForgotFlow();switchModal('forgotModal','loginModal')" data-i18n="auth.forgot.back">← Back to login</a></p>
   </div>
@@ -1007,17 +1007,17 @@ body.auth-loading #userNav{display:none!important}
   <div class="modal" style="max-width:520px">
     <button class="modal-close" onclick="hideModal('sellModal')">✕</button>
     <div class="modal-h" style="text-align:left;margin-bottom:4px" data-i18n="sell.title">Create a listing ➕</div>
-    <div class="modal-sub" style="text-align:left;margin-bottom:18px">Fill in your listing details</div>
+    <div class="modal-sub" style="text-align:left;margin-bottom:18px">Remplis les détails de ton annonce</div>
     <div id="sellAlert"></div>
-    <div class="fg"><label>Item (pick a suggestion or type your own)</label>
+    <div class="fg"><label>Article (choisis une suggestion ou écris le tien)</label>
       <div class="item-picker">
-        <input type="text" id="sellItemSearch" placeholder="Type your item title (or pick a suggestion)…" autocomplete="off" oninput="filterItemList()" onfocus="filterItemList()" onblur="setTimeout(function(){var l=document.getElementById('sellItemList');if(l)l.style.display='none';},180)">
+        <input type="text" id="sellItemSearch" placeholder="Tape le titre de ton article (ou choisis une suggestion)…" autocomplete="off" oninput="filterItemList()" onfocus="filterItemList()" onblur="setTimeout(function(){var l=document.getElementById('sellItemList');if(l)l.style.display='none';},180)">
         <input type="hidden" id="sellTitle">
         <div class="item-dropdown" id="sellItemList" style="display:none"></div>
       </div>
     </div>
     <div class="sell-form-grid">
-      <div class="fg"><label>Game</label>
+      <div class="fg"><label>Jeu</label>
         <select id="sellGame" onchange="renderSellAttrFields()">
           <option value="Steal A Brainrot">🧠 Steal A Brainrot</option>
           <option value="Blox Fruits">🍎 Blox Fruits</option>
@@ -1037,11 +1037,11 @@ body.auth-loading #userNav{display:none!important}
           <option value="Valorant">🔫 Valorant</option>
         </select>
       </div>
-      <div class="fg"><label>Price (€)</label><input type="number" id="sellPrice" placeholder="1.00" min="1" step="0.01"></div>
+      <div class="fg"><label>Prix (€)</label><input type="number" id="sellPrice" placeholder="1.00" min="1" step="0.01"></div>
     </div>
     <div id="sellAttrFields"></div>
-    <div class="fg"><label>Stock (available quantity)</label><input type="number" id="sellStock" placeholder="1" min="1" step="1" value="1"></div>
-    <div class="fg"><label>Description</label><textarea id="sellDesc" placeholder="Describe your item in detail…"></textarea></div>
+    <div class="fg"><label>Stock (quantité disponible)</label><input type="number" id="sellStock" placeholder="1" min="1" step="1" value="1"></div>
+    <div class="fg"><label>Description</label><textarea id="sellDesc" placeholder="Décris ton article en détail…"></textarea></div>
     <div class="fg">
       <label>Photos (1 minimum — 5 max)</label>
       <div class="img-upload-zone" onclick="document.getElementById('sellImages').click()">
@@ -1053,7 +1053,7 @@ body.auth-loading #userNav{display:none!important}
       <div style="font-size:11px;color:var(--muted);margin-top:6px" data-i18n="sell.imgtip">📸 Tip: use clear, well-framed screenshots (no blur). Good photos sell faster.</div>
       <div class="img-preview-row" id="sellImagePreview"></div>
     </div>
-    <button class="btn-submit" id="sellBtn" onclick="doSell()" data-i18n="sell.publish">Publish listing</button>
+    <button class="btn-submit" id="sellBtn" onclick="doSell()" data-i18n="sell.publish">Publier l'annonce</button>
   </div>
 </div>
 
@@ -1063,10 +1063,10 @@ body.auth-loading #userNav{display:none!important}
     <button class="modal-close" onclick="hideModal('editProfileModal')">✕</button>
     <div class="modal-h">Edit my profile ✏️</div>
     <div id="editProfileAlert"></div>
-    <div class="fg"><label>Username</label><input type="text" id="editUsername" placeholder="Your username"></div>
-    <div class="fg"><label>Bio</label><textarea id="editBio" placeholder="Tell us about yourself (max 200 characters)…" maxlength="200"></textarea></div>
-    <div class="fg"><label>Country</label><input type="text" id="editCountry" placeholder="Ex: France"></div>
-    <div class="fg"><label>Date of birth</label><input type="date" id="editBirthdate"></div>
+    <div class="fg"><label>Pseudo</label><input type="text" id="editUsername" placeholder="Ton pseudo"></div>
+    <div class="fg"><label>Bio</label><textarea id="editBio" placeholder="Parle un peu de toi (max 200 caractères)…" maxlength="200"></textarea></div>
+    <div class="fg"><label>Pays</label><input type="text" id="editCountry" placeholder="Ex: France"></div>
+    <div class="fg"><label>Date de naissance</label><input type="date" id="editBirthdate"></div>
     <button class="btn-submit" onclick="saveProfile()">Enregistrer</button>
   </div>
 </div>
@@ -1078,7 +1078,7 @@ body.auth-loading #userNav{display:none!important}
     <div class="modal-h">New password 🔐</div>
     <div class="modal-sub">Choisis un nouveau mot de passe pour ton compte.</div>
     <div id="resetPwAlert"></div>
-    <div class="fg"><label>New password</label><input type="password" id="resetPwInput" placeholder="At least 6 characters" onkeydown="if(event.key==='Enter')doResetPassword()"></div>
+    <div class="fg"><label>Nouveau mot de passe</label><input type="password" id="resetPwInput" placeholder="Au moins 6 caractères" onkeydown="if(event.key==='Enter')doResetPassword()"></div>
     <button class="btn-submit" id="resetPwBtn" onclick="doResetPassword()">Mettre à jour</button>
   </div>
 </div>
@@ -1091,8 +1091,8 @@ body.auth-loading #userNav{display:none!important}
     <div id="settingsAlert"></div>
     <div class="settings-section">
       <div class="settings-label">🔐 Change password</div>
-      <div class="fg"><input type="password" id="newPwInput" placeholder="New password (min. 6)"></div>
-      <button class="btn-blue" style="width:100%" onclick="doChangePassword()">Update password</button>
+      <div class="fg"><input type="password" id="newPwInput" placeholder="Nouveau mot de passe (min. 6)"></div>
+      <button class="btn-blue" style="width:100%" onclick="doChangePassword()">Mettre à jour le mot de passe</button>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
@@ -1103,8 +1103,8 @@ body.auth-loading #userNav{display:none!important}
       <div id="mfaEnrollBox" style="display:none">
         <div style="text-align:center;margin:10px 0"><img id="mfaQr" alt="QR 2FA" style="width:168px;height:168px;background:#fff;border-radius:10px;padding:6px"></div>
         <p class="settings-desc">Scan the QR, or enter the key: <code id="mfaSecret" style="color:var(--blue2);font-size:11px;word-break:break-all"></code></p>
-        <div class="fg"><input type="text" id="mfaCode" placeholder="6-digit code" inputmode="numeric"></div>
-        <button class="btn-blue" style="width:100%" onclick="mfaVerifyEnroll()">Confirm and enable</button>
+        <div class="fg"><input type="text" id="mfaCode" placeholder="Code à 6 chiffres" inputmode="numeric"></div>
+        <button class="btn-blue" style="width:100%" onclick="mfaVerifyEnroll()">Confirmer et activer</button>
       </div>
       <button class="btn-blue" id="mfaToggleBtn" style="width:100%" onclick="mfaStart()">Activer la 2FA</button>
     </div>
@@ -1113,20 +1113,20 @@ body.auth-loading #userNav{display:none!important}
       <div class="settings-label">💻 Sessions &amp; devices</div>
       <p class="settings-desc">Your last 5 logins.</p>
       <div id="loginHistoryBox" class="settings-desc">—</div>
-      <button class="btn-ghost" style="width:100%;margin-top:10px" onclick="logoutAllSessions()">Log out all sessions</button>
+      <button class="btn-ghost" style="width:100%;margin-top:10px" onclick="logoutAllSessions()">Déconnecter toutes les sessions</button>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
       <div class="settings-label">⏸️ Deactivate account</div>
       <p class="settings-desc">Your profile and listings will be hidden. You can reactivate at your next login.</p>
-      <button class="btn-ghost" style="width:100%" onclick="deactivateAccount()">Deactivate my account</button>
+      <button class="btn-ghost" style="width:100%" onclick="deactivateAccount()">Désactiver mon compte</button>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
       <div class="settings-label" style="color:#FCA5A5">🗑️ Delete account</div>
-      <p class="settings-desc">This action is <strong>permanent</strong>: account, listings and data deleted. Type <strong>DELETE</strong> to confirm.</p>
-      <div class="fg"><input type="text" id="deleteConfirmInput" placeholder="Type DELETE" autocomplete="off"></div>
-      <button class="btn-danger" style="width:100%" onclick="deleteAccount()">Delete permanently</button>
+      <p class="settings-desc">Cette action est <strong>permanente</strong>: account, listings and data deleted. Type <strong>DELETE</strong> to confirm.</p>
+      <div class="fg"><input type="text" id="deleteConfirmInput" placeholder="Tape DELETE" autocomplete="off"></div>
+      <button class="btn-danger" style="width:100%" onclick="deleteAccount()">Supprimer définitivement</button>
     </div>
   </div>
 </div>
@@ -1138,8 +1138,8 @@ body.auth-loading #userNav{display:none!important}
     <div class="modal-h">Two-step verification 🔐</div>
     <div class="modal-sub">Enter the code from your authenticator app.</div>
     <div id="mfaLoginAlert"></div>
-    <div class="fg"><label>6-digit code</label><input type="text" id="mfaLoginCode" placeholder="123456" inputmode="numeric" onkeydown="if(event.key==='Enter')submitMfaLogin()"></div>
-    <button class="btn-submit" id="mfaLoginBtn" onclick="submitMfaLogin()">Verify</button>
+    <div class="fg"><label>Code à 6 chiffres</label><input type="text" id="mfaLoginCode" placeholder="123456" inputmode="numeric" onkeydown="if(event.key==='Enter')submitMfaLogin()"></div>
+    <button class="btn-submit" id="mfaLoginBtn" onclick="submitMfaLogin()">Vérifier</button>
   </div>
 </div>
 
@@ -1165,15 +1165,15 @@ body.auth-loading #userNav{display:none!important}
   <div class="modal chat-modal">
     <div class="chat-header">
       <div class="conv-avatar" id="chatAvatar">?</div>
-      <div><div class="chat-title" id="chatTitle">Chat</div><div class="chat-sub">Online</div></div>
+      <div><div class="chat-title" id="chatTitle">Chat</div><div class="chat-sub">En ligne</div></div>
       <button onclick="reportUser()" title="Signaler cet utilisateur" style="background:none;border:none;color:#FCA5A5;font-size:15px;cursor:pointer;margin-left:auto">🚩</button>
       <button class="modal-close" style="position:static;margin-left:8px" onclick="hideModal('chatModal')">✕</button>
     </div>
     <div class="chat-order-bar" id="chatOrderBar" style="display:none"></div>
     <div class="chat-messages" id="chatMessages"><div class="chat-empty">Début de la conversation 👋</div></div>
     <div class="chat-input-row">
-      <input class="chat-input" id="chatInput" placeholder="Your message…" onkeydown="if(event.key==='Enter')sendMessage()">
-      <button class="chat-send" onclick="sendMessage()">Send</button>
+      <input class="chat-input" id="chatInput" placeholder="Ton message…" onkeydown="if(event.key==='Enter')sendMessage()">
+      <button class="chat-send" onclick="sendMessage()">Envoyer</button>
     </div>
   </div>
 </div>
@@ -1183,7 +1183,7 @@ body.auth-loading #userNav{display:none!important}
   <div class="modal" style="max-width:420px">
     <button class="modal-close" onclick="hideModal('addFundsModal')">✕</button>
     <div class="modal-h">Top up my balance 💳</div>
-    <div class="modal-sub">Secure payment by Stripe</div>
+    <div class="modal-sub">Paiement sécurisé par Stripe</div>
     <div id="fundsAlert"></div>
     <div class="funds-amounts">
       <button onclick="setFundsAmount(5)">5€</button>
@@ -1193,8 +1193,8 @@ body.auth-loading #userNav{display:none!important}
       <button onclick="setFundsAmount(100)">100€</button>
       <button onclick="setFundsAmount(200)">200€</button>
     </div>
-    <div class="fg"><label>Amount (€)</label><input type="number" id="fundsAmount" placeholder="Custom amount" min="1" step="1"></div>
-    <div class="fg"><label>Card</label><div id="card-element"></div><div id="card-errors" style="color:#FCA5A5;font-size:11px;margin-top:6px"></div></div>
+    <div class="fg"><label>Montant (€)</label><input type="number" id="fundsAmount" placeholder="Montant personnalisé" min="1" step="1"></div>
+    <div class="fg"><label>Carte</label><div id="card-element"></div><div id="card-errors" style="color:#FCA5A5;font-size:11px;margin-top:6px"></div></div>
     <button class="btn-submit" id="payBtn" onclick="handleStripePayment()">💳 Pay now</button>
     <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:10px">🔒 100% secure payment · SSL · Stripe</p>
   </div>
@@ -1206,10 +1206,10 @@ body.auth-loading #userNav{display:none!important}
     <button class="modal-close" onclick="hideModal('cartModal')">✕</button>
     <div class="modal-h" style="text-align:left;margin-bottom:18px">My cart 🛒</div>
     <div id="cartItems"></div>
-    <div id="cartEmpty" class="empty-state" style="display:none;padding:30px 0"><div class="ico">🛒</div><h3>Empty cart</h3><p>Explore the marketplace!</p></div>
+    <div id="cartEmpty" class="empty-state" style="display:none;padding:30px 0"><div class="ico">🛒</div><h3>Panier vide</h3><p>Explore la marketplace !</p></div>
     <div id="cartFooter" style="display:none">
       <div class="cart-total-row"><div class="cart-total-label">Total</div><div class="cart-total-price" id="cartTotal">0.00€</div></div>
-      <button class="btn-submit" onclick="checkoutCart()">Pay for cart</button>
+      <button class="btn-submit" onclick="checkoutCart()">Payer le panier</button>
     </div>
   </div>
 </div>
@@ -1221,15 +1221,15 @@ body.auth-loading #userNav{display:none!important}
     <div class="modal-h">Secure payment 🔒</div>
     <div class="modal-sub">Carte · Apple Pay · Google Pay</div>
     <div class="pay-summary-box">
-      <div class="ps-row"><span id="payItemTitle">Item</span><span id="paySubtotal">0.00€</span></div>
-      <div class="ps-row" id="payDiscountLine" style="display:none;color:#86efac"><span data-i18n="pay.discount">Discount</span><span id="payDiscountVal">-0.00€</span></div>
+      <div class="ps-row"><span id="payItemTitle">Article</span><span id="paySubtotal">0.00€</span></div>
+      <div class="ps-row" id="payDiscountLine" style="display:none;color:#86efac"><span data-i18n="pay.discount">Réduction</span><span id="payDiscountVal">-0.00€</span></div>
       <div class="ps-row" id="payBonusLine" style="display:none;color:#7fd3ff"><span>🎁 <span data-i18n="pay.bonus">Bonus</span></span><span id="payBonusVal">+0 🔷</span></div>
-      <div class="ps-row ps-muted"><span>Loyalty points earned</span><span id="payBloobux" style="color:var(--blue2)">+0 🔷</span></div>
+      <div class="ps-row ps-muted"><span>Points de fidélité gagnés</span><span id="payBloobux" style="color:var(--blue2)">+0 🔷</span></div>
       <div class="ps-row ps-total"><span>Total</span><strong id="payItemPrice">0.00€</strong></div>
     </div>
     <div style="display:flex;gap:8px;margin:12px 0 2px">
       <input type="text" id="payPromoInput" placeholder="Discount code" data-i18n-ph="pay.promo.ph" style="flex:1;text-transform:uppercase">
-      <button type="button" onclick="applyPromoCode()" style="background:rgba(30,111,255,0.15);border:1px solid rgba(30,111,255,0.35);color:#7fb0ff;padding:0 16px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif" data-i18n="pay.apply">Apply</button>
+      <button type="button" onclick="applyPromoCode()" style="background:rgba(30,111,255,0.15);border:1px solid rgba(30,111,255,0.35);color:#7fb0ff;padding:0 16px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif" data-i18n="pay.apply">Appliquer</button>
     </div>
     <div id="pay-element" style="margin:14px 0"></div>
     <div id="pay-errors" style="color:#FCA5A5;font-size:12px;margin-bottom:10px"></div>
@@ -1243,7 +1243,7 @@ body.auth-loading #userNav{display:none!important}
   <div class="modal" style="max-width:380px">
     <button class="modal-close" onclick="hideModal('reviewModal')">✕</button>
     <div class="modal-h">Leave a review ⭐</div>
-    <div class="modal-sub">How did the transaction go?</div>
+    <div class="modal-sub">Comment s'est passée la transaction ?</div>
     <div id="reviewAlert"></div>
     <div class="review-stars" id="reviewStars">
       <span class="review-star" onclick="setReviewRating(1)">⭐</span>
@@ -1252,9 +1252,9 @@ body.auth-loading #userNav{display:none!important}
       <span class="review-star" onclick="setReviewRating(4)">⭐</span>
       <span class="review-star" onclick="setReviewRating(5)">⭐</span>
     </div>
-    <div style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:14px" id="reviewRatingLabel">Select a rating</div>
-    <div class="fg"><label>Comment (optional)</label><textarea id="reviewComment" placeholder="Tell us how it went…"></textarea></div>
-    <button class="btn-submit" id="reviewBtn" onclick="submitReview()">Post review</button>
+    <div style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:14px" id="reviewRatingLabel">Choisis une note</div>
+    <div class="fg"><label>Commentaire (optionnel)</label><textarea id="reviewComment" placeholder="Tell us how it went…"></textarea></div>
+    <button class="btn-submit" id="reviewBtn" onclick="submitReview()">Publier l'avis</button>
     <input type="hidden" id="reviewOrderId"><input type="hidden" id="reviewSellerId">
   </div>
 </div>
@@ -1273,7 +1273,7 @@ body.auth-loading #userNav{display:none!important}
     </div>
     <div class="fg"><label>Téléphone (recommandé)</label><input type="tel" id="svPhone" placeholder="+33 6 12 34 56 78"></div>
     <div class="fg">
-      <label>ID document</label>
+      <label>Pièce d'identité</label>
       <div class="img-upload-zone" onclick="document.getElementById('svIdFile').click()">
         <div class="ico">🪪</div>
         <p>Clique pour ajouter ta pièce d'identité</p>
@@ -1283,7 +1283,7 @@ body.auth-loading #userNav{display:none!important}
       <div class="img-preview-row" id="svIdPreview"></div>
     </div>
     <label class="filter-check" style="margin:6px 0 14px"><input type="checkbox" id="svAge"> Je certifie avoir 18 ans ou plus</label>
-    <button class="btn-submit" id="svBtn" onclick="submitSellerVerify()">Send my request</button>
+    <button class="btn-submit" id="svBtn" onclick="submitSellerVerify()">Envoyer ma demande</button>
   </div>
 </div>
 
@@ -1565,10 +1565,8 @@ function detectLang() {
   try {
     var saved = localStorage.getItem('bm_lang');
     if (saved && I18N[saved]) return saved;
-    var nav = ((navigator.language || navigator.userLanguage || 'en')).slice(0,2).toLowerCase();
-    if (I18N[nav]) return nav;
   } catch(e){}
-  return 'en';
+  return 'fr';
 }
 function t(key) {
   var d = I18N[LANG] || I18N.en;
@@ -1617,9 +1615,9 @@ async function openPartner() {
   var link = SITE_URL + '?ref=' + (d.code || '');
   body.innerHTML =
     '<div style="background:rgba(30,111,255,0.08);border:1px solid rgba(30,111,255,0.25);border-radius:10px;padding:12px;margin-bottom:14px">'
-    + '<div style="font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:.5px">YOUR REFERRAL LINK</div>'
-    + '<div style="display:flex;gap:8px"><input readonly value="' + link + '" id="partnerLink" style="flex:1;font-size:12px"><button onclick="copyPartnerLink()" style="background:rgba(30,111,255,0.2);border:1px solid rgba(30,111,255,0.4);color:#7fb0ff;padding:0 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700">Copy</button></div></div>'
-    + (d.promo ? '<div style="background:rgba(123,63,240,0.1);border:1px solid rgba(123,63,240,0.35);border-radius:10px;padding:12px;margin-bottom:14px"><div style="font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:.5px">YOUR PROMO CODE (-5% for your fans)</div><div style="display:flex;gap:8px;align-items:center"><div style="flex:1;font-weight:800;letter-spacing:2px;font-size:17px;color:#b794ff">' + d.promo + '</div><button onclick="copyText(\'' + d.promo + '\')" style="background:rgba(123,63,240,0.2);border:1px solid rgba(123,63,240,0.45);color:#b794ff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700">Copy</button></div></div>' : '')
+    + '<div style="font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:.5px">TON LIEN DE PARRAINAGE</div>'
+    + '<div style="display:flex;gap:8px"><input readonly value="' + link + '" id="partnerLink" style="flex:1;font-size:12px"><button onclick="copyPartnerLink()" style="background:rgba(30,111,255,0.2);border:1px solid rgba(30,111,255,0.4);color:#7fb0ff;padding:0 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700">Copier</button></div></div>'
+    + (d.promo ? '<div style="background:rgba(123,63,240,0.1);border:1px solid rgba(123,63,240,0.35);border-radius:10px;padding:12px;margin-bottom:14px"><div style="font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:.5px">YOUR PROMO CODE (-5% for your fans)</div><div style="display:flex;gap:8px;align-items:center"><div style="flex:1;font-weight:800;letter-spacing:2px;font-size:17px;color:#b794ff">' + d.promo + '</div><button onclick="copyText(\'' + d.promo + '\')" style="background:rgba(123,63,240,0.2);border:1px solid rgba(123,63,240,0.45);color:#b794ff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700">Copier</button></div></div>' : '')
     + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'
     + partnerStatCard('Clicks', d.clicks || 0)
     + partnerStatCard('Sign-ups', d.referrals || 0)
@@ -1627,7 +1625,7 @@ async function openPartner() {
     + partnerStatCard('Pending', (Number(d.pending) || 0).toFixed(2) + '€')
     + partnerStatCard('Paid', (Number(d.paid) || 0).toFixed(2) + '€')
     + '</div>'
-    + '<div style="font-size:12px;color:var(--muted);margin-bottom:12px">You earn <strong style="color:#7fb0ff">' + (d.rate || 25) + '%</strong> of our commission on each sale from your referrals.</div>'
+    + '<div style="font-size:12px;color:var(--muted);margin-bottom:12px">Tu gagnes <strong style="color:#7fb0ff">' + (d.rate || 25) + '%</strong> of our commission on each sale from your referrals.</div>'
     + '<button class="btn-submit" onclick="requestPayout()">Request payout (min €10)</button>'
     + '<div id="partnerReferrals" style="margin-top:16px"></div>';
   loadPartnerReferrals();
@@ -1635,15 +1633,15 @@ async function openPartner() {
 async function loadPartnerReferrals(){
   var el = document.getElementById('partnerReferrals'); if (!el) return;
   var r = await db.rpc('partner_referrals');
-  if (r.error || !r.data || !r.data.length) { el.innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:10px">No referred sign-ups yet.</div>'; return; }
+  if (r.error || !r.data || !r.data.length) { el.innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:10px">Aucun filleul pour le moment.</div>'; return; }
   var rows = r.data.map(function(u){ return '<div style="display:flex;justify-content:space-between;padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px"><span>' + escHtml(u.username||'user') + '</span><span style="color:var(--muted)">' + (u.purchases||0) + ' buys · ' + (Number(u.spent)||0).toFixed(2) + '€</span></div>'; }).join('');
-  el.innerHTML = '<div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px">YOUR REFERRALS</div>' + rows;
+  el.innerHTML = '<div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px">TES FILLEULS</div>' + rows;
 }
 function renderPartnerPending(app){
   var body = document.getElementById('partnerBody');
   body.innerHTML =
     '<div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.35);color:#FBBF24;border-radius:12px;padding:16px;font-size:13px;line-height:1.7">'
-    + '⏳ <strong>Application under review</strong><br>We received your application. To prove the channel is yours, add this code to your channel description (or a pinned post/comment):'
+    + '⏳ <strong>Candidature en cours de validation</strong><br>On a bien reçu ta candidature. Pour prouver que la chaîne est à toi, ajoute ce code dans la description de ta chaîne (ou un post/commentaire épinglé) :'
     + '<div style="font-weight:800;letter-spacing:2px;font-size:18px;color:#fff;background:rgba(0,0,0,0.25);border-radius:9px;padding:10px;text-align:center;margin:10px 0">' + (app.code||'') + '</div>'
     + 'Once it\'s on your channel, we\'ll verify and approve you. You\'ll get a notification 🔔</div>';
 }
@@ -1651,13 +1649,13 @@ function renderPartnerApplyForm(wasRejected){
   var body = document.getElementById('partnerBody');
   body.innerHTML =
     (wasRejected ? '<div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#FCA5A5;border-radius:9px;padding:10px;font-size:12px;margin-bottom:12px">Your previous application was not approved. You can apply again.</div>' : '')
-    + '<div style="font-size:13px;color:var(--muted2);margin-bottom:14px;line-height:1.6">Got an audience? Promote BlooMarket and earn <strong style="color:#7fb0ff">25%</strong> of our commission on every sale you bring in. Fill this in and we\'ll review it.</div>'
-    + '<div class="fg"><label>Platform</label><select id="paPlatform"><option value="youtube">▶️ YouTube</option><option value="tiktok">🎵 TikTok</option><option value="x">✖️ X (Twitter)</option><option value="facebook">📘 Facebook</option><option value="snapchat">👻 Snapchat</option><option value="instagram">📸 Instagram</option><option value="discord">💬 Discord</option><option value="other">🌐 Other</option></select></div>'
-    + '<div class="fg"><label>Channel / profile link</label><input type="text" id="paChannel" placeholder="https://youtube.com/@yourchannel"></div>'
-    + '<div class="fg"><label>Followers / subscribers (approx.)</label><input type="number" id="paFollowers" min="0" placeholder="e.g. 20000"></div>'
-    + '<div class="fg"><label>Why do you want to join?</label><textarea id="paReason" rows="3" placeholder="Tell us about your content & audience"></textarea></div>'
+    + '<div style="font-size:13px;color:var(--muted2);margin-bottom:14px;line-height:1.6">Tu as une audience ? Fais la promo de BlooMarket et gagne <strong style="color:#7fb0ff">25%</strong> of our commission on every sale you bring in. Fill this in and we\'ll review it.</div>'
+    + '<div class="fg"><label>Plateforme</label><select id="paPlatform"><option value="youtube">▶️ YouTube</option><option value="tiktok">🎵 TikTok</option><option value="x">✖️ X (Twitter)</option><option value="facebook">📘 Facebook</option><option value="snapchat">👻 Snapchat</option><option value="instagram">📸 Instagram</option><option value="discord">💬 Discord</option><option value="other">🌐 Other</option></select></div>'
+    + '<div class="fg"><label>Lien de chaîne / profil</label><input type="text" id="paChannel" placeholder="https://youtube.com/@yourchannel"></div>'
+    + '<div class="fg"><label>Abonnés (environ)</label><input type="number" id="paFollowers" min="0" placeholder="e.g. 20000"></div>'
+    + '<div class="fg"><label>Pourquoi veux-tu rejoindre ?</label><textarea id="paReason" rows="3" placeholder="Tell us about your content & audience"></textarea></div>'
     + '<label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted2);margin-bottom:14px;cursor:pointer"><input type="checkbox" id="paAge" style="width:auto;margin:0"> I confirm I am 18 years old or older</label>'
-    + '<button class="btn-submit" id="paBtn" onclick="submitPartnerApplication()">Send my application</button>';
+    + '<button class="btn-submit" id="paBtn" onclick="submitPartnerApplication()">Envoyer ma candidature</button>';
 }
 async function submitPartnerApplication(){
   var platform = document.getElementById('paPlatform').value;
@@ -1665,17 +1663,17 @@ async function submitPartnerApplication(){
   var followers = parseInt(document.getElementById('paFollowers').value) || 0;
   var reason = (document.getElementById('paReason').value||'').trim();
   var age = document.getElementById('paAge').checked;
-  if (!channel) { showToast('Channel link required','error'); return; }
-  if (!age) { showToast('You must confirm you are 18 or older','error'); return; }
+  if (!channel) { showToast('Lien de chaîne requis','error'); return; }
+  if (!age) { showToast('Tu dois confirmer que tu as 18 ans ou plus','error'); return; }
   setBtn('paBtn', true, 'Sending…');
   var r = await db.rpc('apply_partner', { p_platform:platform, p_channel:channel, p_followers:followers, p_reason:reason, p_age:age });
   setBtn('paBtn', false, 'Send my application');
   if (r.error) { showToast(rpcMsg(r.error),'error'); return; }
-  showToast('Application sent ✅ We\'ll review it soon.','success');
+  showToast('Candidature envoyée ✅ On la regarde bientôt.','success');
   openPartner();
 }
 async function adminReviewPartner(id, approve) {
-  if (!approve && !confirm('Reject this partner application?')) return;
+  if (!approve && !confirm('Refuser cette candidature partenaire ?')) return;
   var r = await db.rpc('review_partner_app', { p_id: id, p_approve: approve, p_rate: 25 });
   if (r.error) { showToast(rpcMsg(r.error),'error'); return; }
   showToast(approve ? 'Partner approved ✅' : 'Application rejected','success');
@@ -1694,25 +1692,25 @@ async function adminViewPartner(uid, name) {
   var list = (r && r.data) ? r.data : [];
   var rows = list.length
     ? list.map(function(u){ return '<div style="display:flex;justify-content:space-between;padding:7px 10px;border-bottom:1px solid var(--border);font-size:12px"><span>' + escHtml(u.username||'user') + '</span><span style="color:var(--muted)">' + (u.purchases||0) + ' buys · ' + (Number(u.spent)||0).toFixed(2) + '€</span></div>'; }).join('')
-    : '<div style="padding:10px;color:var(--muted);font-size:12px;text-align:center">No referrals yet.</div>';
+    : '<div style="padding:10px;color:var(--muted);font-size:12px;text-align:center">Aucun filleul pour le moment.</div>';
   body.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">'
     + partnerStatCard('Clicks', d.clicks||0) + partnerStatCard('Sign-ups', d.referrals||0)
     + partnerStatCard('Sales', d.sales||0) + partnerStatCard('Pending', (Number(d.pending)||0).toFixed(2)+'€')
-    + '</div><div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px">REFERRALS</div>' + rows;
+    + '</div><div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px">FILLEULS</div>' + rows;
 }
 async function adminRevokePartner(id) {
-  if (!confirm('End this partnership? Their promo code and earnings tracking will stop.')) return;
+  if (!confirm('Mettre fin à ce partenariat ? Son code promo et le suivi des gains seront arrêtés.')) return;
   var r = await db.rpc('revoke_partner_app', { p_id: id });
   if (r.error) { showToast(rpcMsg(r.error),'error'); return; }
-  showToast('Partnership ended','success');
+  showToast('Partenariat terminé','success');
   adminTab('partners');
 }
-function copyText(txt){ try{ navigator.clipboard.writeText(txt); }catch(e){} showToast('Copied 📋','success'); }
-function copyPartnerLink(){ var i=document.getElementById('partnerLink'); if(i){ i.select(); try{ navigator.clipboard.writeText(i.value); }catch(e){ try{document.execCommand('copy');}catch(e2){} } showToast('Link copied 📋','success'); } }
+function copyText(txt){ try{ navigator.clipboard.writeText(txt); }catch(e){} showToast('Copié 📋','success'); }
+function copyPartnerLink(){ var i=document.getElementById('partnerLink'); if(i){ i.select(); try{ navigator.clipboard.writeText(i.value); }catch(e){ try{document.execCommand('copy');}catch(e2){} } showToast('Lien copié 📋','success'); } }
 async function requestPayout(){
   var r = await db.rpc('request_partner_payout');
   if (r.error) { showToast(rpcMsg(r.error),'error'); return; }
-  showToast('Payout requested ✅ We will process it shortly.','success');
+  showToast('Retrait demandé ✅ On le traite bientôt.','success');
   openPartner();
 }
 var editingListingId = null;
@@ -1735,7 +1733,7 @@ async function saveListingNote() {
   if (r.error) { showToast(r.error.message,'error'); return; }
   MY_NOTES[id] = note;
   hideModal('noteModal');
-  showToast('Private note saved 📝','success');
+  showToast('Note privée enregistrée 📝','success');
   loadMyListings();
 }
 var editingExistingImages = [];
@@ -1749,7 +1747,7 @@ async function openEditListing(id) {
   if (!currentUser) return;
   await loadProfile();
   var res = await db.from('listings').select('*').eq('id', id).eq('user_id', currentUser.id).maybeSingle();
-  if (!res.data) { showToast('Listing not found','error'); return; }
+  if (!res.data) { showToast('Annonce introuvable','error'); return; }
   var l = res.data;
   editingListingId = l.id;
   editingExistingImages = Array.isArray(l.image_urls) ? l.image_urls.slice() : [];
@@ -1855,7 +1853,7 @@ async function init() {
   try { var _ref = new URLSearchParams(location.search).get('ref'); if (_ref) { localStorage.setItem('bm_ref', _ref.toUpperCase()); db.rpc('track_referral_click', { p_code: _ref.toUpperCase(), p_visitor: VISITOR_ID }); } } catch(e){}
   handlePaymentReturn();
   if (/type=recovery/.test(location.hash) || /[?&]type=recovery/.test(location.search)) { setTimeout(function(){ revealAuthUI(); showModal('resetPasswordModal'); }, 600); }
-  if (/type=signup/.test(location.hash) || /[?&]type=signup/.test(location.search)) { setTimeout(function(){ showToast('Email confirmed ✅ Welcome!','success'); try { history.replaceState({}, '', location.origin + location.pathname); } catch(e){} }, 900); }
+  if (/type=signup/.test(location.hash) || /[?&]type=signup/.test(location.search)) { setTimeout(function(){ showToast('Email confirmé ✅ Bienvenue !','success'); try { history.replaceState({}, '', location.origin + location.pathname); } catch(e){} }, 900); }
   updateCartBadge();
   renderSellAttrFields();
   db.auth.onAuthStateChange(function(event, session) { handleAuthChange(event, session); });
@@ -1903,11 +1901,11 @@ async function setUser(user) {
   revealAuthUI();
   await loadProfile();
   if (userProfile && userProfile.disabled) {
-    if (confirm('Your account is deactivated. Reactivate it now?')) {
+    if (confirm('Ton compte est désactivé. Le réactiver maintenant ?')) {
       await db.from('profiles').update({disabled:false}).eq('id', currentUser.id);
       await db.from('listings').update({active:true}).eq('user_id', currentUser.id);
       userProfile.disabled = false;
-      showToast('Account reactivated ✅','success');
+      showToast('Compte réactivé ✅','success');
     } else {
       await db.auth.signOut(); clearUser(); showPage('home'); return;
     }
@@ -1960,11 +1958,11 @@ async function loadProfile() {
 async function doLogin() {
   var email = document.getElementById('loginEmail').value.trim();
   var pwd = document.getElementById('loginPassword').value;
-  if (!email || !pwd) return showAlert('loginAlert','error','Fill in all fields!');
+  if (!email || !pwd) return showAlert('loginAlert','error','Remplis tous les champs !');
   setBtn('loginBtn', true, 'Signing in…');
   var res = await db.auth.signInWithPassword({email, password: pwd});
   setBtn('loginBtn', false, 'Sign in');
-  if (res.error) return showAlert('loginAlert','error','Incorrect email or password.');
+  if (res.error) return showAlert('loginAlert','error','Email ou mot de passe incorrect.');
   try {
     var aal = await db.auth.mfa.getAuthenticatorAssuranceLevel();
     if (aal.data && aal.data.currentLevel === 'aal1' && aal.data.nextLevel === 'aal2') {
@@ -1975,7 +1973,7 @@ async function doLogin() {
     }
   } catch(e){}
   hideModal('loginModal');
-  showToast('Logged in! 🎉','success');
+  showToast('Connecté ! 🎉','success');
   track('login_success');
   logLogin();
   setTimeout(function(){ location.reload(); }, 500);
@@ -1985,11 +1983,11 @@ async function doRegister() {
   var username = document.getElementById('registerUsername').value.trim();
   var email = document.getElementById('registerEmail').value.trim();
   var pwd = document.getElementById('registerPassword').value;
-  if (!username || !email || !pwd) return showAlert('registerAlert','error','Fill in all fields!');
-  if (username.length < 3) return showAlert('registerAlert','error','Username too short (min. 3 characters).');
-  if (pwd.length < 6) return showAlert('registerAlert','error','Password too short (min. 6 characters).');
+  if (!username || !email || !pwd) return showAlert('registerAlert','error','Remplis tous les champs !');
+  if (username.length < 3) return showAlert('registerAlert','error','Pseudo trop court (min. 3 caractères).');
+  if (pwd.length < 6) return showAlert('registerAlert','error','Mot de passe trop court (min. 6 caractères).');
   var check = await db.from('profiles').select('id').eq('username', username).maybeSingle();
-  if (check.data) return showAlert('registerAlert','error','Username unavailable.');
+  if (check.data) return showAlert('registerAlert','error','Pseudo indisponible.');
   setBtn('registerBtn', true, 'Creating…');
   try { await db.auth.signOut({ scope: 'local' }); } catch(e){}
   track('signup_submitted');
@@ -2005,25 +2003,25 @@ async function doRegister() {
     showModal('checkEmailModal');
   } else {
     hideModal('registerModal');
-    showToast('Account created! 🎉','success');
+    showToast('Compte créé ! 🎉','success');
   }
 }
 var pendingRegEmail = '';
 async function verifyRegisterCode() {
   var code = (document.getElementById('confirmCode').value || '').trim();
-  if (code.length < 4) return showAlert('confirmEmailAlert','error','Enter the 6-digit code.');
+  if (code.length < 4) return showAlert('confirmEmailAlert','error','Entre le code à 6 chiffres.');
   setBtn('confirmEmailBtn', true, 'Verifying…');
   var res = await db.auth.verifyOtp({ email: pendingRegEmail, token: code, type: 'signup' });
   setBtn('confirmEmailBtn', false, 'Verify');
-  if (res.error) return showAlert('confirmEmailAlert','error','Incorrect or expired code.');
+  if (res.error) return showAlert('confirmEmailAlert','error','Code incorrect ou expiré.');
   hideModal('confirmEmailModal');
-  showToast('Email verified ✅ Welcome!','success');
+  showToast('Email vérifié ✅ Bienvenue !','success');
 }
 async function resendRegisterCode() {
   if (!pendingRegEmail) return;
   var r = await db.auth.resend({ type: 'signup', email: pendingRegEmail });
   if (r.error) showAlert('confirmEmailAlert','error', r.error.message);
-  else showToast('New code sent 📧','success');
+  else showToast('Nouveau code envoyé 📧','success');
 }
 
 /* ══ Reset mot de passe par code email (sur le site, sans lien) ══ */
@@ -2037,11 +2035,11 @@ function resetForgotFlow() {
 }
 async function sendResetCode() {
   var email = (document.getElementById('fpEmail').value || '').trim();
-  if (!email || email.indexOf('@') === -1) return showAlert('forgotAlert','error','Enter a valid email.');
+  if (!email || email.indexOf('@') === -1) return showAlert('forgotAlert','error','Entre un email valide.');
   fpResetEmail = email;
   setBtn('fpSendBtn', true, 'Envoi…');
   var ex = await db.rpc('email_exists', { p_email: email });
-  if (!ex.error && ex.data === false) { setBtn('fpSendBtn', false, 'Envoyer le code'); return showAlert('forgotAlert','error','No account is linked to this email.'); }
+  if (!ex.error && ex.data === false) { setBtn('fpSendBtn', false, 'Envoyer le code'); return showAlert('forgotAlert','error','Aucun compte n\'est lié à cet email.'); }
   var res = await db.auth.resetPasswordForEmail(email);
   setBtn('fpSendBtn', false, 'Envoyer le code');
   if (res.error) return showAlert('forgotAlert','error', res.error.message);
@@ -2051,31 +2049,31 @@ async function sendResetCode() {
 }
 async function verifyResetCode() {
   var code = (document.getElementById('fpCode').value || '').trim();
-  if (!code) return showAlert('forgotAlert','error','Enter the code received by email.');
+  if (!code) return showAlert('forgotAlert','error','Entre le code reçu par email.');
   setBtn('fpVerifyBtn', true, 'Vérification…');
   var res = await db.auth.verifyOtp({ email: fpResetEmail, token: code, type: 'recovery' });
   setBtn('fpVerifyBtn', false, 'Vérifier le code');
-  if (res.error) return showAlert('forgotAlert','error','Incorrect or expired code.');
+  if (res.error) return showAlert('forgotAlert','error','Code incorrect ou expiré.');
   document.getElementById('fpStep2').style.display = 'none';
   document.getElementById('fpStep3').style.display = 'block';
-  showAlert('forgotAlert','success','Email verified ✅ Choose your new password.');
+  showAlert('forgotAlert','success','Email vérifié ✅ Choisis ton nouveau mot de passe.');
 }
 async function saveResetPassword() {
   var pwd = document.getElementById('fpNewPw').value;
-  if (!pwd || pwd.length < 6) return showAlert('forgotAlert','error','Password too short (min. 6).');
+  if (!pwd || pwd.length < 6) return showAlert('forgotAlert','error','Mot de passe trop court (min. 6).');
   setBtn('fpSaveBtn', true, 'Enregistrement…');
   var res = await db.auth.updateUser({ password: pwd });
   setBtn('fpSaveBtn', false, 'Changer le mot de passe');
   if (res.error) return showAlert('forgotAlert','error', res.error.message);
   hideModal('forgotModal');
   resetForgotFlow();
-  showToast('Password changed ✅ You are logged in.','success');
+  showToast('Mot de passe changé ✅ Tu es connecté.','success');
   showPage('home');
 }
 
 async function doResetPassword() {
   var pwd = document.getElementById('resetPwInput').value;
-  if (!pwd || pwd.length < 6) return showAlert('resetPwAlert','error','Password too short (min. 6).');
+  if (!pwd || pwd.length < 6) return showAlert('resetPwAlert','error','Mot de passe trop court (min. 6).');
   setBtn('resetPwBtn', true, 'Mise à jour…');
   var res = await db.auth.updateUser({ password: pwd });
   setBtn('resetPwBtn', false, 'Mettre à jour');
@@ -2083,18 +2081,18 @@ async function doResetPassword() {
   hideModal('resetPasswordModal');
   try { history.replaceState({}, '', location.origin + location.pathname); } catch(e){}
   document.getElementById('resetPwInput').value = '';
-  showToast('Password updated ✅','success');
+  showToast('Mot de passe mis à jour ✅','success');
   showPage('home');
 }
 
 async function doChangePassword() {
   if (!currentUser) return;
   var pwd = document.getElementById('newPwInput').value;
-  if (!pwd || pwd.length < 6) return showAlert('settingsAlert','error','Password too short (min. 6).');
+  if (!pwd || pwd.length < 6) return showAlert('settingsAlert','error','Mot de passe trop court (min. 6).');
   var res = await db.auth.updateUser({ password: pwd });
   if (res.error) return showAlert('settingsAlert','error', res.error.message);
   document.getElementById('newPwInput').value = '';
-  showAlert('settingsAlert','success','Password updated ✅');
+  showAlert('settingsAlert','success','Mot de passe mis à jour ✅');
 }
 
 async function deactivateAccount() {
@@ -2104,19 +2102,19 @@ async function deactivateAccount() {
   await db.from('profiles').update({disabled:true}).eq('id', currentUser.id);
   hideModal('settingsModal');
   await db.auth.signOut(); clearUser(); showPage('home');
-  showToast('Account deactivated. Log back in to reactivate it.','info');
+  showToast('Compte désactivé. Reconnecte-toi pour le réactiver.','info');
 }
 
 async function deleteAccount() {
   if (!currentUser) return;
   var conf = (document.getElementById('deleteConfirmInput').value || '').trim();
-  if (conf !== 'DELETE' && conf !== 'SUPPRIMER') return showAlert('settingsAlert','error','Type DELETE (uppercase) to confirm.');
+  if (conf !== 'DELETE' && conf !== 'SUPPRIMER') return showAlert('settingsAlert','error','Tape DELETE (en majuscules) pour confirmer.');
   if (!confirm('Dernière confirmation : supprimer DÉFINITIVEMENT ton compte ?')) return;
   var res = await db.rpc('delete_my_account');
   if (res.error) return showAlert('settingsAlert','error','Suppression impossible : ' + rpcMsg(res.error) + '. Lance le SQL delete_my_account ou contacte le support.');
   hideModal('settingsModal');
   await db.auth.signOut(); clearUser(); showPage('home');
-  showToast('Account deleted. See you soon 👋','success');
+  showToast('Compte supprimé. À bientôt 👋','success');
 }
 
 function openSettings() { showModal('settingsModal'); refreshMfaStatus(); loadLoginHistory(); }
@@ -2181,7 +2179,7 @@ async function refreshMfaStatus() {
   } catch(e){ statusEl.innerHTML = '2FA indisponible (vérifie que MFA est activé dans Supabase).'; }
 }
 async function mfaStart() {
-  showAlert('mfaAlert','info','Preparing…');
+  showAlert('mfaAlert','info','Préparation…');
   try {
     // nettoie un éventuel facteur non vérifié resté en attente
     var f = await db.auth.mfa.listFactors();
@@ -2200,36 +2198,36 @@ async function mfaStart() {
 }
 async function mfaVerifyEnroll() {
   var code = (document.getElementById('mfaCode').value || '').trim();
-  if (!code) return showAlert('mfaAlert','error','Enter the code from your app.');
+  if (!code) return showAlert('mfaAlert','error','Entre le code de ton app.');
   var ch = await db.auth.mfa.challenge({ factorId: window._mfaFactorId });
   if (ch.error) return showAlert('mfaAlert','error', ch.error.message);
   var v = await db.auth.mfa.verify({ factorId: window._mfaFactorId, challengeId: ch.data.id, code: code });
-  if (v.error) return showAlert('mfaAlert','error','Incorrect code, try again.');
+  if (v.error) return showAlert('mfaAlert','error','Code incorrect, réessaie.');
   document.getElementById('mfaCode').value = '';
-  showAlert('mfaAlert','success','2FA enabled ✅');
+  showAlert('mfaAlert','success','2FA activée ✅');
   refreshMfaStatus();
 }
 async function mfaDisable(factorId) {
   if (!confirm('Désactiver la double authentification ?')) return;
   var res = await db.auth.mfa.unenroll({ factorId: factorId });
   if (res.error) return showAlert('mfaAlert','error', res.error.message);
-  showAlert('mfaAlert','success','2FA disabled.');
+  showAlert('mfaAlert','success','2FA désactivée.');
   refreshMfaStatus();
 }
 async function submitMfaLogin() {
   var code = (document.getElementById('mfaLoginCode').value || '').trim();
-  if (!code) return showAlert('mfaLoginAlert','error','Enter the code.');
+  if (!code) return showAlert('mfaLoginAlert','error','Entre le code.');
   setBtn('mfaLoginBtn', true, 'Vérification…');
   var f = await db.auth.mfa.listFactors();
   var totp = ((f.data && f.data.totp) ? f.data.totp : []).filter(function(x){ return x.status==='verified'; })[0];
-  if (!totp) { setBtn('mfaLoginBtn', false, 'Valider'); return showAlert('mfaLoginAlert','error','No 2FA factor found.'); }
+  if (!totp) { setBtn('mfaLoginBtn', false, 'Valider'); return showAlert('mfaLoginAlert','error','Aucun facteur 2FA trouvé.'); }
   var ch = await db.auth.mfa.challenge({ factorId: totp.id });
   if (ch.error) { setBtn('mfaLoginBtn', false, 'Valider'); return showAlert('mfaLoginAlert','error', ch.error.message); }
   var v = await db.auth.mfa.verify({ factorId: totp.id, challengeId: ch.data.id, code: code });
   setBtn('mfaLoginBtn', false, 'Valider');
-  if (v.error) return showAlert('mfaLoginAlert','error','Incorrect or expired code.');
+  if (v.error) return showAlert('mfaLoginAlert','error','Code incorrect ou expiré.');
   hideModal('mfaLoginModal');
-  showToast('Logged in! 🎉','success');
+  showToast('Connecté ! 🎉','success');
   logLogin();
   setTimeout(function(){ location.reload(); }, 500);
 }
@@ -2341,17 +2339,17 @@ async function adminSupport(el) {
   content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Loading…</div>';
   var res = await db.from('support_tickets').select('*').order('created_at',{ascending:false}).limit(100);
   if (res.error) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Run the support_tickets SQL to view reports and AI escalations.</div>'; return; }
-  if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No report.</div>'; return; }
+  if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucun signalement.</div>'; return; }
   var names = {};
   var ids = [];
   res.data.forEach(function(t){ if (t.user_id && ids.indexOf(t.user_id) === -1) ids.push(t.user_id); });
   if (ids.length) { try { var pr = await db.from('profiles').select('id,username').in('id', ids); if (pr.data) pr.data.forEach(function(p){ names[p.id] = p.username; }); } catch(e){} }
   window.__adminNames = names; window.__adminTickets = {};
-  var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span>User</span><span>Message</span><span>Status</span><span>Action</span></div>';
+  var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span>Utilisateur</span><span>Message</span><span>Statut</span><span>Action</span></div>';
   res.data.forEach(function(tk){
     window.__adminTickets[tk.id] = tk;
     var uname = names[tk.user_id] || (tk.user_id ? tk.user_id.slice(0,8) : '—');
-    var sb = tk.status === 'open' ? '<span class="badge-wait">Open</span>' : '<span class="badge-ok">Resolved</span>';
+    var sb = tk.status === 'open' ? '<span class="badge-wait">Ouvert</span>' : '<span class="badge-ok">Résolu</span>';
     var act = '<button onclick="openTicket(' + tk.id + ')" class="btn-sm" style="font-size:10px;background:rgba(30,111,255,0.15);border:1px solid rgba(30,111,255,0.3);color:var(--blue2);padding:3px 8px;border-radius:6px;cursor:pointer;font-family:Inter,sans-serif">👁 View</button>' + (tk.status === 'open' ? ' <button onclick="adminResolveTicket(' + tk.id + ')" class="btn-sm btn-sm-green" style="font-size:10px">✅</button>' : '');
     html += '<div class="admin-table-row" style="grid-template-columns:1.2fr 2.6fr 0.9fr 0.9fr"><span style="font-weight:600">' + escHtml(uname) + '<br><span style="font-size:10px;color:var(--muted)">' + new Date(tk.created_at).toLocaleString('en-GB') + '</span></span><span style="color:var(--muted2);font-size:11px">' + (tk.type==='report'?'🚩 ':'🤖 ') + escHtml(tk.message || '') + '</span>' + sb + '<span>' + act + '</span></div>';
   });
@@ -2364,7 +2362,7 @@ async function openTicket(id) {
   var typeLabel = tk.type === 'report' ? '🚩 User report' : '🤖 AI escalation';
   var c = document.getElementById('ticketContent');
   c.innerHTML = '<p class="settings-desc" style="margin-bottom:10px">' + typeLabel + ' · ' + new Date(tk.created_at).toLocaleString('en-GB') + '</p>'
-    + '<div class="fg"><label>User</label><div style="font-weight:600">' + escHtml(uname) + '</div></div>'
+    + '<div class="fg"><label>Utilisateur</label><div style="font-weight:600">' + escHtml(uname) + '</div></div>'
     + '<div class="fg"><label>Email</label><div id="ticketEmail" style="color:var(--blue2);font-size:13px">Loading…</div></div>'
     + '<div class="fg"><label>Message</label><div style="white-space:pre-wrap;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:11px;font-size:13px;line-height:1.5">' + escHtml(tk.message || '') + '</div></div>'
     + '<div style="display:flex;gap:8px;margin-top:14px">'
@@ -2384,7 +2382,7 @@ function openTicketReply(userId, username) {
   openChat(userId, username || 'User', 0);
 }
 function copyText(t) {
-  try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function(){ showToast('Copied ✅','success'); }); else prompt('Copy:', t); }
+  try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function(){ showToast('Copié ✅','success'); }); else prompt('Copy:', t); }
   catch(e){ prompt('Copy:', t); }
 }
 async function adminResolveTicket(id) {
@@ -2395,7 +2393,7 @@ async function adminResolveTicket(id) {
 
 var currentPromoteId = null;
 function heroBecomeSeller() {
-  if (!currentUser) { showToast('Create an account first to become a seller','info'); showModal('registerModal'); return; }
+  if (!currentUser) { showToast('Crée un compte d\'abord pour devenir vendeur','info'); showModal('registerModal'); return; }
   openSellerVerify();
 }
 function openPromote(id) {
@@ -2417,7 +2415,7 @@ function doPromote(days) {
 }
 
 async function reportUser() {
-  if (!currentUser) { showToast('Log in to report.','error'); return; }
+  if (!currentUser) { showToast('Connecte-toi pour signaler.','error'); return; }
   if (!currentChatOther) return;
   var reason = prompt('Why are you reporting this user? (scam, spam, insults, forbidden content…)');
   if (!reason) return;
@@ -2425,8 +2423,8 @@ async function reportUser() {
   try {
     var r = await db.from('support_tickets').insert({ user_id: currentUser.id, type:'report', status:'open', message: '🚩 Report of ' + other + ' (' + currentChatOther + '): ' + reason.slice(0,400) });
     if (r.error) throw r.error;
-    showToast('Report sent to the team. Thank you 🙏','success'); refreshAdminBadge();
-  } catch(e){ showToast('Enable the support_tickets SQL for reports.','error'); }
+    showToast('Signalement envoyé à l\'équipe. Merci 🙏','success'); refreshAdminBadge();
+  } catch(e){ showToast('Active le SQL support_tickets pour les signalements.','error'); }
 }
 
 async function logout() {
@@ -2435,7 +2433,7 @@ async function logout() {
   location.reload();
   return;
   clearUser(); showPage('home');
-  showToast('Logged out','success');
+  showToast('Déconnecté','success');
 }
 
 /* ══ PROFILE ══ */
@@ -2492,7 +2490,7 @@ async function loadProfileReviews(sellerId) {
   var res = await db.from('reviews').select('*, buyer:profiles!reviews_buyer_id_fkey(username)').eq('seller_id', sellerId).order('created_at',{ascending:false}).limit(20);
   var cnt = document.getElementById('profileReviewCount');
   if (cnt) cnt.textContent = (res.data || []).length;
-  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:12px;color:var(--muted);font-size:13px">No reviews yet.</div>'; return; }
+  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:12px;color:var(--muted);font-size:13px">Aucun avis pour le moment.</div>'; return; }
   el.innerHTML = res.data.map(function(rv) {
     var bn = (rv.buyer && rv.buyer.username) || 'Acheteur';
     var dd = new Date(rv.created_at).toLocaleDateString('fr-FR');
@@ -2502,7 +2500,7 @@ async function loadProfileReviews(sellerId) {
 
 async function saveProfile() {
   var username = document.getElementById('editUsername').value.trim();
-  if (!username || username.length < 3) return showAlert('editProfileAlert','error','Username too short.');
+  if (!username || username.length < 3) return showAlert('editProfileAlert','error','Pseudo trop court.');
   var check = await db.from('profiles').select('id').eq('username', username).neq('id', currentUser.id).maybeSingle();
   if (check.data) return showAlert('editProfileAlert','error','Nom d\'utilisateur indisponible.');
   /* BLOC 9 : enregistrer bio / pays / date de naissance */
@@ -2513,7 +2511,7 @@ async function saveProfile() {
   if (res.error) return showAlert('editProfileAlert','error', res.error.message);
   await db.auth.updateUser({data:{username}});
   hideModal('editProfileModal');
-  showToast('Profile updated!','success');
+  showToast('Profil mis à jour !','success');
   await loadProfile();
   await loadProfilePage();
 }
@@ -2521,7 +2519,7 @@ async function saveProfile() {
 async function uploadAvatar(input) {
   if (!input.files || !input.files[0]) return;
   var file = input.files[0];
-  if (file.size > 5*1024*1024) return showToast('Image too large (max 5 MB)','error');
+  if (file.size > 5*1024*1024) return showToast('Image trop lourde (max 5 Mo)','error');
   var ext = file.name.split('.').pop();
   var path = currentUser.id + '/avatar.' + ext;
   var up = await db.storage.from('avatars').upload(path, file, {upsert:true});
@@ -2529,7 +2527,7 @@ async function uploadAvatar(input) {
   var url = db.storage.from('avatars').getPublicUrl(path).data.publicUrl + '?t=' + Date.now();
   await db.from('profiles').update({avatar_url: url}).eq('id', currentUser.id);
   if (userProfile) userProfile.avatar_url = url;
-  showToast('Avatar updated!','success');
+  showToast('Avatar mis à jour !','success');
   await loadProfile();
   await loadProfilePage();
 }
@@ -2634,7 +2632,7 @@ async function openDetailById(id) {
   if (res.data) {
     openDetail(res.data);
     if (location.hash !== '#/listing/' + id) { location.hash = '#/listing/' + id; }
-  } else { showToast('Listing not found','error'); }
+  } else { showToast('Annonce introuvable','error'); }
 }
 function closeDetail() {
   hideModal('detailModal'); currentDetailId = null;
@@ -2647,9 +2645,9 @@ async function loadMyFavorites() {
   try { var r = await db.rpc('my_favorites'); MY_FAVORITES = {}; if (r.data) r.data.forEach(function(x){ MY_FAVORITES[x] = true; }); } catch(e){}
 }
 async function toggleFavorite(id, btn) {
-  if (!currentUser) { showToast('Log in to add favorites','info'); showModal('loginModal'); return; }
+  if (!currentUser) { showToast('Connecte-toi pour ajouter des favoris','info'); showModal('loginModal'); return; }
   var r = await db.rpc('toggle_favorite', { p_listing_id: id });
-  if (r.error || !r.data) { showToast('Run the favorites SQL to enable this.','error'); return; }
+  if (r.error || !r.data) { showToast('Active le SQL favoris pour cette fonction.','error'); return; }
   var fav = r.data.favorited, cnt = r.data.count;
   if (fav) MY_FAVORITES[id] = true; else delete MY_FAVORITES[id];
   if (LISTING_CACHE[id]) LISTING_CACHE[id].favorites_count = cnt;
@@ -2662,7 +2660,7 @@ function copyListingLink(id) {
   var url = SITE_URL + '/#/listing/' + id;
   function fallback(){ try { prompt('Copie ce lien :', url); } catch(e){} }
   try {
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(function(){ showToast('Link copied ✅','success'); }, fallback);
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(function(){ showToast('Lien copié ✅','success'); }, fallback);
     else fallback();
   } catch(e) { fallback(); }
 }
@@ -2733,7 +2731,7 @@ function openDetail(l) {
       html += '<button class="btn-cart-add" onclick="addToCart(' + l.id + ',\'' + escHtml(l.title) + '\',\'' + escHtml(l.game) + '\',' + l.price + ',' + (imgs.length ? '\'' + escHtml(imgs[0]) + '\'' : 'null') + ',\'' + l.user_id + '\');hideModal(\'detailModal\')">🛒 Add to cart</button>';
       html += '</div>';
     }
-  } else html += '<span style="font-size:12px;color:var(--muted)">Your listing</span>';
+  } else html += '<span style="font-size:12px;color:var(--muted)">Ton annonce</span>';
   document.getElementById('detailContent').innerHTML = html;
   showModal('detailModal');
 }
@@ -2778,7 +2776,7 @@ async function showSellerProfile(userId) {
     h += '<div class="sp-sub">' + (p.country ? escHtml(p.country) + ' · ' : '') + 'Member since ' + since + '</div></div></div>';
     if (p.bio) h += '<p style="font-size:13px;color:var(--muted2);line-height:1.6;margin-bottom:12px">' + escHtml(p.bio) + '</p>';
     h += '<div class="sp-stats">';
-    h += '<div class="sp-stat"><div class="sp-stat-n">' + (salesRes.count || 0) + '</div><div class="sp-stat-l">Sales</div></div>';
+    h += '<div class="sp-stat"><div class="sp-stat-n">' + (salesRes.count || 0) + '</div><div class="sp-stat-l">Ventes</div></div>';
     h += '<div class="sp-stat"><div class="sp-stat-n">' + listings.length + '</div><div class="sp-stat-l">Annonces</div></div>';
     h += '<div class="sp-stat"><div class="sp-stat-n">' + (reviews.length ? avg.toFixed(1) : '—') + '</div><div class="sp-stat-l">Note</div></div>';
     h += '</div></div>';
@@ -2871,7 +2869,7 @@ async function doSell() {
   await loadProfile();
   if (!userProfile || !userProfile.id_verified) {
     hideModal('sellModal');
-    showToast('You must be a verified seller to publish','error');
+    showToast('Tu dois être vendeur vérifié pour publier','error');
     setTimeout(function(){ openSellerVerify(); }, 500);
     return;
   }
@@ -2882,12 +2880,12 @@ async function doSell() {
   var desc = document.getElementById('sellDesc').value.trim();
   var stock = parseInt(document.getElementById('sellStock').value);
   if (isNaN(stock) || stock < 1) stock = 1;
-  if (!title) return showAlert('sellAlert','error','Please enter an item title.');
+  if (!title) return showAlert('sellAlert','error','Entre un titre d\'article.');
   var descVal = (document.getElementById('sellDesc') ? document.getElementById('sellDesc').value : '');
-  if (containsProfanity(title) || containsProfanity(descVal)) return showAlert('sellAlert','error','Please remove inappropriate language from your title/description.');
-  if (!title || !price || !desc) return showAlert('sellAlert','error','Fill in all fields!');
-  if (isNaN(price) || price < 1) return showAlert('sellAlert','error','Minimum price is €1.');
-  if (!isEdit && sellImageFiles.length < 1) return showAlert('sellAlert','error','Add at least 1 photo.');
+  if (containsProfanity(title) || containsProfanity(descVal)) return showAlert('sellAlert','error','Retire le langage inapproprié de ton titre/description.');
+  if (!title || !price || !desc) return showAlert('sellAlert','error','Remplis tous les champs !');
+  if (isNaN(price) || price < 1) return showAlert('sellAlert','error','Prix minimum : 1€.');
+  if (!isEdit && sellImageFiles.length < 1) return showAlert('sellAlert','error','Ajoute au moins 1 photo.');
   setBtn('sellBtn', true, isEdit ? 'Saving…' : 'Publishing…');
   var imageUrls = isEdit ? (editingExistingImages || []).slice() : [];
   if (sellImageFiles.length > 0) {
@@ -2923,9 +2921,9 @@ async function doSell() {
   sellImageFiles = []; sellImageDataURLs = [];
   renderSellAttrFields();
   if (wasEdit) {
-    showToast('Listing updated ✅','success');
+    showToast('Annonce mise à jour ✅','success');
   } else {
-    showToast('Listing published! 🎉','success');
+    showToast('Annonce publiée ! 🎉','success');
     track('listing_published');
     await addNotification(currentUser.id, '📋', 'Listing published', 'Your listing "' + title + '" is now live.');
   }
@@ -2979,7 +2977,7 @@ async function ensureOrderChat(listingId) {
 
 async function buyFromBalance(listingIds, total, kind, quantities) {
   quantities = quantities || listingIds.map(function(){ return 1; });
-  showToast('Purchase in progress…','info');
+  showToast('Achat en cours…','info');
   for (var i = 0; i < listingIds.length; i++) {
     var r = await db.rpc('buy_listing', { p_listing_id: listingIds[i], p_qty: quantities[i] || 1 });
     if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
@@ -2987,7 +2985,7 @@ async function buyFromBalance(listingIds, total, kind, quantities) {
   }
   if (kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); hideModal('cartModal'); }
   await loadProfile();
-  showToast('Purchase successful ✅ (paid with your balance)','success');
+  showToast('Achat réussi ✅ (payé avec ton solde)','success');
   if (typeof loadListings === 'function') loadListings();
 }
 
@@ -3044,8 +3042,8 @@ async function applyPromoCode(){
     var info = await db.rpc('partner_code_info', { p_code: code });
     if (info && info.data && info.data.valid) { p = { pct:5, bonus:100 }; isPartnerCode = true; }
   }
-  if (!p) { showToast('Invalid code','error'); return; }
-  if (p.until && new Date() > new Date(p.until+'T23:59:59')) { showToast('Code expired','error'); return; }
+  if (!p) { showToast('Code invalide','error'); return; }
+  if (p.until && new Date() > new Date(p.until+'T23:59:59')) { showToast('Code expiré','error'); return; }
   var base = payContext.amount;
   if (base > 1) {
     PROMO = { code: code, pct: p.pct||0, bonus: 0, partner: isPartnerCode };
@@ -3094,8 +3092,8 @@ async function submitPayElement() {
     if (payContext && payContext.kind === 'promote') {
       hideModal('payModal');
       var prr = await db.rpc('promote_listing_paid', { p_listing_id: payContext.promoteId, p_days: payContext.promoteDays });
-      if (prr.error) showToast('Paid, but promotion failed: ' + rpcMsg(prr.error),'error');
-      else showToast('Listing promoted ⭐ It moves to the top!','success');
+      if (prr.error) showToast('Payé, mais la promotion a échoué : ' + rpcMsg(prr.error),'error');
+      else showToast('Annonce promue ⭐ Elle passe en haut !','success');
       if (typeof loadMyListings === 'function') loadMyListings();
       loadListings();
       return;
@@ -3115,7 +3113,7 @@ async function submitPayElement() {
     if (created === 0) {
       showToast('⚠️ Payment received but the order could not be created' + (lastErr ? (': ' + (lastErr.message || rpcMsg(lastErr))) : '') + '. Contact support with this — you will be refunded or delivered.','error');
     } else {
-      showToast('Payment successful! 🔒 ' + created + ' order(s) in escrow','success');
+      showToast('Paiement réussi ! 🔒 ' + created + ' order(s) in escrow','success');
     }
     if (currentUser) { await loadProfile(); }
     loadListings();
@@ -3132,7 +3130,7 @@ async function handlePaymentReturn() {
   var rs = params.get('redirect_status');
   if (!pi) return;
   try { history.replaceState({}, '', location.origin + location.pathname); } catch(e){}
-  if (rs !== 'succeeded') { if (rs) showToast('Payment not completed','error'); return; }
+  if (rs !== 'succeeded') { if (rs) showToast('Paiement non finalisé','error'); return; }
   var pend = null;
   try { pend = JSON.parse(localStorage.getItem('bm_pending_order') || 'null'); } catch(e){}
   localStorage.removeItem('bm_pending_order');
@@ -3140,7 +3138,7 @@ async function handlePaymentReturn() {
     var t2 = 0; while (!currentUser && t2 < 25) { await new Promise(function(r){setTimeout(r,150);}); t2++; }
     if (!currentUser) return;
     var prr2 = await db.rpc('promote_listing_paid', { p_listing_id: pend.promoteId, p_days: pend.promoteDays });
-    if (!prr2.error) showToast('Listing promoted ⭐ It moves to the top!','success');
+    if (!prr2.error) showToast('Annonce promue ⭐ Elle passe en haut !','success');
     if (typeof loadMyListings === 'function') loadMyListings();
     loadListings();
     return;
@@ -3157,7 +3155,7 @@ async function handlePaymentReturn() {
   if (pend.kind === 'cart') { cart = []; localStorage.setItem('bm_cart', '[]'); updateCartBadge(); }
   if (pend.bonusBloobux > 0) { try { await db.rpc('add_bloobux', { p_amount: pend.bonusBloobux }); await loadProfile(); showToast('🎁 +' + pend.bonusBloobux + ' Bloobux added!','success'); } catch(e){} }
   if (pend.promoPartner && pend.promoCode) { try { await db.rpc('attach_referrer_by_code', { p_code: pend.promoCode }); } catch(e){} }
-  showToast('Payment successful! 🔒 ' + created + ' order(s) in escrow','success');
+  showToast('Paiement réussi ! 🔒 ' + created + ' order(s) in escrow','success');
   loadListings(); loadNotifications();
 }
 
@@ -3168,22 +3166,22 @@ function cartStockOf(id) {
   return (l.stock === null || l.stock === undefined || l.stock === '') ? null : parseInt(l.stock);
 }
 function addToCart(id, title, game, price, imgUrl, sellerId) {
-  if (!currentUser) { showToast('Log in to use the cart','error'); showModal('loginModal'); return; }
+  if (!currentUser) { showToast('Connecte-toi pour utiliser le panier','error'); showModal('loginModal'); return; }
   var st = cartStockOf(id);
   var exists = cart.find(function(c){ return c.id === id; });
   if (exists) {
-    if (st !== null && (exists.qty || 1) >= st) { showToast('Max stock reached (' + st + ')','info'); return; }
+    if (st !== null && (exists.qty || 1) >= st) { showToast('Stock max atteint (' + st + ')','info'); return; }
     exists.qty = (exists.qty || 1) + 1; exists.stock = st;
     localStorage.setItem('bm_cart', JSON.stringify(cart));
     updateCartBadge(); renderCartModal();
-    showToast('Quantity +1 🛒','success');
+    showToast('Quantité +1 🛒','success');
     return;
   }
-  if (st !== null && st <= 0) { showToast('Item out of stock','error'); return; }
+  if (st !== null && st <= 0) { showToast('Article en rupture de stock','error'); return; }
   cart.push({id: id, title: title, game: game, price: price, imgUrl: imgUrl, qty: 1, stock: st});
   localStorage.setItem('bm_cart', JSON.stringify(cart));
   updateCartBadge();
-  showToast('Added to cart 🛒','success');
+  showToast('Ajouté au panier 🛒','success');
   track('add_to_cart', { value: price });
   if (sellerId && currentUser && sellerId !== currentUser.id) { try { db.rpc('notify_cart_add', { p_listing_id: id }); } catch(e){} }
 }
@@ -3193,7 +3191,7 @@ function cartQty(id, delta) {
   var st = (it.stock === null || it.stock === undefined) ? cartStockOf(id) : it.stock;
   var q = (it.qty || 1) + delta;
   if (q < 1) q = 1;
-  if (st !== null && q > st) { q = st; showToast('Max stock: ' + st,'info'); }
+  if (st !== null && q > st) { q = st; showToast('Stock max : ' + st,'info'); }
   it.qty = q;
   localStorage.setItem('bm_cart', JSON.stringify(cart));
   updateCartBadge(); renderCartModal();
@@ -3216,7 +3214,7 @@ function updateCartBadge() {
 async function openSellModal() {
   if (!currentUser) { showModal('loginModal'); return; }
   await loadProfile();
-  if (!(userProfile && userProfile.id_verified)) { showToast('You must be a verified seller to sell','info'); openSellerVerify(); return; }
+  if (!(userProfile && userProfile.id_verified)) { showToast('Tu dois être vendeur vérifié pour vendre','info'); openSellerVerify(); return; }
   editingListingId = null; editingExistingImages = [];
   document.getElementById('sellTitle').value = ''; var s=document.getElementById('sellItemSearch'); if(s) s.value='';
   document.getElementById('sellPrice').value = ''; document.getElementById('sellStock').value = '1'; document.getElementById('sellDesc').value = '';
@@ -3230,13 +3228,13 @@ async function openSellerVerify() {
   track('become_seller_click');
   if (!currentUser) { showModal('loginModal'); return; }
   await loadProfile();
-  if (userProfile && userProfile.id_verified) { showToast('You are already a verified seller ✅','success'); return; }
+  if (userProfile && userProfile.id_verified) { showToast('Tu es déjà vendeur vérifié ✅','success'); return; }
   var b = document.getElementById('svBtn');
   var al = document.getElementById('sellerVerifyAlert');
   var pend = await db.from('seller_requests').select('id,status').eq('user_id', currentUser.id).order('created_at',{ascending:false}).limit(1);
   showModal('sellerVerifyModal');
   if (pend.data && pend.data.length && pend.data[0].status === 'pending') {
-    if (al) al.innerHTML = '<div style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.35);color:#FBBF24;padding:12px;border-radius:9px;font-size:13px">⏳ Your seller request has been sent and is <strong>pending validation</strong>. You can start selling as soon as an admin approves it.</div>';
+    if (al) al.innerHTML = '<div style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.35);color:#FBBF24;padding:12px;border-radius:9px;font-size:13px">⏳ Your seller request has been sent and is <strong>en attente de validation</strong>. You can start selling as soon as an admin approves it.</div>';
     if (b) { b.disabled = true; b.textContent = 'Pending validation…'; b.style.opacity = '0.6'; b.style.cursor = 'not-allowed'; }
   } else {
     if (al) al.innerHTML = '';
@@ -3267,7 +3265,7 @@ function filterItemList() {
     html += '<div class="item-opt" data-v="' + escHtml(raw.trim()) + '" onmousedown="chooseItem(this.dataset.v)" style="color:#7fb0ff">✏️ Use "' + escHtml(raw.trim()) + '" as title</div>';
   }
   html += matches.map(function(it){ return '<div class="item-opt" data-v="' + escHtml(it) + '" onmousedown="chooseItem(this.dataset.v)">' + escHtml(it) + '</div>'; }).join('');
-  if (!html) html = '<div class="item-opt-empty">Type your item title above</div>';
+  if (!html) html = '<div class="item-opt-empty">Tape le titre de ton article ci-dessus</div>';
   list.innerHTML = html; list.style.display = 'block';
 }
 var BRAINROT_RARITY = {"Noobini Pizzanini": "Common", "Lirilì Larilà": "Common", "Tim Cheese": "Common", "Fluriflura": "Common", "Talpa Di Fero": "Common", "Noobini Santanini": "Common", "Svinina Bombardino": "Common", "Raccooni Jandelini": "Common", "Pipi Kiwi": "Common", "Tartaragno": "Common", "Pipi Corni": "Common", "Holy Arepa": "Common", "Trippi Troppi": "Rare", "Gangster Footera": "Rare", "Bandito Bobritto": "Rare", "Boneca Ambalabu": "Rare", "Cacto Hipopotamo": "Rare", "Ta Ta Ta Ta Sahur": "Rare", "Cupcake Koala": "Rare", "Tric Trac Baraboom": "Rare", "Frogo Elfo": "Rare", "Pipi Avocado": "Rare", "Pengolino Nuvoletto": "Rare", "Pinealotto Fruttarino": "Rare", "Cappuccino Assassino": "Epic", "Brr Brr Patapim": "Epic", "Avocadini Antilopini": "Epic", "Trulimero Trulicina": "Epic", "Bambini Crostini": "Epic", "Malame Amarele": "Epic", "Bananita Dolphinita": "Epic", "Perochello Lemonchello": "Epic", "Brri Brri Bicus Dicus Bombicus": "Epic", "Avocadini Guffo": "Epic", "Ti Ti Ti Sahur": "Epic", "Mangolini Parrocini": "Epic", "Frogato Pirato": "Epic", "Gato Celesto": "Epic", "Salamino Penguino": "Epic", "Doi Doi Do": "Epic", "Penguin Tree": "Epic", "Wombo Rollo": "Epic", "Penguino Cocosino": "Epic", "Mummio Rappitto": "Epic", "Chimpanzini Bananini": "Legendary", "Tirilikalika Tirilikalako": "Legendary", "Ballerina Cappuccina": "Legendary", "Burbaloni Loliloli": "Legendary", "Chef Crabracadabra": "Legendary", "Lionel Cactuseli": "Legendary", "Glorbo Fruttodrillo": "Legendary", "Quivioli Ameleonni": "Legendary", "Clickerino Crabo": "Legendary", "Blueberrinni Octopusini": "Legendary", "Caramello Filtrello": "Legendary", "Pipi Potato": "Legendary", "Strawberrelli Flamingelli": "Legendary", "Cocosini Mama": "Legendary", "Bandito Axolito": "Legendary", "Pandaccini Bananini": "Legendary", "Quackula": "Legendary", "Pi Pi Watermelon": "Legendary", "Buho del Cielo": "Legendary", "Sigma Boy": "Legendary", "Chocco Bunny": "Legendary", "Puffaball": "Legendary", "Sigma Girl": "Legendary", "Sealo Regalo": "Legendary", "Electro Quacko": "Legendary", "Buho de Fuego": "Legendary", "Seraphino Gruyero": "Legendary", "Frigo Camelo": "Mythic", "Orangutini Ananassini": "Mythic", "Rhino Toasterino": "Mythic", "Bombardiro Crocodilo": "Mythic", "Brutto Gialutto": "Mythic", "Spioniro Golubiro": "Mythic", "Bombombini Gusini": "Mythic", "Zibra Zubra Zibralini": "Mythic", "Tigrilini Watermelini": "Mythic", "Avocadorilla": "Mythic", "Mythic Lucky Block": "Mythic", "Cavallo Virtuoso": "Mythic", "Gorillo Subwoofero": "Mythic", "Gorillo Watermelondrillo": "Mythic", "Stoppo Luminino": "Mythic", "Ganganzelli Trulala": "Mythic", "Tob Tobi Tobi": "Mythic", "Lerulerulerule": "Mythic", "Te Te Te Sahur": "Mythic", "Rhino Helicopterino": "Mythic", "Magi Ribbitini": "Mythic", "Tracoducotulu Delapeladustuz": "Mythic", "Jingle Jingle Sahur": "Mythic", "Los Noobinis": "Mythic", "Spongini Quackini": "Mythic", "Cachorrito Melonito": "Mythic", "Bee Loco": "Mythic", "Carloo": "Mythic", "Harpuccino": "Mythic", "Cocoteddy": "Mythic", "Carrotini Brainini": "Mythic", "Centrucci Nuclucci": "Mythic", "Toiletto Focaccino": "Mythic", "Jacko Spaventosa": "Mythic", "Bananito Bandito": "Mythic", "Tree Tree Tree Sahur": "Mythic", "Fizzy Soda": "Mythic", "Berenjello Angello": "Mythic", "Bucketoro": "Mythic", "Orbi Mochi": "Mythic", "Cocofanto Elefanto": "Brainrot God", "Girafa Celestre": "Brainrot God", "Gattatino Neonino": "Brainrot God", "Gattatino Nyanino": "Brainrot God", "Chihuanini Taconini": "Brainrot God", "Matteo": "Brainrot God", "Tralalero Tralala": "Brainrot God", "Los Crocodillitos": "Brainrot God", "Tigroligre Frutonni": "Brainrot God", "Odin Din Din Dun": "Brainrot God", "Brainrot God Lucky Block": "Brainrot God", "Money Money Man": "Brainrot God", "Alessio": "Brainrot God", "Statutino Libertino": "Brainrot God", "Tipi Topi Taco": "Brainrot God", "Unclito Samito": "Brainrot God", "Tralalita Tralala": "Brainrot God", "Tukanno Bananno": "Brainrot God", "Extinct Ballerina": "Brainrot God", "Vampira Cappucina": "Brainrot God", "Espresso Signora": "Brainrot God", "Orcalero Orcala": "Brainrot God", "Trenostruzzo Turbo 3000": "Brainrot God", "Jacko Jack Jack": "Brainrot God", "Urubini Flamenguini": "Brainrot God", "Trippi Troppi Troppa Trippa": "Brainrot God", "Capi Taco": "Brainrot God", "Sundrilla Sundae": "Brainrot God", "Divino Platypio": "Brainrot God", "Los Chihuaninis": "Brainrot God", "Gattito Tacoto": "Brainrot God", "Las Capuchinas": "Brainrot God", "Pineaplino": "Brainrot God", "Bulbito Bandito Traktorito": "Brainrot God", "Ballerino Lololo": "Brainrot God", "Los Tungtungtungcitos": "Brainrot God", "Ballerina Peppermintina": "Brainrot God", "Pakrahmatmamat": "Brainrot God", "Brr es Teh Patipum": "Brainrot God", "Piccione Macchina": "Brainrot God", "Pakrahmatmatina": "Brainrot God", "Los Bombinitos": "Brainrot God", "Tractoro Dinosauro": "Brainrot God", "Los Orcalitos": "Brainrot God", "Cacasito Satalito": "Brainrot God", "Orcalita Orcala": "Brainrot God", "Corn Corn Corn Sahur": "Brainrot God", "Mummy Ambalabu": "Brainrot God", "Snailenzo": "Brainrot God", "Squalanana": "Brainrot God", "Tartaruga Cisterna": "Brainrot God", "Aquanaut": "Brainrot God", "Trenoturbo Axolotrico 9000": "Brainrot God", "Lazy Ducky": "Brainrot God", "Ginger Globo": "Brainrot God", "Yeti Claus": "Brainrot God", "Crabbo Limonetta": "Brainrot God", "Tootini Shrimpini": "Brainrot God", "Granchiello Spiritell": "Brainrot God", "Los Tipi Tacos": "Brainrot God", "Frio Ninja": "Brainrot God", "Lumaca Malefica": "Brainrot God", "Buho De Noelo": "Brainrot God", "Bunny Tralala": "Brainrot God", "Boba Panda": "Brainrot God", "Piccionetta Macchina": "Brainrot God", "Bambu Bambu Sahur": "Brainrot God", "Los Gattitos": "Brainrot God", "Mastodontico Telepiedone": "Brainrot God", "Chrismasmamat": "Brainrot God", "Lemonita Splashita": "Brainrot God", "Astrolero Cervalero": "Brainrot God", "Anpali Babel": "Brainrot God", "Luv Luv Luv": "Brainrot God", "Cappuccino Clownino": "Brainrot God", "Bombardini Tortinii": "Brainrot God", "Brasilini Berimbini": "Brainrot God", "Patteo": "Brainrot God", "Belula Beluga": "Brainrot God", "Krupuk Pagi Pagi": "Brainrot God", "Skull Skull Skull": "Brainrot God", "Cocoa Assassino": "Brainrot God", "Tentacolo Tecnico": "Brainrot God", "Ginger Cisterna": "Brainrot God", "Pandanini Frostini": "Brainrot God", "Dolphini Jetskini": "Brainrot God", "Pop Pop Sahur": "Brainrot God", "Noo La Polizia": "Brainrot God", "Karkerheart Luvkur": "Brainrot God", "Appelini": "Brainrot God", "Clovkur Kurkur": "Brainrot God", "Eggdin Egg Egg Dun": "Brainrot God", "Dumborino Miracello": "Brainrot God", "Flippo Marino": "Brainrot God", "Robo Grafito": "Brainrot God", "Tortuginni Sandcastlini": "Brainrot God", "La Vacca Saturno Saturnita": "Secret", "Bisonte Giuppitere": "Secret", "Sammyni Spyderini": "Secret", "Blackhole Goat": "Secret", "Pretzo Robo": "Secret", "Jackorilla": "Secret", "Karkerkar Kurkur": "Secret", "Agarrini La Palini": "Secret", "Chachechi": "Secret", "Trenostruzzo Turbo 4000": "Secret", "Chimpanzini Spiderini": "Secret", "Los Matteos": "Secret", "Los Tortus": "Secret", "Los Tralaleritos": "Secret", "La Cucaracha": "Secret", "Vulturino Skeletono": "Secret", "Boatito Auratito": "Secret", "Torrtuginni Dragonfrutini": "Secret", "Los Spyderinis": "Secret", "Extinct Tralalero": "Secret", "Fragola La La La": "Secret", "Zombie Tralala": "Secret", "Yess my examine": "Secret", "Extinct Matteo": "Secret", "Dul Dul Dul": "Secret", "Guerriro Digitale": "Secret", "Las Tralaleritas": "Secret", "Rocco Disco": "Secret", "La Karkerkar Combinasion": "Secret", "La Vacca Prese Presente": "Secret", "Reindeer Tralala": "Secret", "Pumpkini Spyderini": "Secret", "Los Trios": "Secret", "Frankentteo": "Secret", "Job Job Job Sahur": "Secret", "Karker Sahur": "Secret", "Las Vaquitas Saturnitas": "Secret", "Los Karkeritos": "Secret", "Santteo": "Secret", "Fishboard": "Secret", "Buntteo": "Secret", "La Vacca Jacko Linterino": "Secret", "Triplito Tralaleritos": "Secret", "Paradiso Axolottino": "Secret", "Trickolino": "Secret", "GOAT": "Secret", "Giftini Spyderini": "Secret", "Love Love Love Sahur": "Secret", "Graipuss Medussi": "Secret", "Perrito Burrito": "Secret", "Bombardiro Vaccariro": "Secret", "La Vacca Lepre Lepreino": "Secret", "1x1x1x1": "Secret", "Easter Easter Easter Sahur": "Secret", "Los Cucarachas": "Secret", "Please my Present": "Secret", "Craburger": "Secret", "Cuadramat and Pakrahmatmamat": "Secret", "Berryno": "Secret", "Bunnyman": "Secret", "Coffin Tung Tung Tung Sahur": "Secret", "Tung Tung Tung Sahur": "Secret", "Los Jobcitos": "Secret", "Nooo My Hotspot": "Secret", "Noo my examine": "Secret", "La Sahur Combinasion": "Secret", "List List List Sahur": "Secret", "Telemorte": "Secret", "Bunny Bunny Bunny Sahur": "Secret", "To to to Sahur": "Secret", "Glaciator": "Secret", "Pirulitoita Bicicleteira": "Secret", "25": "Secret", "Pot Hotspot": "Secret", "Santa Hotspot": "Secret", "Buho de Volto": "Secret", "Horegini Boom": "Secret", "Pot Pumpkin": "Secret", "Naughty Naughty": "Secret", "Quesadilla Crocodila": "Secret", "Rocketini Frostini": "Secret", "Cupid Cupid Sahur": "Secret", "Mi Gatito": "Secret", "Ho Ho Ho Sahur": "Secret", "Secret Lucky Block": "Secret", "Cupid Hotspot": "Secret", "Octoball": "Secret", "Eid Eid Eid Sahur": "Secret", "Chicleteira Bicicleteira": "Secret", "Brunito Marsito": "Secret", "Quesadillo Vampiro": "Secret", "Luck Luck Luck Sahur": "Secret", "Flancito": "Secret", "Granny": "Secret", "Chicleteirina Bicicleteirina": "Secret", "Burrito Bandito": "Secret", "Chill Puppy": "Secret", "Los Bunitos": "Secret", "Los Quesadillas": "Secret", "Futbolini Skatini": "Secret", "Bunito Bunito Spinito": "Secret", "Arcadopus": "Secret", "Noo my candy": "Secret", "Serafinna Medusella": "Secret", "La Grande Combinasion": "Secret", "Los Nooo My Hotspotsitos": "Secret", "Flipa Sandala": "Secret", "Noo my Present": "Secret", "Rang Ring Bus": "Secret", "Ombrello Topolino": "Secret", "Strawberrita": "Secret", "Los Mi Gatitos": "Secret", "Noo my Eggs": "Secret", "Los Chicleteiras": "Secret", "John Doe": "Secret", "67": "Secret", "Donkeyturbo Express": "Secret", "Sushi Inu": "Secret", "Los Burritos": "Secret", "Los 25": "Secret", "Tacorillo Crocodillo": "Secret", "Mariachi Corazoni": "Secret", "Noo my Heart": "Secret", "Swag Soda": "Secret", "Noo my Gold": "Secret", "Chimnino": "Secret", "Bananito": "Secret", "Chicleteira Noelteira": "Secret", "Los Combinasionas": "Secret", "Fishino Clownino": "Secret", "Baskito": "Secret", "Los Sweethearts": "Secret", "Tacorita Bicicleta": "Secret", "Camera Ramena": "Secret", "Spinny Hammy": "Secret", "Nuclearo Dinossauro": "Secret", "DJ Panda": "Secret", "Las Sis": "Secret", "Chicleteira Cupideira": "Secret", "Chillin Chili": "Secret", "Money Money Reindeer": "Secret", "Chipso and Queso": "Secret", "Girafini Raftini": "Secret", "Los Bros": "Secret", "Money Money Puggy": "Secret", "Churrito Bunnito": "Secret", "Los Planitos": "Secret", "Snailo Clovero": "Secret", "Capitano Gullini": "Secret", "Los Mobilis": "Secret", "Celularcini Viciosini": "Secret", "Los 67": "Secret", "Tuff Toucan": "Secret", "Mieteteira Bicicleteira": "Secret", "Gobblino Uniciclino": "Secret", "La Spooky Grande": "Secret", "Frullato Framingo": "Secret", "Los Jolly Combinasionas": "Secret", "Cigno Fulgoro": "Secret", "Los Spooky Combinasionas": "Secret", "Los Hotspotsitos": "Secret", "Los Candies": "Secret", "Los Fruits": "Secret", "Globa Steppa": "Secret", "Tralaledon": "Secret", "Los Cupids": "Secret", "Sand Sand Sand": "Secret", "Los Puggies": "Secret", "W or L": "Secret", "La Extinct Grande": "Secret", "Esok Sekolah": "Secret", "La Jolly Grande": "Secret", "Los Primos": "Secret", "Bacuru and Egguru": "Secret", "Eviledon": "Secret", "Los Tacoritas": "Secret", "Lovin Rose": "Secret", "Abyssaloco": "Secret", "Coco and Mango": "Secret", "Tang Tang Keletang": "Secret", "Ketupat Kepat": "Secret", "La Taco Combinasion": "Secret", "Dug Dug Dug": "Secret", "Tictac Sahur": "Secret", "Swaggy Bros": "Secret", "La Romantic Grande": "Secret", "Orcaledon": "Secret", "Gym Bros": "Secret", "Rico Dinero": "Secret", "Ketchuru And Musturu": "Secret", "Jolly Jolly Sahur": "Secret", "Gold Gold Gold": "Secret", "Money Money Bros": "Secret", "La Anniversary Grande": "Secret", "Nacho Spyder": "Secret", "Rosetti Tualetti": "Secret", "Garama and Madundung": "Secret", "Caylusaurus": "Secret", "Steakini Fattini": "Secret", "Hopilikalika Hopilikalako": "Secret", "Sammyni Cakini": "Secret", "Cloverat Clapat": "Secret", "Spaghetti Tualetti": "Secret", "Ventoliero Pavonero": "Secret", "Quackini Snackini": "Secret", "Guest 666": "Secret", "Festive 67": "Secret", "Rubrikiko": "Secret", "Los Spaghettis": "Secret", "Sammyni Fattini": "Secret", "Hokka Horloge": "Secret", "Bearito Cabinito": "Secret", "Los Hackers": "Secret", "Los Chillis": "Secret", "Ginger Gerat": "Secret", "La Ginger Sekolah": "Secret", "Boppin Bunny": "Secret", "Skibidi Toilet": "OG", "John Pork": "OG", "Headless Horseman": "OG", "Meowl": "OG", "Strawberry Elephant": "OG", "Griffin": "OG", "Cerberus": "OG", "Dragon Gingerini": "OG", "Love Love Bear": "OG"};
@@ -3354,7 +3352,7 @@ function setFundsAmount(n) {
 async function handleStripePayment() {
   if (!currentUser) { hideModal('addFundsModal'); showModal('loginModal'); return; }
   var amount = parseFloat(document.getElementById('fundsAmount').value);
-  if (!amount || amount < 1) return showAlert('fundsAlert','error','Minimum amount: €1');
+  if (!amount || amount < 1) return showAlert('fundsAlert','error','Montant minimum : 1€');
   setBtn('payBtn', true, 'Processing…');
   document.getElementById('card-errors').textContent = '';
   try {
@@ -3376,7 +3374,7 @@ async function handleStripePayment() {
       await db.from('profiles').update({balance: newBal}).eq('id', currentUser.id);
       await addNotification(currentUser.id, '💰', 'Top-up successful', '+' + amount.toFixed(2) + '€ added to your balance.');
       hideModal('addFundsModal');
-      showToast('Payment successful! +' + amount.toFixed(2) + '€ 💰','success');
+      showToast('Paiement réussi ! +' + amount.toFixed(2) + '€ 💰','success');
       document.getElementById('fundsAmount').value = '';
       cardElement.clear();
       await loadProfile();
@@ -3411,7 +3409,7 @@ async function loadMyListings() {
       alertHtml = '<div style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.4);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:#FBBF24">⏰ <strong>' + po.data.length + ' order(s) to deliver within 24h.</strong> ' + soon.map(function(s){ return '« ' + escHtml(s.t) + ' » ' + (s.late ? '⚠️ overdue!' : ('— ' + s.h + 'h ' + s.m + 'm left')); }).join(' · ') + '</div>';
     }
   } catch(e){}
-  if (!res.data.length) { body.innerHTML = alertHtml + '<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">No listing</div>'; return; }
+  if (!res.data.length) { body.innerHTML = alertHtml + '<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">Aucune annonce</div>'; return; }
   var html = alertHtml;
   res.data.forEach(function(l) {
     var paused = !l.active;
@@ -3450,8 +3448,8 @@ async function loadTransactionHistory() {
   var all = [...(buys.data||[]).map(function(o){return Object.assign({},o,{_type:'buy'});}), ...(sells.data||[]).map(function(o){return Object.assign({},o,{_type:'sell'});})];
   all.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);});
   all = all.slice(0, 15);
-  if (!all.length) { el.innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted);font-size:13px">No transaction</div>'; return; }
-  var html = '<div class="dtable"><div class="dth" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Item</span><span>Type</span><span>Montant</span><span>Date</span></div>';
+  if (!all.length) { el.innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted);font-size:13px">Aucune transaction</div>'; return; }
+  var html = '<div class="dtable"><div class="dth" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Article</span><span>Type</span><span>Montant</span><span>Date</span></div>';
   all.forEach(function(o) {
     var typeHtml = o._type === 'buy' ? '<span style="color:var(--red);font-size:11px;font-weight:700">ACHAT</span>' : '<span style="color:var(--green);font-size:11px;font-weight:700">VENTE</span>';
     var amountColor = o._type === 'buy' ? 'var(--red)' : 'var(--green)';
@@ -3463,9 +3461,9 @@ async function loadTransactionHistory() {
 }
 
 async function deleteListing(id) {
-  if (!confirm('Delete this listing?')) return;
+  if (!confirm('Supprimer cette annonce ?')) return;
   await db.from('listings').update({active:false}).eq('id', id).eq('user_id', currentUser.id);
-  showToast('Listing deleted','success');
+  showToast('Annonce supprimée','success');
   loadMyListings(); loadListings();
 }
 
@@ -3487,7 +3485,7 @@ async function loadOrders() {
   } else {
     res = await db.from('orders').select('*, buyer:profiles!orders_buyer_id_fkey(username)').eq('seller_id', currentUser.id).order('created_at',{ascending:false});
   }
-  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">No order</div>'; return; }
+  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Aucune commande</div>'; return; }
   var html = '';
   res.data.forEach(function(o) {
     var other = currentOrderTab === 'buying' ? ((o.seller && o.seller.username) || 'Seller') : ((o.buyer && o.buyer.username) || 'Buyer');
@@ -3538,7 +3536,7 @@ async function confirmOrder(orderId, sellerId) {
   if (!confirm("Confirm you received the item?\n\nThe escrowed money will then be released to the seller. This action is permanent.")) return;
   var r = await db.rpc('confirm_order', { p_order_id: orderId });
   if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
-  showToast('Receipt confirmed ✅ Funds released to seller','success');
+  showToast('Réception confirmée ✅ Fonds versés au vendeur','success');
   loadOrders();
   loadChatOrder();
   setTimeout(function(){openReviewModal(orderId, sellerId);}, 500);
@@ -3548,17 +3546,17 @@ async function claimLateRefund(orderId) {
   if (!confirm('The seller missed the 24h delivery deadline.\n\nRequest a refund? A priority dispute will be opened and an administrator will process the refund of your escrowed payment.')) return;
   var r = await db.rpc('open_dispute', { p_order_id: orderId, p_reason: 'Délai de livraison de 24h dépassé — remboursement demandé' });
   if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
-  showToast('Refund requested ↩️ An admin will handle the dispute','info');
+  showToast('Remboursement demandé ↩️ Un admin gère le litige','info');
   loadOrders();
 }
 async function openDispute(orderId) {
   var reason = prompt("Décris le problème (item non reçu, incorrect, tentative d'arnaque...) :");
   if (reason === null) return;
   reason = (reason || '').trim();
-  if (!reason) { showToast('A reason is required to open a dispute','error'); return; }
+  if (!reason) { showToast('Une raison est requise pour ouvrir un litige','error'); return; }
   var r = await db.rpc('open_dispute', { p_order_id: orderId, p_reason: reason });
   if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
-  showToast('Dispute opened ⚖️ An administrator will review it','info');
+  showToast('Litige ouvert ⚖️ Un administrateur va l\'examiner','info');
   loadOrders();
   loadChatOrder();
 }
@@ -3600,7 +3598,7 @@ async function openChat(otherUserId, otherUsername, listingId) {
     var newConv = await db.from('conversations').insert({user1_id:ids[0], user2_id:ids[1], listing_id:listingId}).select().single();
     conv = newConv.data;
   }
-  if (!conv) { showToast('Chat error','error'); return; }
+  if (!conv) { showToast('Erreur du chat','error'); return; }
   currentChatConvId = conv.id;
   currentChatOther = otherUserId;
   loadChatOrder();
@@ -3655,7 +3653,7 @@ async function loadConversations() {
     .or('user1_id.eq.' + currentUser.id + ',user2_id.eq.' + currentUser.id)
     .order('updated_at',{ascending:false});
   var el = document.getElementById('convList');
-  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">No conversation</div>'; return; }
+  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Aucune conversation</div>'; return; }
   var html = '<div class="conv-list">';
   res.data.forEach(function(c) {
     var isUser1 = c.user1_id === currentUser.id;
@@ -3725,7 +3723,7 @@ async function loadNotifications() {
 
 function renderNotifications(notifs) {
   var el = document.getElementById('notifList');
-  if (!notifs.length) { el.innerHTML = '<div class="notif-empty">No notification</div>'; return; }
+  if (!notifs.length) { el.innerHTML = '<div class="notif-empty">Aucune notification</div>'; return; }
   var typeIcon = { order:'🛒', cart:'🛒', message:'💬', newsletter:'🆕', partner:'🤝', payout:'💸' };
   el.innerHTML = notifs.map(function(n) {
     var d = new Date(n.created_at);
@@ -3774,7 +3772,7 @@ function setReviewRating(r) {
 }
 
 async function submitReview() {
-  if (!reviewRating) return showAlert('reviewAlert','error','Select a rating!');
+  if (!reviewRating) return showAlert('reviewAlert','error','Choisis une note !');
   var orderId = document.getElementById('reviewOrderId').value;
   var sellerId = document.getElementById('reviewSellerId').value;
   var comment = document.getElementById('reviewComment').value.trim();
@@ -3797,12 +3795,12 @@ async function requestWithdraw() {
   var name = document.getElementById('wdName').value.trim();
   var iban = document.getElementById('wdIban').value.trim().replace(/\s+/g,' ');
   var bic = document.getElementById('wdBic').value.trim();
-  if (!amount || amount < 1) return showAlert('withdrawAlert','error','Minimum amount: €1');
+  if (!amount || amount < 1) return showAlert('withdrawAlert','error','Montant minimum : 1€');
   if (!name) return showAlert('withdrawAlert','error','Enter the account holder full name.');
   if (!iban || iban.replace(/\s/g,'').length < 14) return showAlert('withdrawAlert','error','Enter a valid IBAN.');
   var balance = parseFloat(userProfile ? userProfile.balance : 0);
   if (balance < amount) return showAlert('withdrawAlert','error','Insufficient balance (' + balance.toFixed(2) + '€)');
-  if (!confirm('Request a €' + amount.toFixed(2) + ' bank transfer to this IBAN?')) return;
+  if (!confirm('Demander un virement de ' + amount.toFixed(2) + '€ vers cet IBAN ?')) return;
   var address = 'Name: ' + name + ' | IBAN: ' + iban + (bic ? ' | BIC: ' + bic : '');
   var newBal = Math.round((balance - amount) * 100) / 100;
   await db.from('profiles').update({balance: newBal}).eq('id', currentUser.id);
@@ -3818,7 +3816,7 @@ async function loadWithdrawHistory() {
   if (!currentUser) return;
   var res = await db.from('withdrawals').select('*').eq('user_id', currentUser.id).order('created_at',{ascending:false});
   var el = document.getElementById('withdrawHistory');
-  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">No withdrawal</div>'; return; }
+  if (!res.data || !res.data.length) { el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Aucun retrait</div>'; return; }
   el.innerHTML = res.data.map(function(w) {
     var badge = w.status === 'approved' ? '<span class="badge-ok">✅ Approuvé</span>' : w.status === 'rejected' ? '<span class="badge-cancel">❌ Refusé</span>' : '<span class="badge-wait">⏳ Pending</span>';
     return '<div class="wh-row"><div><strong>' + parseFloat(w.amount).toFixed(2) + '€</strong> via ' + escHtml(w.method) + '<br><span style="font-size:11px;color:var(--muted)">' + escHtml(w.address) + ' · ' + new Date(w.created_at).toLocaleDateString('fr-FR') + '</span></div>' + badge + '</div>';
@@ -3853,8 +3851,8 @@ async function adminTab(tab, el) {
   var content = document.getElementById('adminContent');
   if (tab === 'users') {
     var res = await db.from('profiles').select('*').order('created_at',{ascending:false});
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No user</div>'; return; }
-    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Username</span><span>Balance</span><span>Verified</span><span>Joined</span><span>Actions</span></div>';
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucun utilisateur</div>'; return; }
+    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Pseudo</span><span>Solde</span><span>Vérifié</span><span>Inscrit</span><span>Actions</span></div>';
     res.data.forEach(function(u) {
       html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml(u.username||'—') + (u.banned ? ' <span style="color:#FCA5A5;font-size:10px">🚫 banni</span>' : '') + '</span><span style="color:var(--blue2)">' + parseFloat(u.balance||0).toFixed(2) + '€</span><span>' + (u.id_verified ? '✅' : '—') + '</span><span style="color:var(--muted)">' + new Date(u.created_at).toLocaleDateString('fr-FR') + '</span><span style="display:flex;gap:5px">';
       html += '<button onclick="adminVerifyUser(\'' + u.id + '\',' + !u.id_verified + ')" class="btn-sm" style="background:rgba(34,197,94,0.1);color:#22C55E;border:1px solid rgba(34,197,94,0.2);font-size:10px">' + (u.id_verified ? 'Remove' : 'Verify') + '</button>';
@@ -3866,10 +3864,10 @@ async function adminTab(tab, el) {
   } else if (tab === 'partners') {
     var res = await db.rpc('admin_partner_apps');
     if (res.error) { content.innerHTML = '<div style="padding:20px;text-align:center;color:#FCA5A5">Run bloomarket_FINAL.sql to enable partner applications.</div>'; return; }
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No partner application</div>'; return; }
-    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1fr 1.6fr 0.8fr 1.6fr 1.4fr"><span>Platform</span><span>Channel</span><span>Subs</span><span>Status / Code</span><span>Actions</span></div>';
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucune candidature partenaire</div>'; return; }
+    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1fr 1.6fr 0.8fr 1.6fr 1.4fr"><span>Plateforme</span><span>Chaîne</span><span>Abonnés</span><span>Status / Code</span><span>Actions</span></div>';
     res.data.forEach(function(a){
-      var sbadge = a.status === 'approved' ? '<span class="badge-ok">Approved</span>' : a.status === 'rejected' ? '<span class="badge-cancel">Rejected</span>' : '<span class="badge-wait">Pending</span>';
+      var sbadge = a.status === 'approved' ? '<span class="badge-ok">Approuvé</span>' : a.status === 'rejected' ? '<span class="badge-cancel">Refusé</span>' : '<span class="badge-wait">En attente</span>';
       var chan = a.channel_url ? '<a href="' + escHtml(a.channel_url) + '" target="_blank" style="color:var(--blue2);word-break:break-all">' + escHtml(a.channel_url) + '</a>' : '—';
       var acts = a.status === 'pending'
         ? '<button onclick="adminReviewPartner(' + a.id + ',true)" class="btn-sm btn-sm-green" style="font-size:10px">✅ Approve</button> <button onclick="adminReviewPartner(' + a.id + ',false)" class="btn-sm btn-sm-red" style="font-size:10px">❌ Reject</button>'
@@ -3883,7 +3881,7 @@ async function adminTab(tab, el) {
     content.innerHTML = html;
   } else if (tab === 'sellers') {
     var res = await db.from('seller_requests').select('*, profiles(username, id_verified)').order('created_at',{ascending:false});
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No seller request</div>'; return; }
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucune demande vendeur</div>'; return; }
     var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.5fr 1fr 0.6fr 1fr 1.2fr"><span>Utilisateur</span><span>Téléphone</span><span>18+</span><span>Statut</span><span>Actions</span></div>';
     for (var i = 0; i < res.data.length; i++) {
       var s = res.data[i];
@@ -3893,7 +3891,7 @@ async function adminTab(tab, el) {
         var signed = await db.storage.from('kyc').createSignedUrl(s.id_card_url, 3600);
         if (signed.data) idlink = '<a href="' + signed.data.signedUrl + '" target="_blank" style="color:var(--blue2)">Voir pièce 🪪</a>';
       }
-      var sbadge = s.status === 'approved' ? '<span class="badge-ok">Approved</span>' : s.status === 'rejected' ? '<span class="badge-cancel">Rejected</span>' : '<span class="badge-wait">Pending</span>';
+      var sbadge = s.status === 'approved' ? '<span class="badge-ok">Approuvé</span>' : s.status === 'rejected' ? '<span class="badge-cancel">Refusé</span>' : '<span class="badge-wait">En attente</span>';
       var acts = s.status === 'pending' ? '<button onclick="adminApproveSeller(\'' + s.user_id + '\',true)" class="btn-sm btn-sm-green" style="font-size:10px">✅ Approve</button> <button onclick="adminApproveSeller(\'' + s.user_id + '\',false)" class="btn-sm btn-sm-red" style="font-size:10px">❌ Reject</button>' : '—';
       html += '<div class="admin-table-row" style="grid-template-columns:1.5fr 1fr 0.6fr 1fr 1.2fr"><span style="font-weight:600">' + escHtml(uname) + '<br><span style="font-size:10px;color:var(--muted)">' + idlink + '</span></span><span style="color:var(--muted)">' + escHtml(s.phone || '—') + '</span><span>' + (s.age_confirmed ? '✅' : '—') + '</span>' + sbadge + '<span>' + acts + '</span></div>';
     }
@@ -3901,11 +3899,11 @@ async function adminTab(tab, el) {
     content.innerHTML = html;
   } else if (tab === 'disputes') {
     var res = await db.from('disputes').select('*, orders(title, price)').order('created_at',{ascending:false});
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No dispute</div>'; return; }
-    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.5fr 2fr 1fr 1.4fr"><span>Order</span><span>Reason</span><span>Status</span><span>Decision</span></div>';
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucun litige</div>'; return; }
+    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:1.5fr 2fr 1fr 1.4fr"><span>Commande</span><span>Raison</span><span>Statut</span><span>Décision</span></div>';
     res.data.forEach(function(dp) {
       var o = dp.orders || {};
-      var sbadge = dp.status === 'open' ? '<span class="badge-wait">Open</span>' : dp.status === 'resolved_refund' ? '<span class="badge-cancel">Refunded</span>' : '<span class="badge-ok">Paid to seller</span>';
+      var sbadge = dp.status === 'open' ? '<span class="badge-wait">Ouvert</span>' : dp.status === 'resolved_refund' ? '<span class="badge-cancel">Remboursé</span>' : '<span class="badge-ok">Versé au vendeur</span>';
       var acts = dp.status === 'open' ? '<button onclick="adminResolveDispute(' + dp.order_id + ',\'refund\')" class="btn-sm btn-sm-red" style="font-size:10px">↩️ Refund</button> <button onclick="adminResolveDispute(' + dp.order_id + ',\'release\')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Pay seller</button>' : '—';
       html += '<div class="admin-table-row" style="grid-template-columns:1.5fr 2fr 1fr 1.4fr"><span style="font-weight:600">' + escHtml(o.title || ('#' + dp.order_id)) + '<br><span style="font-size:10px;color:var(--blue2)">' + parseFloat(o.price || 0).toFixed(2) + '€</span></span><span style="color:var(--muted2);font-size:11px">' + escHtml(dp.reason || '') + '</span>' + sbadge + '<span>' + acts + '</span></div>';
     });
@@ -3913,25 +3911,25 @@ async function adminTab(tab, el) {
     content.innerHTML = html;
   } else if (tab === 'listings') {
     var res = await db.from('listings').select('*, profiles(username)').order('created_at',{ascending:false}).limit(50);
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No listing</div>'; return; }
-    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Item</span><span>Seller</span><span>Price</span><span>Status</span><span>Action</span></div>';
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucune annonce</div>'; return; }
+    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Article</span><span>Vendeur</span><span>Prix</span><span>Statut</span><span>Action</span></div>';
     res.data.forEach(function(l) {
-      html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml(l.title||'—') + '</span><span style="color:var(--muted)">' + escHtml((l.profiles&&l.profiles.username)||'—') + '</span><span style="color:var(--blue2);font-weight:700">' + parseFloat(l.price||0).toFixed(2) + '€</span><span>' + (l.active ? '<span class="badge-ok">Actif</span>' : '<span class="badge-cancel">Inactif</span>') + '</span><span style="display:flex;gap:5px"><button onclick="adminToggleListing(' + l.id + ',' + (!l.active) + ')" class="btn-sm btn-sm-ghost" style="font-size:10px">' + (l.active ? 'Désactiver' : 'Activer') + '</button><button onclick="adminDeleteListing(' + l.id + ')" class="btn-sm btn-sm-red" style="font-size:10px">Delete</button></span></div>';
+      html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml(l.title||'—') + '</span><span style="color:var(--muted)">' + escHtml((l.profiles&&l.profiles.username)||'—') + '</span><span style="color:var(--blue2);font-weight:700">' + parseFloat(l.price||0).toFixed(2) + '€</span><span>' + (l.active ? '<span class="badge-ok">Actif</span>' : '<span class="badge-cancel">Inactif</span>') + '</span><span style="display:flex;gap:5px"><button onclick="adminToggleListing(' + l.id + ',' + (!l.active) + ')" class="btn-sm btn-sm-ghost" style="font-size:10px">' + (l.active ? 'Désactiver' : 'Activer') + '</button><button onclick="adminDeleteListing(' + l.id + ')" class="btn-sm btn-sm-red" style="font-size:10px">Supprimer</button></span></div>';
     });
     html += '</div>';
     content.innerHTML = html;
   } else if (tab === 'orders') {
     var res = await db.from('orders').select('*').order('created_at',{ascending:false}).limit(50);
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No order</div>'; return; }
-    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Item</span><span>Prix</span><span>Commission</span><span>Statut</span></div>';
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucune commande</div>'; return; }
+    var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr"><span>Article</span><span>Prix</span><span>Commission</span><span>Statut</span></div>';
     res.data.forEach(function(o) {
-      html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml(o.title||'—') + '</span><span style="color:var(--blue2);font-weight:700">' + parseFloat(o.price||0).toFixed(2) + '€</span><span style="color:var(--green)">' + parseFloat(o.commission||0).toFixed(2) + '€</span><span>' + (o.status === 'completed' ? '<span class="badge-ok">Completed</span>' : o.status === 'pending' ? '<span class="badge-wait">Pending</span>' : '<span class="badge-cancel">Cancelled</span>') + '</span></div>';
+      html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml(o.title||'—') + '</span><span style="color:var(--blue2);font-weight:700">' + parseFloat(o.price||0).toFixed(2) + '€</span><span style="color:var(--green)">' + parseFloat(o.commission||0).toFixed(2) + '€</span><span>' + (o.status === 'completed' ? '<span class="badge-ok">Terminé</span>' : o.status === 'pending' ? '<span class="badge-wait">En attente</span>' : '<span class="badge-cancel">Annulé</span>') + '</span></div>';
     });
     html += '</div>';
     content.innerHTML = html;
   } else if (tab === 'aconv') {
     var res = await db.from('conversations').select('*, user1:profiles!conversations_user1_id_fkey(username), user2:profiles!conversations_user2_id_fkey(username)').order('updated_at',{ascending:false}).limit(100);
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No conversation</div>'; return; }
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucune conversation</div>'; return; }
     var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 2fr 1fr"><span>Participants</span><span>Dernier message</span><span>Date</span></div>';
     res.data.forEach(function(c) {
       var u1 = (c.user1 && c.user1.username) || '—', u2 = (c.user2 && c.user2.username) || '—';
@@ -3942,10 +3940,10 @@ async function adminTab(tab, el) {
     content.innerHTML = html;
   } else if (tab === 'withdraws') {
     var res = await db.from('withdrawals').select('*, profiles(username)').order('created_at',{ascending:false});
-    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No withdrawal</div>'; return; }
+    if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucun retrait</div>'; return; }
     var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Utilisateur</span><span>Montant</span><span>Méthode</span><span>Statut</span><span>Actions</span></div>';
     res.data.forEach(function(w) {
-      var badge = w.status === 'approved' ? '<span class="badge-ok">Approved</span>' : w.status === 'rejected' ? '<span class="badge-cancel">Rejected</span>' : '<span class="badge-wait">Pending</span>';
+      var badge = w.status === 'approved' ? '<span class="badge-ok">Approuvé</span>' : w.status === 'rejected' ? '<span class="badge-cancel">Refusé</span>' : '<span class="badge-wait">En attente</span>';
       var actions = w.status === 'pending' ? '<button onclick="adminWithdraw(' + w.id + ',\'approved\',\'' + w.user_id + '\')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Approve</button> <button onclick="adminWithdraw(' + w.id + ',\'rejected\',\'' + w.user_id + '\')" class="btn-sm btn-sm-red" style="font-size:10px">❌ Reject</button>' : '—';
       html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml((w.profiles&&w.profiles.username)||'—') + '<br><span style="font-size:10px;color:var(--muted)">' + escHtml(w.address||'') + '</span></span><span style="color:var(--blue2);font-weight:700">' + parseFloat(w.amount||0).toFixed(2) + '€</span><span style="color:var(--muted)">' + escHtml(w.method||'—') + '</span>' + badge + '<span>' + actions + '</span></div>';
     });
@@ -3977,11 +3975,11 @@ async function adminResolveDispute(orderId, action) {
 }
 
 async function adminDeleteListing(id) {
-  if (!confirm('Delete this listing?')) return;
+  if (!confirm('Supprimer cette annonce ?')) return;
   var r = await db.rpc('admin_delete_listing', { p_id: id });
   if (r.error) { r = await db.from('listings').update({active:false}).eq('id', id); }
   if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
-  showToast('Listing deleted','success');
+  showToast('Annonce supprimée','success');
   adminTab(currentAdminTab); loadListings();
 }
 
@@ -4248,7 +4246,7 @@ init();
     <div class="modal-sub" style="text-align:left;margin-bottom:14px">Only you can see this. Use it to remember where to buy the item (e.g. Eldorado link + price).</div>
     <input type="hidden" id="noteListingId">
     <div class="fg"><textarea id="noteText" rows="4" placeholder="e.g. Bought on Eldorado 1€ — eldorado.gg/..."></textarea></div>
-    <button class="btn-submit" onclick="saveListingNote()">Save note</button>
+    <button class="btn-submit" onclick="saveListingNote()">Enregistrer la note</button>
   </div>
 </div>
 
@@ -4267,7 +4265,7 @@ init();
   <div class="modal">
     <button class="modal-close" onclick="hideModal('partnerModal')">✕</button>
     <div class="modal-h" style="text-align:left">🤝 Partner program</div>
-    <div class="modal-sub" style="text-align:left;margin-bottom:14px">Earn money by bringing buyers to BlooMarket.</div>
+    <div class="modal-sub" style="text-align:left;margin-bottom:14px">Gagne de l'argent en amenant des acheteurs sur BlooMarket.</div>
     <div id="partnerBody"><div style="padding:20px;text-align:center;color:var(--muted)">Loading…</div></div>
   </div>
 </div>
@@ -4276,7 +4274,7 @@ init();
 <div id="welcomePopup" style="display:none;position:fixed;bottom:20px;right:20px;max-width:330px;background:linear-gradient(135deg,#0f1830,#0b1020);border:1px solid rgba(30,111,255,0.4);border-radius:16px;padding:20px;z-index:600;box-shadow:0 18px 50px rgba(0,0,0,0.55)">
   <button onclick="closeWelcome()" style="position:absolute;top:9px;right:11px;background:none;border:none;color:#8aa;cursor:pointer;font-size:16px">✕</button>
   <div style="font-size:30px">🎉</div>
-  <div style="font-weight:800;font-size:16px;margin:6px 0;color:#fff" data-i18n="welcome.title">Welcome to BlooMarket!</div>
+  <div style="font-weight:800;font-size:16px;margin:6px 0;color:#fff" data-i18n="welcome.title">Bienvenue sur BlooMarket !</div>
   <div style="font-size:13px;color:#b6c2d8;margin-bottom:10px" data-i18n="welcome.text">Get 5% off until July 15 with the code:</div>
   <div style="font-weight:800;letter-spacing:3px;font-size:19px;color:#5b9bff;background:rgba(30,111,255,0.12);border:1px dashed rgba(30,111,255,0.5);border-radius:10px;padding:9px;text-align:center;margin-bottom:13px">WELCOME5</div>
   <button onclick="closeWelcome();track('welcome_signup');showModal('registerModal')" style="width:100%;background:linear-gradient(135deg,#1E6FFF,#0050CC);border:none;color:#fff;font-weight:800;padding:11px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif" data-i18n="welcome.cta">🚀 Sign up now</button>
