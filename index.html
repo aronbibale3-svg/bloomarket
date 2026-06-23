@@ -657,7 +657,7 @@ body.auth-loading #userNav{display:none!important}
         <div class="ud-balance">💰 Balance: <span id="dropBalance">0.00</span>€</div>
         <div class="ud-balance" style="color:var(--blue2)" title="Loyalty points (non-convertible)">🔷 <span id="dropBloobux">0</span> Bloobux</div>
         <div class="ud-verify-status unverified" id="udVerifyStatus">⚠ Non vérifié</div>
-        <div class="ud-item" onclick="showPage('profile')">👤 My profile</div>
+        <div class="ud-item" onclick="showPage('profile')">👤 Mon profil</div>
         <div class="ud-item" onclick="openPartner()">🤝 Partner program</div>
         <div class="ud-item" onclick="toggleTheme()">🌙 Light / dark theme</div>
         <div class="ud-item" style="cursor:default;display:flex;align-items:center;gap:8px">🌐 <span data-i18n="menu.language">Langue</span>
@@ -677,18 +677,18 @@ body.auth-loading #userNav{display:none!important}
             <button data-ccy="AUD" class="ud-lang ud-ccy" onclick="event.stopPropagation();setCcy('AUD')">A$ AUD</button>
           </span>
         </div>
-        <div class="ud-item" onclick="showPage('dashboard')">📊 Dashboard</div>
-        <div class="ud-item" onclick="showPage('orders')">📦 My orders</div>
+        <div class="ud-item" onclick="showPage('dashboard')">📊 Tableau de bord</div>
+        <div class="ud-item" onclick="showPage('orders')">📦 Mes commandes</div>
         <div class="ud-item" onclick="showPage('messages')">💬 Messages</div>
-        <div class="ud-item" onclick="openSettings()">⚙️ Settings</div>
+        <div class="ud-item" onclick="openSettings()">⚙️ Réglages</div>
         <div class="ud-sep"></div>
-        <div class="ud-item" id="becomeSellerItem" onclick="openSellerVerify()">🛡️ Become a verified seller</div>
+        <div class="ud-item" id="becomeSellerItem" onclick="openSellerVerify()">🛡️ Devenir vendeur vérifié</div>
         <div class="ud-item" onclick="openShop()">🔷 Bloobux shop</div>
         <div class="ud-item" onclick="openSellModal()">➕ Sell an item</div>
-        <div class="ud-item" onclick="showPage('withdrawPage')">💸 Withdraw funds</div>
+        <div class="ud-item" onclick="showPage('withdrawPage')">💸 Retirer des fonds</div>
         <div id="adminMenuItem" style="display:none"><div class="ud-sep"></div><div class="ud-item" onclick="showPage('adminPage')" style="color:#FBBF24">⚙️ Administration <span id="adminTicketBadge" style="display:none;background:#EF4444;color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:10px;margin-left:6px"></span></div></div>
         <div class="ud-sep"></div>
-        <div class="ud-item" onclick="logout()" style="color:#FCA5A5">🚪 Log out</div>
+        <div class="ud-item" onclick="logout()" style="color:#FCA5A5">🚪 Déconnexion</div>
       </div>
     </div>
   </div>
@@ -702,14 +702,14 @@ body.auth-loading #userNav{display:none!important}
   <div class="hero-banner">
     <div>
       <div class="hb-title" data-i18n="hero.title">💰 Sell your Roblox items safely 🎮</div>
-      <div class="hb-sub" data-i18n="hero.sub">Free listings · Secure Stripe payment · Escrow protection until you receive your item.</div>
+      <div class="hb-sub" data-i18n="hero.sub">Annonces gratuites · Paiement Stripe sécurisé · Protection escrow le temps de recevoir ton article.</div>
       <div class="hb-trust">
-        <span data-i18n="trust.pay">🔒 Secure payments</span>
+        <span data-i18n="trust.pay">🔒 Paiements sécurisés</span>
         <span data-i18n="trust.escrow">🛡️ Anti-scam escrow</span>
-        <span data-i18n="trust.verified">✅ Verified sellers</span>
+        <span data-i18n="trust.verified">✅ Vendeurs vérifiés</span>
         <span data-i18n="trust.support">💬 Responsive support</span>
       </div>
-      <button id="heroSellerBtn" onclick="heroBecomeSeller()" style="margin-top:16px;background:linear-gradient(135deg,#1E6FFF,#0050CC);border:none;color:#fff;font-weight:800;font-size:13px;padding:12px 22px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 6px 18px rgba(30,111,255,0.35)" data-i18n="hero.cta">🚀 Become a seller</button>
+      <button id="heroSellerBtn" onclick="heroBecomeSeller()" style="margin-top:16px;background:linear-gradient(135deg,#1E6FFF,#0050CC);border:none;color:#fff;font-weight:800;font-size:13px;padding:12px 22px;border-radius:10px;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 6px 18px rgba(30,111,255,0.35)" data-i18n="hero.cta">🚀 Devenir vendeur</button>
     </div>
     <div style="font-size:64px;opacity:.7;flex-shrink:0">🛒</div>
   </div>
@@ -741,14 +741,14 @@ body.auth-loading #userNav{display:none!important}
   <div class="filters-bar">
     <select class="filter-select" onchange="applySort(this.value)">
       <option value="created_at">Plus récents</option>
-      <option value="price_asc">Price: low to high</option>
-      <option value="price_desc">Price: high to low</option>
+      <option value="price_asc">Prix : croissant</option>
+      <option value="price_desc">Prix : décroissant</option>
       <option value="oldest">Plus anciens</option>
     </select>
     <input class="filter-input" type="number" id="filterMinPrice" placeholder="Min €" onchange="loadListings()">
     <input class="filter-input" type="number" id="filterMaxPrice" placeholder="Max €" onchange="loadListings()">
-    <label class="filter-check"><input type="checkbox" id="filterVerified" onchange="loadListings()"> ✓ Verified sellers</label>
-    <span class="results-count" id="resultsCount">Loading…</span>
+    <label class="filter-check"><input type="checkbox" id="filterVerified" onchange="loadListings()"> ✓ Vendeurs vérifiés</label>
+    <span class="results-count" id="resultsCount">Chargement…</span>
   </div>
   <div id="listingsLoader" class="loader"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div>
   <div class="listings" id="listingsGrid"></div>
@@ -768,7 +768,7 @@ body.auth-loading #userNav{display:none!important}
     <div style="flex:1;min-width:200px">
       <div style="font-size:20px;font-weight:800;margin-bottom:4px" id="profileDisplayName">-</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px" id="profileEmail">-</div>
-      <div id="profileVerifiedBadge" style="display:none;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#22C55E;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-flex;align-items:center;gap:4px;margin-bottom:12px">✓ Verified seller</div>
+      <div id="profileVerifiedBadge" style="display:none;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#22C55E;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-flex;align-items:center;gap:4px;margin-bottom:12px">✓ Vendeur vérifié</div>
       <div class="profile-stats-row">
         <div class="profile-stat"><div class="profile-stat-n" id="profileStatSales">0</div><div class="profile-stat-l">Ventes</div></div>
         <div class="profile-stat"><div class="profile-stat-n" id="profileStatBuys">0</div><div class="profile-stat-l">Achats</div></div>
@@ -778,7 +778,7 @@ body.auth-loading #userNav{display:none!important}
       </div>
     </div>
     <button class="btn-blue" onclick="showModal('editProfileModal')">✏️ Modifier profil</button>
-    <button class="btn-ghost" onclick="openSettings()" style="margin-left:8px">⚙️ Settings</button>
+    <button class="btn-ghost" onclick="openSettings()" style="margin-left:8px">⚙️ Réglages</button>
   </div>
   <div class="section-title">Parrainage 🎁</div>
   <div class="referral-box" id="referralBox" style="margin-bottom:22px">
@@ -795,7 +795,7 @@ body.auth-loading #userNav{display:none!important}
 <!-- ── DASHBOARD ── -->
 <div id="dashPage" class="page">
   <div class="dash-header">
-    <div><div class="dash-title">Dashboard</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Bienvenue, <span id="dashUsername">-</span></div></div>
+    <div><div class="dash-title">Tableau de bord</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Bienvenue, <span id="dashUsername">-</span></div></div>
     <button class="btn-blue" onclick="openSellModal()">➕ Nouvelle annonce</button>
   </div>
   <div class="wallet-box">
@@ -817,15 +817,15 @@ body.auth-loading #userNav{display:none!important}
     <div id="myListingsBody"><div style="padding:28px;text-align:center;color:var(--muted);font-size:13px">Aucune annonce</div></div>
   </div>
   <div class="section-title">Historique des transactions</div>
-  <div id="transactionHistory"><div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Loading…</div></div>
+  <div id="transactionHistory"><div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Chargement…</div></div>
 </div>
 
 <!-- ── ORDERS ── -->
 <div id="ordersPage" class="page">
-  <div class="dash-header"><div class="dash-title">My orders 📦</div></div>
+  <div class="dash-header"><div class="dash-title">Mes commandes 📦</div></div>
   <div style="display:flex;gap:7px;margin-bottom:16px">
-    <button class="cat-tab active" id="tabBuying" onclick="switchOrderTab('buying')">🛒 My purchases</button>
-    <button class="cat-tab" id="tabSelling" onclick="switchOrderTab('selling')">📤 My sales</button>
+    <button class="cat-tab active" id="tabBuying" onclick="switchOrderTab('buying')">🛒 Mes achats</button>
+    <button class="cat-tab" id="tabSelling" onclick="switchOrderTab('selling')">📤 Mes ventes</button>
   </div>
   <div id="ordersContent"><div class="loader"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div></div>
 </div>
@@ -838,9 +838,9 @@ body.auth-loading #userNav{display:none!important}
 
 <!-- ── WITHDRAW ── -->
 <div id="withdrawPage" class="page">
-  <div class="dash-header"><div class="dash-title">Withdraw funds 💸</div></div>
+  <div class="dash-header"><div class="dash-title">Retirer des fonds 💸</div></div>
   <div class="wallet-box" style="margin-bottom:22px">
-    <div><div class="wallet-label">Solde disponible</div><div class="wallet-amount" id="withdrawBalance">0.00€</div><div class="wallet-sub">Minimum withdrawal: €1</div></div>
+    <div><div class="wallet-label">Solde disponible</div><div class="wallet-amount" id="withdrawBalance">0.00€</div><div class="wallet-sub">Retrait minimum : 1€</div></div>
   </div>
   <div style="max-width:480px">
     <div class="fg"><label>Méthode de retrait</label><input type="text" value="🏦 Bank transfer (IBAN)" readonly style="opacity:.75;cursor:default"></div>
@@ -971,9 +971,9 @@ body.auth-loading #userNav{display:none!important}
     <div style="text-align:center">
       <div style="font-size:46px;margin-bottom:4px">📧</div>
       <div class="modal-h" data-i18n="auth.check.title">Vérifie tes emails</div>
-      <div class="modal-sub" data-i18n="auth.check.sub">We sent you a confirmation link. Click it to activate your account — you'll be brought back here and logged in automatically.</div>
+      <div class="modal-sub" data-i18n="auth.check.sub">Lien de confirmation envoyé. Clique dessus pour activer ton compte — tu reviendras ici et seras connecté automatiquement.</div>
       <button class="btn-submit" onclick="hideModal('checkEmailModal')" data-i18n="auth.check.ok">Compris</button>
-      <p class="sw" style="margin-top:10px;color:var(--muted)" data-i18n="auth.check.tip">Tip: check your spam folder if you don't see it.</p>
+      <p class="sw" style="margin-top:10px;color:var(--muted)" data-i18n="auth.check.tip">Astuce : vérifie tes spams si tu ne le vois pas.</p>
     </div>
   </div>
 </div>
@@ -1046,7 +1046,7 @@ body.auth-loading #userNav{display:none!important}
       <label>Photos (1 minimum — 5 max)</label>
       <div class="img-upload-zone" onclick="document.getElementById('sellImages').click()">
         <div class="ico">📷</div>
-        <p>Click to add a photo (at least 1)</p>
+        <p>Clique pour ajouter une photo (au moins 1)</p>
         <p style="font-size:11px;margin-top:4px;color:var(--muted)">JPG, PNG — max 5 MB each</p>
       </div>
       <input type="file" id="sellImages" accept="image/*" multiple style="display:none" onchange="previewSellImages(this)">
@@ -1061,7 +1061,7 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="editProfileModal" onclick="closeOnBg(event,'editProfileModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('editProfileModal')">✕</button>
-    <div class="modal-h">Edit my profile ✏️</div>
+    <div class="modal-h">Modifier mon profil ✏️</div>
     <div id="editProfileAlert"></div>
     <div class="fg"><label>Pseudo</label><input type="text" id="editUsername" placeholder="Ton pseudo"></div>
     <div class="fg"><label>Bio</label><textarea id="editBio" placeholder="Parle un peu de toi (max 200 caractères)…" maxlength="200"></textarea></div>
@@ -1087,7 +1087,7 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="settingsModal" onclick="closeOnBg(event,'settingsModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('settingsModal')">✕</button>
-    <div class="modal-h">Account settings ⚙️</div>
+    <div class="modal-h">Réglages du compte ⚙️</div>
     <div id="settingsAlert"></div>
     <div class="settings-section">
       <div class="settings-label">🔐 Change password</div>
@@ -1096,10 +1096,10 @@ body.auth-loading #userNav{display:none!important}
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
-      <div class="settings-label">🔐 Two-factor authentication (2FA)</div>
+      <div class="settings-label">🔐 Double authentification (2FA)</div>
       <p class="settings-desc">Add a temporary code (Google Authenticator, Authy…) on top of your password.</p>
       <div id="mfaAlert"></div>
-      <div id="mfaStatus" class="settings-desc">Loading…</div>
+      <div id="mfaStatus" class="settings-desc">Chargement…</div>
       <div id="mfaEnrollBox" style="display:none">
         <div style="text-align:center;margin:10px 0"><img id="mfaQr" alt="QR 2FA" style="width:168px;height:168px;background:#fff;border-radius:10px;padding:6px"></div>
         <p class="settings-desc">Scan the QR, or enter the key: <code id="mfaSecret" style="color:var(--blue2);font-size:11px;word-break:break-all"></code></p>
@@ -1110,21 +1110,21 @@ body.auth-loading #userNav{display:none!important}
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
-      <div class="settings-label">💻 Sessions &amp; devices</div>
-      <p class="settings-desc">Your last 5 logins.</p>
+      <div class="settings-label">💻 Sessions &amp; appareils</div>
+      <p class="settings-desc">Tes 5 dernières connexions.</p>
       <div id="loginHistoryBox" class="settings-desc">—</div>
       <button class="btn-ghost" style="width:100%;margin-top:10px" onclick="logoutAllSessions()">Déconnecter toutes les sessions</button>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
-      <div class="settings-label">⏸️ Deactivate account</div>
-      <p class="settings-desc">Your profile and listings will be hidden. You can reactivate at your next login.</p>
+      <div class="settings-label">⏸️ Désactiver le compte</div>
+      <p class="settings-desc">Ton profil et tes annonces seront masqués. Tu peux réactiver à ta prochaine connexion.</p>
       <button class="btn-ghost" style="width:100%" onclick="deactivateAccount()">Désactiver mon compte</button>
     </div>
     <div class="settings-divider"></div>
     <div class="settings-section">
-      <div class="settings-label" style="color:#FCA5A5">🗑️ Delete account</div>
-      <p class="settings-desc">Cette action est <strong>permanente</strong>: account, listings and data deleted. Type <strong>DELETE</strong> to confirm.</p>
+      <div class="settings-label" style="color:#FCA5A5">🗑️ Supprimer le compte</div>
+      <p class="settings-desc">Cette action est <strong>permanente</strong>: compte, annonces et données supprimés. Tape <strong>DELETE</strong> to confirm.</p>
       <div class="fg"><input type="text" id="deleteConfirmInput" placeholder="Tape DELETE" autocomplete="off"></div>
       <button class="btn-danger" style="width:100%" onclick="deleteAccount()">Supprimer définitivement</button>
     </div>
@@ -1147,7 +1147,7 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="promoteModal" onclick="closeOnBg(event,'promoteModal')">
   <div class="modal">
     <button class="modal-close" onclick="hideModal('promoteModal')">✕</button>
-    <div class="modal-h">Promote listing 🚀</div>
+    <div class="modal-h">Promouvoir cette annonce 🚀</div>
     <div class="modal-sub">Your listing goes to the top of results with a ⭐ Sponsored badge.</div>
     <div id="promoteAlert"></div>
     <p class="settings-desc">💳 Paid securely by card — your listing jumps to the top with a ⭐ Sponsored badge.</p>
@@ -1195,8 +1195,8 @@ body.auth-loading #userNav{display:none!important}
     </div>
     <div class="fg"><label>Montant (€)</label><input type="number" id="fundsAmount" placeholder="Montant personnalisé" min="1" step="1"></div>
     <div class="fg"><label>Carte</label><div id="card-element"></div><div id="card-errors" style="color:#FCA5A5;font-size:11px;margin-top:6px"></div></div>
-    <button class="btn-submit" id="payBtn" onclick="handleStripePayment()">💳 Pay now</button>
-    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:10px">🔒 100% secure payment · SSL · Stripe</p>
+    <button class="btn-submit" id="payBtn" onclick="handleStripePayment()">💳 Payer maintenant</button>
+    <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:10px">🔒 Paiement 100% sécurisé · SSL · Stripe</p>
   </div>
 </div>
 
@@ -1218,7 +1218,7 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="payModal" onclick="closeOnBg(event,'payModal')">
   <div class="modal" style="max-width:440px">
     <button class="modal-close" onclick="hideModal('payModal')">✕</button>
-    <div class="modal-h">Secure payment 🔒</div>
+    <div class="modal-h">Paiement sécurisé 🔒</div>
     <div class="modal-sub">Carte · Apple Pay · Google Pay</div>
     <div class="pay-summary-box">
       <div class="ps-row"><span id="payItemTitle">Article</span><span id="paySubtotal">0.00€</span></div>
@@ -1233,7 +1233,7 @@ body.auth-loading #userNav{display:none!important}
     </div>
     <div id="pay-element" style="margin:14px 0"></div>
     <div id="pay-errors" style="color:#FCA5A5;font-size:12px;margin-bottom:10px"></div>
-    <button class="btn-submit" id="payNowBtn" onclick="submitPayElement()">Pay</button>
+    <button class="btn-submit" id="payNowBtn" onclick="submitPayElement()">Payer</button>
     <p style="font-size:10px;color:var(--muted);text-align:center;margin-top:10px">🔒 100% secure · Stripe · no balance top-up needed</p>
   </div>
 </div>
@@ -1242,7 +1242,7 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="reviewModal" onclick="closeOnBg(event,'reviewModal')">
   <div class="modal" style="max-width:380px">
     <button class="modal-close" onclick="hideModal('reviewModal')">✕</button>
-    <div class="modal-h">Leave a review ⭐</div>
+    <div class="modal-h">Laisser un avis ⭐</div>
     <div class="modal-sub">Comment s'est passée la transaction ?</div>
     <div id="reviewAlert"></div>
     <div class="review-stars" id="reviewStars">
@@ -1263,7 +1263,7 @@ body.auth-loading #userNav{display:none!important}
 <div class="overlay" id="sellerVerifyModal" onclick="closeOnBg(event,'sellerVerifyModal')">
   <div class="modal" style="max-width:460px">
     <button class="modal-close" onclick="hideModal('sellerVerifyModal')">✕</button>
-    <div class="modal-h">Become a verified seller 🛡️</div>
+    <div class="modal-h">Devenir vendeur vérifié 🛡️</div>
     <div class="modal-sub">Vérification manuelle par notre équipe (KYC)</div>
     <div id="sellerVerifyAlert"></div>
     <div class="sv-steps">
@@ -1601,7 +1601,7 @@ async function openPartner() {
   if (!currentUser) { showModal('loginModal'); return; }
   showModal('partnerModal');
   var body = document.getElementById('partnerBody');
-  body.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Loading…</div>';
+  body.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Chargement…</div>';
   var r = await db.rpc('partner_stats');
   if (r.error || !r.data) { body.innerHTML = '<div style="padding:14px;color:#FCA5A5;font-size:13px">Run bloomarket_FINAL.sql in Supabase to enable the partner program.</div>'; return; }
   var d = r.data;
@@ -1619,14 +1619,14 @@ async function openPartner() {
     + '<div style="display:flex;gap:8px"><input readonly value="' + link + '" id="partnerLink" style="flex:1;font-size:12px"><button onclick="copyPartnerLink()" style="background:rgba(30,111,255,0.2);border:1px solid rgba(30,111,255,0.4);color:#7fb0ff;padding:0 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700">Copier</button></div></div>'
     + (d.promo ? '<div style="background:rgba(123,63,240,0.1);border:1px solid rgba(123,63,240,0.35);border-radius:10px;padding:12px;margin-bottom:14px"><div style="font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:.5px">YOUR PROMO CODE (-5% for your fans)</div><div style="display:flex;gap:8px;align-items:center"><div style="flex:1;font-weight:800;letter-spacing:2px;font-size:17px;color:#b794ff">' + d.promo + '</div><button onclick="copyText(\'' + d.promo + '\')" style="background:rgba(123,63,240,0.2);border:1px solid rgba(123,63,240,0.45);color:#b794ff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700">Copier</button></div></div>' : '')
     + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'
-    + partnerStatCard('Clicks', d.clicks || 0)
-    + partnerStatCard('Sign-ups', d.referrals || 0)
-    + partnerStatCard('Sales', d.sales || 0)
-    + partnerStatCard('Pending', (Number(d.pending) || 0).toFixed(2) + '€')
-    + partnerStatCard('Paid', (Number(d.paid) || 0).toFixed(2) + '€')
+    + partnerStatCard('Clics', d.clicks || 0)
+    + partnerStatCard('Inscriptions', d.referrals || 0)
+    + partnerStatCard('Ventes', d.sales || 0)
+    + partnerStatCard('En attente', (Number(d.pending) || 0).toFixed(2) + '€')
+    + partnerStatCard('Payé', (Number(d.paid) || 0).toFixed(2) + '€')
     + '</div>'
     + '<div style="font-size:12px;color:var(--muted);margin-bottom:12px">Tu gagnes <strong style="color:#7fb0ff">' + (d.rate || 25) + '%</strong> of our commission on each sale from your referrals.</div>'
-    + '<button class="btn-submit" onclick="requestPayout()">Request payout (min €10)</button>'
+    + '<button class="btn-submit" onclick="requestPayout()">Demander un paiement (min 10€)</button>'
     + '<div id="partnerReferrals" style="margin-top:16px"></div>';
   loadPartnerReferrals();
 }
@@ -1665,9 +1665,9 @@ async function submitPartnerApplication(){
   var age = document.getElementById('paAge').checked;
   if (!channel) { showToast('Lien de chaîne requis','error'); return; }
   if (!age) { showToast('Tu dois confirmer que tu as 18 ans ou plus','error'); return; }
-  setBtn('paBtn', true, 'Sending…');
+  setBtn('paBtn', true, 'Envoi…');
   var r = await db.rpc('apply_partner', { p_platform:platform, p_channel:channel, p_followers:followers, p_reason:reason, p_age:age });
-  setBtn('paBtn', false, 'Send my application');
+  setBtn('paBtn', false, 'Envoyer ma candidature');
   if (r.error) { showToast(rpcMsg(r.error),'error'); return; }
   showToast('Candidature envoyée ✅ On la regarde bientôt.','success');
   openPartner();
@@ -1684,7 +1684,7 @@ async function adminViewPartner(uid, name) {
   showModal('partnerDetailModal');
   document.getElementById('partnerDetailName').textContent = name || '';
   var body = document.getElementById('partnerDetailBody');
-  body.innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted)">Loading…</div>';
+  body.innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted)">Chargement…</div>';
   var s = await db.rpc('admin_partner_summary', { p_partner: uid });
   var r = await db.rpc('admin_partner_referrals', { p_partner: uid });
   if (s.error) { body.innerHTML = '<div style="padding:14px;color:#FCA5A5;font-size:13px">' + rpcMsg(s.error) + '</div>'; return; }
@@ -1694,8 +1694,8 @@ async function adminViewPartner(uid, name) {
     ? list.map(function(u){ return '<div style="display:flex;justify-content:space-between;padding:7px 10px;border-bottom:1px solid var(--border);font-size:12px"><span>' + escHtml(u.username||'user') + '</span><span style="color:var(--muted)">' + (u.purchases||0) + ' buys · ' + (Number(u.spent)||0).toFixed(2) + '€</span></div>'; }).join('')
     : '<div style="padding:10px;color:var(--muted);font-size:12px;text-align:center">Aucun filleul pour le moment.</div>';
   body.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">'
-    + partnerStatCard('Clicks', d.clicks||0) + partnerStatCard('Sign-ups', d.referrals||0)
-    + partnerStatCard('Sales', d.sales||0) + partnerStatCard('Pending', (Number(d.pending)||0).toFixed(2)+'€')
+    + partnerStatCard('Clics', d.clicks||0) + partnerStatCard('Inscriptions', d.referrals||0)
+    + partnerStatCard('Ventes', d.sales||0) + partnerStatCard('En attente', (Number(d.pending)||0).toFixed(2)+'€')
     + '</div><div style="font-size:11px;color:var(--muted);letter-spacing:.5px;margin-bottom:6px">FILLEULS</div>' + rows;
 }
 async function adminRevokePartner(id) {
@@ -1959,9 +1959,9 @@ async function doLogin() {
   var email = document.getElementById('loginEmail').value.trim();
   var pwd = document.getElementById('loginPassword').value;
   if (!email || !pwd) return showAlert('loginAlert','error','Remplis tous les champs !');
-  setBtn('loginBtn', true, 'Signing in…');
+  setBtn('loginBtn', true, 'Connexion…');
   var res = await db.auth.signInWithPassword({email, password: pwd});
-  setBtn('loginBtn', false, 'Sign in');
+  setBtn('loginBtn', false, 'Se connecter');
   if (res.error) return showAlert('loginAlert','error','Email ou mot de passe incorrect.');
   try {
     var aal = await db.auth.mfa.getAuthenticatorAssuranceLevel();
@@ -2010,9 +2010,9 @@ var pendingRegEmail = '';
 async function verifyRegisterCode() {
   var code = (document.getElementById('confirmCode').value || '').trim();
   if (code.length < 4) return showAlert('confirmEmailAlert','error','Entre le code à 6 chiffres.');
-  setBtn('confirmEmailBtn', true, 'Verifying…');
+  setBtn('confirmEmailBtn', true, 'Vérification…');
   var res = await db.auth.verifyOtp({ email: pendingRegEmail, token: code, type: 'signup' });
-  setBtn('confirmEmailBtn', false, 'Verify');
+  setBtn('confirmEmailBtn', false, 'Vérifier');
   if (res.error) return showAlert('confirmEmailAlert','error','Code incorrect ou expiré.');
   hideModal('confirmEmailModal');
   showToast('Email vérifié ✅ Bienvenue !','success');
@@ -2336,7 +2336,7 @@ async function adminSupport(el) {
   document.querySelectorAll('.admin-tab').forEach(function(t){ t.classList.remove('active'); });
   if (el) el.classList.add('active');
   var content = document.getElementById('adminContent');
-  content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Loading…</div>';
+  content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Chargement…</div>';
   var res = await db.from('support_tickets').select('*').order('created_at',{ascending:false}).limit(100);
   if (res.error) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Run the support_tickets SQL to view reports and AI escalations.</div>'; return; }
   if (!res.data || !res.data.length) { content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">Aucun signalement.</div>'; return; }
@@ -2363,7 +2363,7 @@ async function openTicket(id) {
   var c = document.getElementById('ticketContent');
   c.innerHTML = '<p class="settings-desc" style="margin-bottom:10px">' + typeLabel + ' · ' + new Date(tk.created_at).toLocaleString('en-GB') + '</p>'
     + '<div class="fg"><label>Utilisateur</label><div style="font-weight:600">' + escHtml(uname) + '</div></div>'
-    + '<div class="fg"><label>Email</label><div id="ticketEmail" style="color:var(--blue2);font-size:13px">Loading…</div></div>'
+    + '<div class="fg"><label>Email</label><div id="ticketEmail" style="color:var(--blue2);font-size:13px">Chargement…</div></div>'
     + '<div class="fg"><label>Message</label><div style="white-space:pre-wrap;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:11px;font-size:13px;line-height:1.5">' + escHtml(tk.message || '') + '</div></div>'
     + '<div style="display:flex;gap:8px;margin-top:14px">'
     + '<button class="btn-submit" style="flex:1;margin:0" onclick="openTicketReply(\'' + tk.user_id + '\',\'' + escHtml(uname).replace(/[\'\\]/g,"") + '\')">💬 Reply in chat</button>'
@@ -2706,7 +2706,7 @@ function openDetail(l) {
   html += '<div class="ld-title">' + escHtml(l.title) + '</div>';
   html += '<div class="ld-meta"><span class="ld-badge">' + escHtml(l.game) + '</span>';
   if (rar) html += '<span class="ld-rarity-tag" style="background:' + rarityColor(rar) + '">' + escHtml(rar) + '</span>';
-  if (verified) html += '<span class="ld-badge" style="color:var(--blue2);border-color:rgba(30,111,255,0.3)">✓ Verified seller</span>';
+  if (verified) html += '<span class="ld-badge" style="color:var(--blue2);border-color:rgba(30,111,255,0.3)">✓ Vendeur vérifié</span>';
   html += '</div>';
   if (aline) html += '<div class="ld-stock-info">📋 ' + escHtml(aline) + '</div>';
   if (stock !== null) html += '<div class="ld-stock-info"' + (stock <= 0 ? ' style="color:var(--red)"' : '') + '>' + (stock <= 0 ? '❌ Rupture de stock' : ('📦 En stock : ' + stock)) + '</div>';
@@ -2715,7 +2715,7 @@ function openDetail(l) {
   var avatarInner = (l.profiles && l.profiles.avatar_url) ? '<img src="' + escHtml(l.profiles.avatar_url) + '">' : avLetter;
   html += '<div class="ld-seller-box" style="cursor:pointer" onclick="showSellerProfile(\'' + l.user_id + '\')">';
   html += '<div class="ld-seller-avatar">' + avatarInner + '</div>';
-  html += '<div class="ld-seller-info"><h4>' + escHtml(seller) + (verified ? ' <span class="verified-icon">✓</span>' : '') + '</h4><p>View seller profile →</p></div>';
+  html += '<div class="ld-seller-info"><h4>' + escHtml(seller) + (verified ? ' <span class="verified-icon">✓</span>' : '') + '</h4><p>Voir le profil du vendeur →</p></div>';
   if (!isOwn) html += '<button class="btn-msg" style="margin-left:auto" onclick="event.stopPropagation();openChat(\'' + l.user_id + '\',\'' + escHtml(seller) + '\',' + l.id + ')">💬 Contact</button>';
   html += '</div>';
   html += '<div class="ld-price-row"><div class="ld-price">' + fmtPrice(l.price) + '</div></div>';
@@ -2785,7 +2785,7 @@ async function showSellerProfile(userId) {
       h += '<div class="section-title">Annonces actives</div><div class="listings" id="spListings"></div>';
     }
     if (reviews.length) {
-      h += '<div class="section-title" style="margin-top:16px">Reviews (' + reviews.length + ')</div>';
+      h += '<div class="section-title" style="margin-top:16px">Avis (' + reviews.length + ')</div>';
       reviews.forEach(function(rv) {
         var bn = (rv.buyer && rv.buyer.username) || 'Acheteur';
         var dd = new Date(rv.created_at).toLocaleDateString('fr-FR');
@@ -3015,8 +3015,8 @@ function updatePayTotals(){
   }
 }
 async function initPay(amount){
-  document.getElementById('pay-element').innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted);font-size:13px">Loading payment…</div>';
-  setBtn('payNowBtn', true, 'Loading…');
+  document.getElementById('pay-element').innerHTML = '<div style="padding:18px;text-align:center;color:var(--muted);font-size:13px">Chargement du paiement…</div>';
+  setBtn('payNowBtn', true, 'Chargement…');
   try {
     var res = await fetch('/api/create-payment', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ amount: amount, userId: currentUser.id, buyerId: currentUser.id, kind: payContext.kind, listingIds: (payContext.listingIds||[]).join(',') }) });
     var txt = await res.text(); var data;
@@ -3027,10 +3027,10 @@ async function initPay(amount){
     var pe = payElements.create('payment', { layout:'tabs' });
     document.getElementById('pay-element').innerHTML = '';
     pe.mount('#pay-element');
-    setBtn('payNowBtn', false, 'Pay ' + amount.toFixed(2) + '€');
+    setBtn('payNowBtn', false, 'Payer ' + amount.toFixed(2) + '€');
   } catch(e){
     document.getElementById('pay-errors').textContent = e.message || 'Payment error';
-    setBtn('payNowBtn', false, 'Retry');
+    setBtn('payNowBtn', false, 'Réessayer');
   }
 }
 async function applyPromoCode(){
@@ -3234,11 +3234,11 @@ async function openSellerVerify() {
   var pend = await db.from('seller_requests').select('id,status').eq('user_id', currentUser.id).order('created_at',{ascending:false}).limit(1);
   showModal('sellerVerifyModal');
   if (pend.data && pend.data.length && pend.data[0].status === 'pending') {
-    if (al) al.innerHTML = '<div style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.35);color:#FBBF24;padding:12px;border-radius:9px;font-size:13px">⏳ Your seller request has been sent and is <strong>en attente de validation</strong>. You can start selling as soon as an admin approves it.</div>';
+    if (al) al.innerHTML = '<div style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.35);color:#FBBF24;padding:12px;border-radius:9px;font-size:13px">⏳ Your seller request has been sent and is <strong>en attente de validation</strong>. Tu pourras vendre dès validation par un admin.</div>';
     if (b) { b.disabled = true; b.textContent = 'Pending validation…'; b.style.opacity = '0.6'; b.style.cursor = 'not-allowed'; }
   } else {
     if (al) al.innerHTML = '';
-    if (b) { b.disabled = false; b.textContent = 'Send my request'; b.style.opacity = ''; b.style.cursor = ''; }
+    if (b) { b.disabled = false; b.textContent = 'Envoyer ma demande'; b.style.opacity = ''; b.style.cursor = ''; }
   }
 }
 function quickSell() { if (!currentUser) { showModal('loginModal'); return; } openSellModal(); }
@@ -3353,7 +3353,7 @@ async function handleStripePayment() {
   if (!currentUser) { hideModal('addFundsModal'); showModal('loginModal'); return; }
   var amount = parseFloat(document.getElementById('fundsAmount').value);
   if (!amount || amount < 1) return showAlert('fundsAlert','error','Montant minimum : 1€');
-  setBtn('payBtn', true, 'Processing…');
+  setBtn('payBtn', true, 'Traitement…');
   document.getElementById('card-errors').textContent = '';
   try {
     var res = await fetch('/api/create-payment', {
@@ -3387,7 +3387,7 @@ async function handleStripePayment() {
   } catch(e) {
     document.getElementById('card-errors').textContent = e.message;
   }
-  setBtn('payBtn', false, '💳 Pay now');
+  setBtn('payBtn', false, '💳 Payer maintenant');
 }
 
 /* ══ DASHBOARD ══ */
@@ -3497,7 +3497,7 @@ async function loadOrders() {
         var _h = Math.floor(_rem/3600000), _m = Math.floor((_rem%3600000)/60000);
         deadlineHtml = '<div class="order-deadline">⏳ Delivery within 24h — <strong>' + _h + 'h ' + _m + 'm</strong></div>';
       } else {
-        deadlineHtml = '<div class="order-deadline late">⏰ 24h deadline passed' + (currentOrderTab === 'selling' ? ' — deliver asap!' : '') + '</div>';
+        deadlineHtml = '<div class="order-deadline late">⏰ Délai 24h dépassé' + (currentOrderTab === 'selling' ? ' — livre vite !' : '') + '</div>';
       }
     }
     var statusHtml = o.status === 'pending' ? '<span class="badge-wait">🔒 Escrow</span>' :
@@ -3508,12 +3508,12 @@ async function loadOrders() {
     var actions = '';
     if (currentOrderTab === 'buying' && o.status === 'pending') {
       actions += '<button class="btn-sm btn-sm-ghost" onclick="openChat(\'' + (o.seller_id||'') + '\',\'' + escHtml(other) + '\',' + (o.listing_id||0) + ')">💬 Chat</button>';
-      actions += '<button class="btn-sm btn-sm-green" onclick="confirmOrder(' + o.id + ',\'' + o.seller_id + '\')">✅ Confirm receipt</button>';
+      actions += '<button class="btn-sm btn-sm-green" onclick="confirmOrder(' + o.id + ',\'' + o.seller_id + '\')">✅ Confirmer la réception</button>';
       actions += '<button class="btn-sm btn-sm-red" onclick="openDispute(' + o.id + ')">⚖️ Signaler un problème</button>';
     } else if (currentOrderTab === 'selling' && o.status === 'pending') {
       actions += '<button class="btn-sm btn-sm-ghost" onclick="openChat(\'' + (o.buyer_id||'') + '\',\'' + escHtml(other) + '\',' + (o.listing_id||0) + ')">💬 Chat</button>';
     } else if (o.status === 'completed' && currentOrderTab === 'buying' && !o.reviewed) {
-      actions += '<button class="btn-sm btn-sm-blue" onclick="openReviewModal(' + o.id + ',\'' + o.seller_id + '\')">⭐ Leave a review</button>';
+      actions += '<button class="btn-sm btn-sm-blue" onclick="openReviewModal(' + o.id + ',\'' + o.seller_id + '\')">⭐ Laisser un avis</button>';
     }
     if (currentOrderTab === 'buying' && o.status === 'pending' && _rem <= 0) {
       actions += '<button class="btn-sm btn-sm-red" onclick="claimLateRefund(' + o.id + ')">↩️ Request a refund</button>';
@@ -3776,12 +3776,12 @@ async function submitReview() {
   var orderId = document.getElementById('reviewOrderId').value;
   var sellerId = document.getElementById('reviewSellerId').value;
   var comment = document.getElementById('reviewComment').value.trim();
-  setBtn('reviewBtn', true, 'Loading…');
+  setBtn('reviewBtn', true, 'Chargement…');
   var res = await db.from('reviews').insert({order_id:orderId, seller_id:sellerId, buyer_id:currentUser.id, rating:reviewRating, comment});
   if (!res.error) await db.from('orders').update({reviewed:true}).eq('id', orderId);
   setBtn('reviewBtn', false, 'Post review');
   if (res.error) return showAlert('reviewAlert','error','Error: ' + res.error.message);
-  await addNotification(sellerId, '⭐', 'New review received', 'You received a review ' + reviewRating + '/5.');
+  await addNotification(sellerId, '⭐', 'Nouvel avis reçu', 'Tu as reçu un avis ' + reviewRating + '/5.');
   hideModal('reviewModal');
   showToast('Review posted! Thank you ⭐','success');
   loadOrders();
@@ -3796,7 +3796,7 @@ async function requestWithdraw() {
   var iban = document.getElementById('wdIban').value.trim().replace(/\s+/g,' ');
   var bic = document.getElementById('wdBic').value.trim();
   if (!amount || amount < 1) return showAlert('withdrawAlert','error','Montant minimum : 1€');
-  if (!name) return showAlert('withdrawAlert','error','Enter the account holder full name.');
+  if (!name) return showAlert('withdrawAlert','error','Entre le nom complet du titulaire du compte.');
   if (!iban || iban.replace(/\s/g,'').length < 14) return showAlert('withdrawAlert','error','Enter a valid IBAN.');
   var balance = parseFloat(userProfile ? userProfile.balance : 0);
   if (balance < amount) return showAlert('withdrawAlert','error','Insufficient balance (' + balance.toFixed(2) + '€)');
@@ -3855,7 +3855,7 @@ async function adminTab(tab, el) {
     var html = '<div class="admin-table"><div class="admin-table-header" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span>Pseudo</span><span>Solde</span><span>Vérifié</span><span>Inscrit</span><span>Actions</span></div>';
     res.data.forEach(function(u) {
       html += '<div class="admin-table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr"><span style="font-weight:600">' + escHtml(u.username||'—') + (u.banned ? ' <span style="color:#FCA5A5;font-size:10px">🚫 banni</span>' : '') + '</span><span style="color:var(--blue2)">' + parseFloat(u.balance||0).toFixed(2) + '€</span><span>' + (u.id_verified ? '✅' : '—') + '</span><span style="color:var(--muted)">' + new Date(u.created_at).toLocaleDateString('fr-FR') + '</span><span style="display:flex;gap:5px">';
-      html += '<button onclick="adminVerifyUser(\'' + u.id + '\',' + !u.id_verified + ')" class="btn-sm" style="background:rgba(34,197,94,0.1);color:#22C55E;border:1px solid rgba(34,197,94,0.2);font-size:10px">' + (u.id_verified ? 'Remove' : 'Verify') + '</button>';
+      html += '<button onclick="adminVerifyUser(\'' + u.id + '\',' + !u.id_verified + ')" class="btn-sm" style="background:rgba(34,197,94,0.1);color:#22C55E;border:1px solid rgba(34,197,94,0.2);font-size:10px">' + (u.id_verified ? 'Retirer' : 'Vérifier') + '</button>';
       html += '<button onclick="adminBanUser(\'' + u.id + '\',' + !u.banned + ')" class="btn-sm btn-sm-red" style="font-size:10px">' + (u.banned ? 'Débannir' : 'Bannir') + '</button>';
       html += '</span></div>';
     });
@@ -3904,7 +3904,7 @@ async function adminTab(tab, el) {
     res.data.forEach(function(dp) {
       var o = dp.orders || {};
       var sbadge = dp.status === 'open' ? '<span class="badge-wait">Ouvert</span>' : dp.status === 'resolved_refund' ? '<span class="badge-cancel">Remboursé</span>' : '<span class="badge-ok">Versé au vendeur</span>';
-      var acts = dp.status === 'open' ? '<button onclick="adminResolveDispute(' + dp.order_id + ',\'refund\')" class="btn-sm btn-sm-red" style="font-size:10px">↩️ Refund</button> <button onclick="adminResolveDispute(' + dp.order_id + ',\'release\')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Pay seller</button>' : '—';
+      var acts = dp.status === 'open' ? '<button onclick="adminResolveDispute(' + dp.order_id + ',\'refund\')" class="btn-sm btn-sm-red" style="font-size:10px">↩️ Refund</button> <button onclick="adminResolveDispute(' + dp.order_id + ',\'release\')" class="btn-sm btn-sm-green" style="font-size:10px">✅ Payer le vendeur</button>' : '—';
       html += '<div class="admin-table-row" style="grid-template-columns:1.5fr 2fr 1fr 1.4fr"><span style="font-weight:600">' + escHtml(o.title || ('#' + dp.order_id)) + '<br><span style="font-size:10px;color:var(--blue2)">' + parseFloat(o.price || 0).toFixed(2) + '€</span></span><span style="color:var(--muted2);font-size:11px">' + escHtml(dp.reason || '') + '</span>' + sbadge + '<span>' + acts + '</span></div>';
     });
     html += '</div>';
@@ -3992,7 +3992,7 @@ async function adminToggleListing(id, active) {
 }
 
 async function adminBanUser(userId, banned) {
-  if (!confirm(banned ? 'Ban this user? Their listings will be removed from sale.' : 'Débannir cet utilisateur ?')) return;
+  if (!confirm(banned ? 'Bannir cet utilisateur ? Ses annonces seront retirées de la vente.' : 'Débannir cet utilisateur ?')) return;
   var r = await db.rpc('admin_ban_user', { p_user_id: userId, p_banned: banned });
   if (r.error) { showToast('Error: ' + rpcMsg(r.error), 'error'); return; }
   showToast(banned ? 'Utilisateur banni 🚫' : 'Utilisateur débanni ✅','success');
@@ -4162,7 +4162,7 @@ async function submitSellerVerify() {
   if (!currentUser) return showModal('loginModal');
   if (!document.getElementById('svAge').checked) return showAlert('sellerVerifyAlert','error','You must certify you are 18 or older.');
   if (!svIdFile) return showAlert('sellerVerifyAlert','error','Add a photo of your ID document.');
-  setBtn('svBtn', true, 'Sending…');
+  setBtn('svBtn', true, 'Envoi…');
   var phone = document.getElementById('svPhone').value.trim();
   var path = null;
   try {
@@ -4173,7 +4173,7 @@ async function submitSellerVerify() {
   } catch(e) { path = null; }
   var ins = await db.from('seller_requests').insert({user_id:currentUser.id, id_card_url:path, phone:phone, age_confirmed:true, status:'pending'});
   if (phone) db.from('profiles').update({phone:phone, age_confirmed:true}).eq('id', currentUser.id).then(function(){});
-  setBtn('svBtn', false, 'Send my request');
+  setBtn('svBtn', false, 'Envoyer ma demande');
   if (ins.error) return showAlert('sellerVerifyAlert','error','Error: ' + ins.error.message);
   hideModal('sellerVerifyModal');
   showToast('Request sent ✅ Reply after review by the admin','success');
@@ -4206,9 +4206,9 @@ function renderShop() {
   var hasP = userProfile && userProfile.premium_badge;
   var h = '';
   h += shopItem('premium_badge', '', '👑 Premium badge', 'A crown on your profile and listings', 50, bx, hasP);
-  h += shopItem('color', '#3D8BFF', '🔵 Blue username', 'Show your username in blue', 30, bx, false);
-  h += shopItem('color', '#22C55E', '🟢 Green username', 'Show your username in green', 30, bx, false);
-  h += shopItem('color', '#FBBF24', '🟡 Gold username', 'Show your username in gold', 30, bx, false);
+  h += shopItem('color', '#3D8BFF', '🔵 Blue username', 'Afficher ton pseudo en bleu', 30, bx, false);
+  h += shopItem('color', '#22C55E', '🟢 Green username', 'Afficher ton pseudo en vert', 30, bx, false);
+  h += shopItem('color', '#FBBF24', '🟡 Gold username', 'Afficher ton pseudo en or', 30, bx, false);
   document.getElementById('shopList').innerHTML = h;
 }
 function shopItem(perk, value, title, desc, cost, bx, owned) {
@@ -4256,7 +4256,7 @@ init();
     <button class="modal-close" onclick="hideModal('partnerDetailModal')">✕</button>
     <div class="modal-h" style="text-align:left">👤 Partner detail</div>
     <div class="modal-sub" style="text-align:left;margin-bottom:14px" id="partnerDetailName">—</div>
-    <div id="partnerDetailBody"><div style="padding:18px;text-align:center;color:var(--muted)">Loading…</div></div>
+    <div id="partnerDetailBody"><div style="padding:18px;text-align:center;color:var(--muted)">Chargement…</div></div>
   </div>
 </div>
 
@@ -4266,7 +4266,7 @@ init();
     <button class="modal-close" onclick="hideModal('partnerModal')">✕</button>
     <div class="modal-h" style="text-align:left">🤝 Partner program</div>
     <div class="modal-sub" style="text-align:left;margin-bottom:14px">Gagne de l'argent en amenant des acheteurs sur BlooMarket.</div>
-    <div id="partnerBody"><div style="padding:20px;text-align:center;color:var(--muted)">Loading…</div></div>
+    <div id="partnerBody"><div style="padding:20px;text-align:center;color:var(--muted)">Chargement…</div></div>
   </div>
 </div>
 
