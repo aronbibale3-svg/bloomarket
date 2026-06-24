@@ -1242,6 +1242,7 @@ body.auth-loading #userNav{display:none!important}
     <div id="cartItems"></div>
     <div id="cartEmpty" class="empty-state" style="display:none;padding:30px 0"><div class="ico">🛒</div><h3>Panier vide</h3><p>Explore la marketplace !</p></div>
     <div id="cartFooter" style="display:none">
+      <div class="cart-total-row" id="cartFeeRow" style="padding:6px 0;border:none"><div class="cart-total-label">🛡️ Frais de service</div><div class="cart-total-price" id="cartFee" style="font-size:14px;color:var(--muted);font-weight:700">0.00€</div></div>
       <div class="cart-total-row"><div class="cart-total-label">Total</div><div class="cart-total-price" id="cartTotal">0.00€</div></div>
       <button class="btn-submit" onclick="checkoutCart()">Payer le panier</button>
     </div>
@@ -1258,6 +1259,7 @@ body.auth-loading #userNav{display:none!important}
       <div class="ps-row"><span id="payItemTitle">Article</span><span id="paySubtotal">0.00€</span></div>
       <div class="ps-row" id="payDiscountLine" style="display:none;color:#86efac"><span data-i18n="pay.discount">Réduction</span><span id="payDiscountVal">-0.00€</span></div>
       <div class="ps-row" id="payBonusLine" style="display:none;color:#7fd3ff"><span>🎁 <span data-i18n="pay.bonus">Bonus</span></span><span id="payBonusVal">+0 🔷</span></div>
+      <div class="ps-row" id="payFeeLine"><span>🛡️ Frais de service</span><span id="payFeeVal">0.00€</span></div>
       <div class="ps-row ps-muted"><span>Points de fidélité gagnés</span><span id="payBloobux" style="color:var(--blue2)">+0 🔷</span></div>
       <div class="ps-row ps-total"><span>Total</span><strong id="payItemPrice">0.00€</strong></div>
     </div>
@@ -2947,12 +2949,17 @@ var payElements = null, payClientSecret = null, payContext = null;
 
 var PROMO = { code:'', pct:0, bonus:0 };
 var PROMO_TABLE = { 'WELCOME5': { pct:5, bonus:100, until:'2026-07-15' } };
-function chargedAmount(){ var a = payContext.amount * (1 - (PROMO.pct||0)/100); a = Math.round(a*100)/100; if (payContext && payContext.kind !== 'funds' && a < 0.5) a = 0.5; return a; }
+var BUYER_FEE_PCT = 0.05, BUYER_FEE_MIN = 0.50;
+function articleAmount(){ var a = payContext.amount * (1 - (PROMO.pct||0)/100); a = Math.round(a*100)/100; if (payContext && payContext.kind !== 'funds' && a < 0.5) a = 0.5; return a; }
+function serviceFee(){ if (!payContext || payContext.kind === 'funds') return 0; var f = articleAmount() * BUYER_FEE_PCT; f = Math.round(f*100)/100; if (f < BUYER_FEE_MIN) f = BUYER_FEE_MIN; return f; }
+function chargedAmount(){ return Math.round((articleAmount() + serviceFee())*100)/100; }
 function updatePayTotals(){
   if (!payContext) return;
-  var base = payContext.amount, charged = chargedAmount();
+  var base = payContext.amount, article = articleAmount(), fee = serviceFee(), charged = chargedAmount();
   function payFmt(eur){ if (DISPLAY_CCY==='EUR') return eur.toFixed(2)+'€'; var r=CCY_RATES[DISPLAY_CCY]||1, sym=CCY_SYM[DISPLAY_CCY]||'€'; return '≈ '+sym+(eur*r).toFixed(2)+' ('+eur.toFixed(2)+'€)'; }
   var s=document.getElementById('paySubtotal'); if(s) s.textContent = payFmt(base);
+  var fl=document.getElementById('payFeeLine'); var fv=document.getElementById('payFeeVal');
+  if (fl && fv){ if (fee>0){ fl.style.display='flex'; fv.textContent = payFmt(fee); } else { fl.style.display='none'; } }
   var t=document.getElementById('payItemPrice'); if(t) t.textContent = payFmt(charged);
   var dl=document.getElementById('payDiscountLine');
   var bl=document.getElementById('payBonusLine');
@@ -3273,7 +3280,9 @@ function renderCartModal() {
     html += '</div>';
   });
   itemsEl.innerHTML = html;
-  totalEl.textContent = fmtPrice(total);
+  var fee = Math.round(total*0.05*100)/100; if (fee < 0.50) fee = 0.50;
+  var cf = document.getElementById('cartFee'); if (cf) cf.textContent = fmtPrice(fee);
+  totalEl.textContent = fmtPrice(Math.round((total+fee)*100)/100);
 }
 
 async function checkoutCart() {
