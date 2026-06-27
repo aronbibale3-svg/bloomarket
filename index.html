@@ -1696,11 +1696,36 @@ async function saveListingNote() {
   loadMyListings();
 }
 var editingExistingImages = [];
+var duplicatingImages = [];
 function setSellAttrs(attrs) {
   attrs = attrs || {};
   var sel = document.getElementById('sellGame'); if (!sel) return;
   var fields = GAME_ATTRS[sel.value] || [];
   fields.forEach(function(f) { var inp = document.getElementById('attr_' + f.key); if (inp && attrs[f.key] != null) inp.value = attrs[f.key]; });
+}
+async function duplicateListing(id) {
+  if (!currentUser) return;
+  await loadProfile();
+  if (!(userProfile && userProfile.id_verified)) { showToast('Tu dois être vendeur vérifié pour vendre','info'); openSellerVerify(); return; }
+  var res = await db.from('listings').select('*').eq('id', id).eq('user_id', currentUser.id).maybeSingle();
+  if (!res.data) { showToast('Annonce introuvable','error'); return; }
+  var l = res.data;
+  editingListingId = null; editingExistingImages = [];
+  duplicatingImages = Array.isArray(l.image_urls) ? l.image_urls.slice() : [];
+  var g = document.getElementById('sellGame'); if (g && l.game) g.value = l.game;
+  renderSellAttrFields();
+  setSellAttrs(l.attributes || {});
+  document.getElementById('sellTitle').value = l.title || '';
+  var srch = document.getElementById('sellItemSearch'); if (srch) srch.value = l.title || '';
+  document.getElementById('sellPrice').value = parseFloat(l.price || 0);
+  document.getElementById('sellStock').value = (l.stock != null ? l.stock : 1);
+  sellImageFiles = []; sellImageDataURLs = [];
+  var prev = document.getElementById('sellImagePreview');
+  if (prev) prev.innerHTML = duplicatingImages.map(function(u){ return '<div style="width:60px;height:60px;border-radius:8px;overflow:hidden;border:1px solid var(--border)"><img src="' + u + '" style="width:100%;height:100%;object-fit:cover"></div>'; }).join('');
+  document.getElementById('sellAlert').innerHTML = '<div style="background:rgba(110,231,183,0.1);border:1px solid rgba(110,231,183,0.25);color:#6ee7b7;padding:9px;border-radius:8px;font-size:12px">📄 Copie d\'une annonce — change le prix si besoin puis publie. (Les photos sont reprises automatiquement.)</div>';
+  var h = document.querySelector('#sellModal .modal-h'); if (h) h.textContent = '📄 Dupliquer l\'annonce';
+  setBtn('sellBtn', false, 'Publier la copie');
+  showModal('sellModal');
 }
 async function openEditListing(id) {
   if (!currentUser) return;
@@ -2841,9 +2866,9 @@ async function doSell() {
   if (containsProfanity(title) || containsProfanity(descVal)) return showAlert('sellAlert','error','Retire le langage inapproprié de ton titre/description.');
   if (!title || isNaN(price) || price < 1) return showAlert('sellAlert','error','Remplis le titre et un prix d\'au moins 1€ !');
   if (isNaN(price) || price < 1) return showAlert('sellAlert','error','Prix minimum : 1€.');
-  if (!isEdit && sellImageFiles.length < 1) return showAlert('sellAlert','error','Ajoute au moins 1 photo.');
+  if (!isEdit && sellImageFiles.length < 1 && !(duplicatingImages && duplicatingImages.length)) return showAlert('sellAlert','error','Ajoute au moins 1 photo.');
   setBtn('sellBtn', true, isEdit ? 'Saving…' : 'Publishing…');
-  var imageUrls = isEdit ? (editingExistingImages || []).slice() : [];
+  var imageUrls = isEdit ? (editingExistingImages || []).slice() : ((duplicatingImages && duplicatingImages.length) ? duplicatingImages.slice() : []);
   if (sellImageFiles.length > 0) {
     imageUrls = [];
     for (var i = 0; i < sellImageFiles.length; i++) {
@@ -2867,7 +2892,7 @@ async function doSell() {
   if (res.error) return showAlert('sellAlert','error','Error: ' + res.error.message);
   var wasEdit = isEdit;
   hideModal('sellModal');
-  editingListingId = null; editingExistingImages = [];
+  editingListingId = null; editingExistingImages = []; duplicatingImages = [];
   document.getElementById('sellTitle').value = ''; var ss=document.getElementById('sellItemSearch'); if(ss) ss.value=''; renderItemPicker();
   document.getElementById('sellPrice').value = '';
   document.getElementById('sellStock').value = '1';
@@ -3175,7 +3200,7 @@ async function openSellModal() {
   if (!currentUser) { showModal('loginModal'); return; }
   await loadProfile();
   if (!(userProfile && userProfile.id_verified)) { showToast('Tu dois être vendeur vérifié pour vendre','info'); openSellerVerify(); return; }
-  editingListingId = null; editingExistingImages = [];
+  editingListingId = null; editingExistingImages = []; duplicatingImages = [];
   document.getElementById('sellTitle').value = ''; var s=document.getElementById('sellItemSearch'); if(s) s.value='';
   document.getElementById('sellPrice').value = ''; document.getElementById('sellStock').value = '1';
   sellImageFiles = []; sellImageDataURLs = []; var p=document.getElementById('sellImagePreview'); if(p) p.innerHTML='';
@@ -3385,7 +3410,7 @@ async function loadMyListings() {
     var pauseBtn = paused
       ? '<button onclick="toggleListingActive(' + l.id + ',true)" style="background:rgba(110,231,183,0.12);border:1px solid rgba(110,231,183,0.3);color:#6ee7b7;' + bP + '">🟢 Activate</button>'
       : '<button onclick="toggleListingActive(' + l.id + ',false)" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;' + bP + '">🔴 Pause</button>';
-    html += '<span style="display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap">' + promo + noteBtn + pauseBtn + '<button onclick="openEditListing(' + l.id + ')" style="background:rgba(30,111,255,0.12);border:1px solid rgba(30,111,255,0.3);color:#7fb0ff;' + bP + '">✏️ Edit</button><button onclick="openPromote(' + l.id + ')" style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:#FBBF24;' + bP + '">🚀</button><button onclick="deleteListing(' + l.id + ')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;' + bP + '">🗑️</button></span></div>';
+    html += '<span style="display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap">' + promo + noteBtn + pauseBtn + '<button onclick="duplicateListing(' + l.id + ')" title="Dupliquer" style="background:rgba(110,231,183,0.12);border:1px solid rgba(110,231,183,0.3);color:#6ee7b7;' + bP + '">📄</button><button onclick="openEditListing(' + l.id + ')" style="background:rgba(30,111,255,0.12);border:1px solid rgba(30,111,255,0.3);color:#7fb0ff;' + bP + '">✏️ Edit</button><button onclick="openPromote(' + l.id + ')" style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);color:#FBBF24;' + bP + '">🚀</button><button onclick="deleteListing(' + l.id + ')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#FCA5A5;' + bP + '">🗑️</button></span></div>';
   });
   body.innerHTML = html;
   var salesRes = await db.from('orders').select('price').eq('seller_id', currentUser.id).eq('status','completed');
